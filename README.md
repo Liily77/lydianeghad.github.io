@@ -4,7 +4,7 @@ Hello everyone !
 
 In this project, you will find an exercise offered by the Codecademy school to learn the Python programming language.
 
-Here is part of the exercise statement :
+Here is part of the first exercise statement :
 
 Course link : https://www.codecademy.com/learn/learn-python-3
 
@@ -15,3 +15,16 @@ Sal runs the biggest shipping company in the tri-county area, Sal’s Shippers. 
 In this project, you’ll build a program that will take the weight of a package and determine the cheapest way to ship that package using Sal’s Shippers.
 
 <a href='https://codespaces.new/Liily77/lydianeghad.github.io'><img src='https://github.com/codespaces/badge.svg' alt='Open in GitHub Codespaces' style='max-width: 100%;'></a>
+
+<h4><strong>Magic 8-Ball</strong></h4>
+
+Here is part of the second exercise statement :
+
+The Magic 8-Ball is a popular toy developed in the 1950s for fortune-telling or advice seeking.
+
+Write a magic8.py Python program that can answer any “Yes” or “No” question with a different fortune each time it executes.
+
+We’ll be using the following 9 possible answers for our Magic 8-Ball.
+
+
+
