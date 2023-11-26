@@ -28,7 +28,16 @@ We’ll be using the following 9 possible answers for our Magic 8-Ball.
 
 I created a small program that stored grade information, processed them to obtain the total grade and percentage, and does some operations to prepared this information before printing them on screen.
 
+<h4>Human Resources Program</h4>
+
+Our Human Resources department is very busy and they have asked us to help speed up their hiring process.
+
+We'll code a program that decides whether or not to hire a candidate, depending on location and score.
+
+
 <a href='https://codespaces.new/Liily77/lydianeghad.github.io'><img src='https://github.com/codespaces/badge.svg' alt='Open in GitHub Codespaces' style='max-width: 100%;'></a>
+
+
 
 
 
