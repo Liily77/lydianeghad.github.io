@@ -34,6 +34,12 @@ Our Human Resources department is very busy and they have asked us to help speed
 
 We'll code a program that decides whether or not to hire a candidate, depending on location and score.
 
+<h4>Password Security</h4>
+
+A client has asked us to check their company's cybersecurity system.
+
+Let's create a program that checks the strength of the client's password. We should also check how long it could take for a hacker to hack into their account if they knew the characters, but not the order, to the password.
+
 
 <a href='https://codespaces.new/Liily77/lydianeghad.github.io'><img src='https://github.com/codespaces/badge.svg' alt='Open in GitHub Codespaces' style='max-width: 100%;'></a>
 
