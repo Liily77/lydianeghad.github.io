@@ -40,6 +40,10 @@ A client has asked us to check their company's cybersecurity system.
 
 Let's create a program that checks the strength of the client's password. We should also check how long it could take for a hacker to hack into their account if they knew the characters, but not the order, to the password.
 
+<h4>Shopping List App</h4>
+
+Rachel often forgets to purchase some things when she goes to the grocery store. I develop an app to help her manage a shopping list!
+
 
 <a href='https://codespaces.new/Liily77/lydianeghad.github.io'><img src='https://github.com/codespaces/badge.svg' alt='Open in GitHub Codespaces' style='max-width: 100%;'></a>
 
@@ -47,3 +51,4 @@ Let's create a program that checks the strength of the client's password. We sho
 
 
 
+d
