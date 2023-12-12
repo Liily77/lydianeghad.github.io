@@ -44,6 +44,10 @@ Let's create a program that checks the strength of the client's password. We sho
 
 Rachel often forgets to purchase some things when she goes to the grocery store. I develop an app to help her manage a shopping list!
 
+<h4>Plant Growth Analysis</h4>
+
+George is concerned with the inconsistent growth of his plant. He wants us to write a program to perform some simple analysis with him.
+
 
 <a href='https://codespaces.new/Liily77/lydianeghad.github.io'><img src='https://github.com/codespaces/badge.svg' alt='Open in GitHub Codespaces' style='max-width: 100%;'></a>
 
@@ -51,4 +55,3 @@ Rachel often forgets to purchase some things when she goes to the grocery store.
 
 
 
-d
