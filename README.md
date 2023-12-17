@@ -48,6 +48,11 @@ Rachel often forgets to purchase some things when she goes to the grocery store.
 
 George is concerned with the inconsistent growth of his plant. He wants us to write a program to perform some simple analysis with him.
 
+<h4>Electronics Store</h4>
+
+You work in an electronics store. Your task is to clean and format data that contains information about some devices.
+
+Let's build a Python program to help you with that task!
 
 <a href='https://codespaces.new/Liily77/lydianeghad.github.io'><img src='https://github.com/codespaces/badge.svg' alt='Open in GitHub Codespaces' style='max-width: 100%;'></a>
 
