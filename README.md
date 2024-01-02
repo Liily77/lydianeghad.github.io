@@ -54,6 +54,10 @@ You work in an electronics store. Your task is to clean and format data that con
 
 Let's build a Python program to help you with that task!
 
+<h4>Gradebook</h4>
+
+You are a student and you are trying to organize your subjects and grades using Python. Let’s explore what we’ve learned about lists to organize your subjects and scores.
+
 <a href='https://codespaces.new/Liily77/lydianeghad.github.io'><img src='https://github.com/codespaces/badge.svg' alt='Open in GitHub Codespaces' style='max-width: 100%;'></a>
 
 
