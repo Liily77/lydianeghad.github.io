@@ -2,7 +2,7 @@
 
 Bonjour à tous !
 
-Dans ce projet, vous trouverez les consignes des différents exercices proposées par l'école Codecademy pour apprendre le langage de programmation Python.
+Dans ce projet, vous trouverez les consignes des différents exercices proposés par l'école Codecademy pour apprendre le langage de programmation Python.
 
 <h4><strong>Sal's Shipping 🛳️</strong></h4>
 
