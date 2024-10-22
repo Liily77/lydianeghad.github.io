@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Tutoriel HTLM">
+    <meta name="keywords" content="Tutoriel, HTML, CSS">
+    <meta name="author" content="Lydia Neghad">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriel HTML et CSS</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #04045c;
+            color: aliceblue;
+            font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            width: 100%;
+        }
+        
+        h1 {
+            height: 80px;
+            border-radius: 20px;
+            color: aliceblue;
+            text-align: center;
+            float: right;
+            width: 50%;
+            margin-right: 260px;
+            padding: 50px 20px 0px;
+            font-size: 40px;
+            margin: auto;
+                 
+        }
+        
+        .logo {
+            width: 200px; 
+            height: 200px;
+            border-radius: 40px;
+        
+        }
+        
+        #menu {
+            background-color: aliceblue;
+            border: solid black 1px;
+            color: #04045c;
+            width: 100%;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 70px;
+            box-shadow: 0px 0px 10px #111010;
+            width: 100%;
+        }
+        
+        #menu li {
+            display: inline-block;
+            list-style: none;
+            margin: 0 50px;
+            font-size: 20px;
+            padding: 10px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            text-shadow: 0px -2px #030303;
+            transition: all 0.05s;
+            text-decoration:none;
+            color: #04045c;
+        }
+        
+        li:hover  {
+            cursor: pointer;
+            color: #b349cd;
+            box-shadow: 2px 2px 2px #04045c;
+            border-bottom: 3px solid #04045c;
+            border-right: 1px solid #04045c;
+        }
+        
+        li:active {
+            cursor: pointer;
+            box-shadow:inset -5px -5px 10px 0px rgba(255, 255, 255, 0.5), inset 5px 5px 10px 0px rgba(0, 0, 0, 0.3);
+            transform: translate(0px,5px);
+            border-bottom: 1px solid;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #04045c;
+         }
+        .title1 {
+            padding-left: 10px;
+            padding-bottom: 10px;
+            list-style: square;
+        }
+        .title2 {
+            border: solid 0.5px;
+            box-shadow: 0px 0px 4px aliceblue;;
+            background-color: rgb(54,37,128);
+            color:aliceblue;
+            padding-left: 10px;
+            
+        }
+        .elementp, .elementbr, #proprietecss {
+            
+            font-size: 13px;
+            border: solid 1px aliceblue;
+            padding: 10px 20px 30px 20px;
+            margin-left: 50px;  
+        }
+        
+        #conteneur {
+            float: left;
+            width: 60%;
+            
+        }
+        
+        
+        .article1, .article2, .article3 {
+            border: solid 0.5px aliceblue;
+            padding: 10px 20px 10px 20px;
+            margin-top: 30px;
+            font-size: 17px;
+            font-weight: bold;
+            background-color: rgba(240, 248, 255, 0.976);
+            color: #04045c;    
+        }
+        .notitle {
+            color: rgba(240, 248, 255, 0.976);
+            font-size: 0px;
+        }
+        img {
+            width: 500px;
+            width: 100%;
+           
+        }
+        
+        .note {
+            background-color: rgb(54,37,128);
+            font-weight: bold;
+            font-size: 15px;
+            border: solid 0.3px aliceblue;
+            padding: 10px 10px 10px 20px;
+            margin-top: 30px;
+        }
+        span {
+            color: #b349cd;
+        }
+         
+        #proprietecss {
+            margin-bottom: 80px;
+        }
+        .inline-word { color: red;}    
+        
+        aside {
+            border: solid 0.5px aliceblue;
+            padding: 10px 20px 10px 20px;
+            margin: 10px 10px 30px 10px;
+        }
+        
+        #sidebar {
+            border: solid 0.5px aliceblue;
+            float: right;
+            width: 30%; 
+            padding: 5px 5px 5px 10px;
+            margin-right: 50px;
+             
+        }
+        
+        .titlesidebar {
+            padding-left: 19px;
+            font-size: 19px;   
+        }
+        
+        .liens {
+            color: blue;
+        }
+        .liens:hover {
+            color: rgb(223, 121, 121);
+        }
+        
+        #footer {
+            float: left;
+            width: 700px;
+            color: #04045c;
+            background-color:rgba(240, 248, 255, 0.976);
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        </style>
+
+
+</head>
+<body>
+
+<header id="banniere">
+        <img src="appren-tech-logo.png" class="logo" alt="logo apprentech">
+       <h1>Tutoriel HTML5 et CSS</h1>
+</header>
+
+    <br>
+
+    <nav id="menu">
+        <ul>
+            <li><a href="#conteneur">Les éléments sémantiques</a></li>
+            <li><a href="#proprietecss">Les propriétés CSS</a></li>
+            <li>Blog</li>
+            <li>Nous contacter</li>
+        </ul>
+    </nav>
+    
+        <div id="conteneur">
+            <section class="elementp">
+        <h2 class="title1"><span>➡︎</span> Les éléments sémantiques</h2>
+            <header class="title2">
+              <h2>L'élément &lt; header &gt; :</h2>
+            </header>
+              <article class="article1">
+                <h2 class="notitle">No title</h2>
+                <p>Nous avons remarqué ces derniers temps que les professionnels du Web sont de plus en plus intéressés par le HTML5. 
+                Plusieurs d’entre eux ont d’ailleurs commencé à l’utiliser.
+                    <br>
+                    <br>Selon la spécification HTML5, l’élément header représente :
+                    "Un groupe d’aide de navigation ou d’introduction. Un élément header contient de façon générale les headings (les éléments h1 à h6 ou l’élément hgroup).  Il peut aussi contenir d’autres éléments, comme une table des matières, un formulaire de recherche, ou des logos.
+                   <br>
+                   <br>
+                   → À quel endroit doit-on utiliser la balise &lt; header &gt; ?
+                   <br>
+                   <br>L’endroit le plus évident est au début d’une page. Nous pouvons commencer par y inclure le titre le plus important sur votre page.</p>
+                <div class="img"><img src="Element_header.PNG" alt="picture element header"></div>
+                <p>La balise header nous donne la possibilité de structurer nos documents avec une meilleure sémantique pour les en-têtes de sections ou de pages.</p>  
+              </article>
+
+            <footer class="note"><p><span>NOTA BENE :</span> Il est important de noter que vous pouvez avoir plus d’une balise header par page. Vous pouvez utiliser une balise header par section de le page.</p></footer>
+            </section>
+    
+        <br>
+        
+            <section class="elementbr">
+            <h2 class="title1"><span>➡︎</span> Les éléments sémantiques</h2>
+            <header class="title2">
+             <h2>L'élément &lt; nav &gt; :</h2>
+            </header>
+           <article class="article2">
+            <h2 class="notitle">notitle</h2>
+           <p>L'élément HTML &lt; nav &gt; représente une section d'une page ayant des liens vers d'autres pages ou des fragments de cette page. Autrement dit, c'est une section destinée à la navigation dans un document (avec des menus, des tables des matières, des index, etc.).
+
+           </p>
+            <div class="img"><img src="Element_nav.PNG" alt="photo element nav"></div>
+            <p>Un seul document HTML peut contenir plusieurs tags &lt; nav &gt;, l’autre peut contenir un groupe de liens pour naviguer sur le site, un autre pour naviguer dans la page Web actuelle.
+
+                Notez que tous les liens du document HTML ne peuvent pas être placés dans l'élément &lt; nav &gt;, ils ne peuvent inclure que de gros blocs de navigation. N'incluez pas &lt; nav &gt; dans le tag &lt; footer &gt;.
+                </p>
+            </article>
+            <br>
+            <footer class="note"><p> <span>NOTA BENE : </span>Cela va permettre d’indiquer aux navigateurs et moteurs de recherche que notre élément ul (utilisé pour créer un menu) n’est pas qu’une liste mais bien un menu de navigation.</p></footer>
+            </section>
+        
+        
+            <br>
+         
+            <section id="proprietecss">
+            <h2 class="title1"><span>➡︎</span> Propriétés CSS</h2>
+            <header class="title2">
+              <h2>La propriété CSS : float</h2>
+            </header>
+            <article class="article3">
+                <h2 class="notitle">no title</h2>
+                <p>La propriété CSS float permet de sortir un élément du flux normal de la page et de le faire “flotter” contre un bord de son élément parent conteneur ou contre un autre élément flottant.
+                    <br>Une utilisation bien connue de la propriété float est de s’en servir pour faire flotter une image à droite ou à gauche d’un texte et ainsi l’entourer avec du texte.
+                    
+                    <br>La propriété float est donc une autre propriété qui va impacter la disposition dans la page et qu’il convient de manier avec précaution pour ne pas obtenir de comportement indésirable. Le but de cette nouvelle leçon est d’apprendre à la manipuler.</p>
+                <div class="img"><img src="Propriete_float.PNG" alt="picture propriete float"></div>
+                <p>En effet, les éléments de type block suivants un élément flottant vont également se placer sur la même ligne que l’élément flottant mais continuer à prendre tout l’espace disponible dans la ligne. 
+                    <br>La partie des éléments block chevauchant un flottant va être cachée derrière le flottant.
+
+                    <br>On va cependant également tout à fait pouvoir faire flotter un élément block même si généralement nous utiliserons plutôt un display : <span class="inline-word">inline-block</span> pour placer deux éléments de type block côte-à-côte.
+                    
+                    <br>Notez que si vous voulez faire flotter un élément block sans contenu, alors il faudra lui donner une largeur et une hauteur explicites avec les propriétés width et height car dans le cas contraire les valeurs calculées seront égales à 0.</p>
+            </article>
+            <footer class="note"> <span>NOTA BENE : </span>  La propriété de feuille de style float CSS utilisée avec la CSS clear qui permet de "supprimer les flottements". </footer>
+            </section>
+        </div>
+        <div id="sidebar">
+            <h2 class="titlesidebar">📢 Last News...</h2>  
+               <aside class="news">
+                   <h3><span>ChatGPT4 vs Opscidia</span></h3>
+                   <p>Dans le vaste paysage de l’intelligence artificielle pour la recherche scientifique, de nombreux acteurs se démarquent par leur capacité à analyser et à extraire des informations pertinentes dans le domaine scientifique... <a href="https://www.opscidia.com/fr/2024/01/29/analyse-comparative-chatgpt4-vs-opscidia-dans-la-recherche-dacteurs-influents-un-domaine-scientifique/" class="liens">Lire la suite</a></p>
+                   <h3><span>Reddit aurait cédé son contenu pour former des modèles d'IA</span></h3>
+                   <p>Les publications sur Reddit pourraient être le prochain carburant de la machine d'innovation de l'IA , car la « première page d'Internet » aurait négocié un accord de licence de contenu pour permettre à ses données d'être utilisées pour former des modèles d'IA... <a href="https://mashable.com/article/reddit-signs-ai-content-licensing-deal" class="liens">Lire la suite</a></p>
+               </aside>
+               <aside class="apropos">
+                <h3>A propos de nous 😁</h3>
+                <p>Bienvenue chez Appren'Tech ! Vous trouverez des tutoriels concernant les langages HTML et CSS. Mais aussi les dernières actualitées sur le monde de la Tech 🔥</p>
+               </aside>
+        </div>
+    
+
+    <div id="footer">
+        <footer id="copyright">
+        <p>Copyright © 2024 - Tous droits réservés. Mentions légales</p>
+    </footer>
+    </div>
+</body>
+</html>
