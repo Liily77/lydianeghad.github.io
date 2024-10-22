@@ -4,7 +4,7 @@ Hello everyone !
 
 In this project, you will find some exercise instructions offered by the Codecademy School to learn the Python programming language.
 
-<h4><strong>Sal's Shipping</strong></h4>
+<h4><strong>Sal's Shipping 🛳️</strong></h4>
 
 Sal runs the biggest shipping company in the tri-county area, Sal’s Shippers. Sal wants to make sure that every single one of his customers has the best, and most affordable experience shipping their packages.
 
