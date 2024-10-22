@@ -1,4 +1,4 @@
-<h3>Codecademy student - <href="https://www.codecademy.com/learn/learn-python-3">Learn Python 3 </h3>
+<h3>Codecademy student - <href="https://www.codecademy.com/learn/learn-python-3">Learn Python 🐍 </h3>
 
 Hello everyone !
 
