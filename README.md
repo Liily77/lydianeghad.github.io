@@ -2,11 +2,7 @@
 
 Hello everyone !
 
-In this project, you will find an exercise offered by the Codecademy school to learn the Python programming language.
-
-Here is part of the first exercise statement :
-
-Course link : https://www.codecademy.com/learn/learn-python-3
+In this project, you will find some exercise instructions offered by the Codecademy School to learn the Python programming language.
 
 <h4><strong>Sal's Shipping</strong></h4>
 
