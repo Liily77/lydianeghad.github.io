@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Étape 3A</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <script src="data.js"></script>
+  <script src="fonctions3A.js"></script>
+  
+</head>
+<body>
+  <script>
+    
+    /*----------------------------------------------
+           DOCUMENT.ONREADYSTATECHANGE 
+    -----------------------------------------------*/
+    
+        let expCond;
+    
+      document.onreadystatechange = function(){ 
+    
+      if (document.readyState === "complete") {
+    
+              
+              writeList("meteo", meteo);
+              writeList("trafic", trafic);
+              writeList("typederoute", typederoute);
+              writeList("manoeuvre", manoeuvre);
+              writeList("appreciation", appreciation);
+    
+              
+              getLocalStorage();
+    
+              
+              for (let i = 0; i < expCond.length; i++) {
+                  remplirTableau(i);
+              }
+    
+              
+              calculDistance();
+              
+    
+             
+              let message = document.getElementById("message");
+    
+              
+              let dateDepart = document.getElementById("dateDepart");
+              dateDepart.addEventListener("blur", verifDate);
+    
+              let distance = document.getElementById("distance");
+              distance.addEventListener("blur", verifDistance);
+    
+              
+            const boutonReset = document.getElementById("bouton-reset");
+            boutonReset.addEventListener("click", resetApplication);
+               
+       }        
+     };
+
+
+    /* Cette fonciton permet de ne pas doubler quand on appuye sur le bouton reset*/
+    
+    function writeList(id, variable) {
+    let select = document.getElementById(id);
+    
+    if (select.multiple) {
+        select.innerHTML = '';
+    } else {
+        select.innerHTML = '<option value="">-- Choix --</option>'; 
+    }
+    for (let i = 0; i < variable.length; i++) {
+        select.innerHTML += `<option value="${i + 1}">${variable[i][id]}</option>`;
+    }
+}
+
+    function resetApplication() {
+            
+    writeList("meteo", meteo);
+    writeList("trafic", trafic);
+    writeList("typederoute", typederoute);
+    writeList("manoeuvre", manoeuvre);
+    writeList("appreciation", appreciation);
+
+   /* Supprime les données locales et redémarre les tableaux et statistiques */
+    localStorage.removeItem("expCond");
+    expCond = [];
+    document.getElementById("tableau-progression").getElementsByTagName('tbody')[0].innerHTML = "";
+            calculDistance();
+            afficherStatistiques();
+}
+    
+    </script>
+  <header>
+    <div class="banniere"><img src="SP_Conduite_banner.jpg" alt=""></div>
+    <nav>
+      <ul>
+        <li><a href="#ajout">Expérience </a></li>
+        <li><a href="#progression">Progression </a></li>
+        <li><a href="#statistiques">Statistiques </a></li>
+      </ul>
+    </nav>
+    <div id="titres">
+
+      <h1>Carnet de suivi </h1>
+    </div>
+  </header>
+  <main>
+    <section id="ajout">
+      <div class="titre2">
+      <h3>Ajouter une expérience de conduite</h3>
+      <p>Tous les champs sont obligatoires.</p>
+      </div>
+      <form>
+        <fieldset>
+          <legend>Trajet 🚘</legend>
+          <label for="dateDepart">Date du trajet</label><input type="date" name="dateDepart" id="dateDepart" onchange="displayFrenchDate('dateDepart', 'dateDisplayDepart')" required><br>
+
+          <label for="heureDepart">Heure de départ</label><input type="time" name="heureDepart" id="heureDepart" required><br>
+
+          <label for="heureArrivee">Heure d'arrivée</label><input type="time" name="heureArrivee" id="heureArrivee" required><br>
+
+          <label for="distance">Distance parcourue (km)</label><input type="number" min="1" value="0" name="kmInput" id="distance" required><br>
+        </fieldset>
+        <fieldset>
+          <legend>Détails 🛤️</legend>
+          <label for="meteo">Quel temps faisait-il ?</label>
+          <select name="meteo" id="meteo" required>
+              <option value="">-- Choix --</option>
+          </select><br>
+          <label for="trafic">Comment était le trafic ?</label>
+          <select name="trafic" id="trafic" required>
+            <option value="">-- Choix --</option>
+          </select><br>
+          <label for="typederoute">Sur quel(s) type(s) de route avez-vous conduit ?</label>
+          <select name="typederoute[]" id="typederoute" multiple size="4" required>
+          </select><br>
+          <label for="manoeuvre">Quelle(s) manœuvre(s) avez-vous effectué ?</label>
+          <select name="manoeuvre[]" id="manoeuvre" multiple size="4" required>
+          </select>
+        </fieldset>
+        <fieldset>
+          <legend>Appréciation 😀</legend>
+          <label for="appreciation">Comment avez-vous trouvé votre expérience de conduite ?</label>
+          <select name="appreciation" id="appreciation" required>
+            <option value="">-- Choix --</option>
+          </select>
+        </fieldset>
+        <br>
+        
+        <button type="button" onclick="verifForm()">Ajouter</button>
+        <div id="message" class="message"></div>
+        <button type="reset" id="bouton-reset" onclick="resetApplication()">Réinitialiser</button>
+      </form>
+      
+    </section>
+    <section id="progression">
+      <h3>Progression</h3>
+      <table id="tableau-progression">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Heure de départ</th>
+            <th scope="col">Heure d'arrivée</th>
+            <th scope="col">Distance (km)</th>
+            <th scope="col">Détails</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </section>
+    <section id="statistiques">
+      
+      <h3>Statistiques</h3>
+      <p><b>Distance moyenne :</b> <span id="distanceMoyenne"></span></p>
+       <p><b>Durée totale de conduite</b> : <span id="dureeTotale"></span></p>
+      <label for="progress"><b>Avancement</b> :</label>
+      <progress id="progress" max="3000" value=""><span></span></progress>
+      <p><span></span><b> sur 3000 km parcourus</b></p>
+      <hr>
+      <h3>Tableau récapitulatif</h3>
+  <table id="tableau-bilan">
+    <thead>
+      <tr>
+        <th scope="col">Catégories</th>
+        <th scope="col" style="width: 0%;">Nombres d'expériences</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+    </section>
+  </main>
+  <br>
+  <div id="banner"> 
+    <img src="photoSP.jpeg" alt="photo conduite accompagnée">
+  </div>
+  <footer>
+    <p>Un site web réalisé par l'équipe 2 - DU Développement web de l'Université de Strasbourg Session <time datetime="2024">2024</time></p>
+    <address>
+    <a href="mailto:equipe2DUWeb24Stras@gmail.com">equipe2DUWeb24Stras@gmail.com</a>
+    </address>
+  </footer>
+</body>
+</html>
