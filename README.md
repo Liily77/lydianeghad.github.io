@@ -1,5 +1,5 @@
 <h1>Projet : Création d'un site e-commerce "Arc-en-Ciel" 🌈</h1>
-<p>👉 Voir le projet sur GitHub : <a href="#">Arc-en-Ciel</a> (lien à ajouter)</p>
+<p>👉 Voir le projet sur GitHub : <a href="#"></a></p>
 
 <h2>Description 🖋️</h2>
 <p><b>Arc-en-Ciel</b> est un projet e-commerce en cours de développement, permettant la vente de bijoux artisanaux et spirituels faits main. Le site a été conçu avec Django, HTML/CSS et JavaScript, et inclut des fonctionnalités comme la gestion des produits, un panier d'achat et un processus de paiement en ligne. Ce projet est une collaboration avec une créatrice de bijoux pour laquelle je développe une interface intuitive et fonctionnelle qui facilitera la gestion des produits via un système de gestion de contenu (CMS).</p>
