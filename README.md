@@ -30,7 +30,7 @@ Grâce à phpMyAdmin, la base de données est facilement accessible et modifiabl
 <h2>Compétences acquises ✔️</h2>
 
 <li><b>Manipulation du DOM</b> : Ajout dynamique d'éléments HTML avec JavaScript, comme les options des listes déroulantes et les lignes de tableaux.</li>
-<li><b>Gestion du LocalStorage et MySQL</b></li> : J'ai appris à gérer le stockage local des données avant de les insérer dans une base de données MySQL, tout en assurant leur récupération via phpMyAdmin.</li>
+<li><b>Gestion du LocalStorage/MySQL</b></li>: J'ai appris à gérer le stockage local des données avant de les insérer dans une base de données MySQL, tout en assurant leur récupération via phpMyAdmin.</li>
 <li><b>Validation de formulaires</b> : J'ai mis en place une validation robuste pour garantir la cohérence des données avant leur enregistrement.</li>
 <li><b>Calculs statistiques dynamiques</b> : Calculs automatisés pour afficher la distance moyenne, la durée totale et l'avancement par rapport à un objectif défini.</li>
 <li><b>Conception responsive</b> : J'ai veillé à ce que le site soit utilisable sur toutes les tailles d'écran (mobile, tablette, desktop).</li>
