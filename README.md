@@ -1,7 +1,6 @@
 <h1>Portfolio - Lydia Neghad</h1>
 
-<p>Bienvenue sur mon portfolio ! Ici, vous trouverez une sélection de mes projets réalisés dans le cadre de mes études et de mes expérimentations personnelles. 
-Chaque projet aborde des compétences spécifiques dans le développement web et la data, mettant en avant ma polyvalence et ma passion pour le code.</p>
+<p>Bienvenue sur mon portfolio ! Ici, vous trouverez une sélection de mes projets réalisés dans le cadre de mes études, ainsi que de mes expérimentations personnelles en développement web et en data analytics. Chaque projet met en avant mes compétences dans ces deux domaines, illustrant ma polyvalence et ma passion pour le code et l'analyse des données.</p>
 
 <hr>
 
