@@ -1,19 +1,19 @@
-<h1>Portfolio - Lydia Neghad</h1>
+<h1 align="center">Portfolio - Lydia Neghad</h1>
 
 <p>Bienvenue sur mon portfolio ! Ici, vous trouverez une sélection de mes projets réalisés dans le cadre de mes études, ainsi que de mes expérimentations personnelles en développement web et en data analytics. 
 Chaque projet met en avant mes compétences dans ces deux domaines, illustrant ma polyvalence et ma passion pour le code et l'analyse des données.</p>
 
 
 <hr>
-<h1> Mes projets en Data Analytics 📈</h1>
+<h2> Mes projets en Data Analytics 📈</h2>
 
 (en cours)
 
 <hr>
 
-<h1> Mes projets dans le développement web 👩🏻‍💻</h1>
+<h2> Mes projets dans le développement web 👩🏻‍💻</h2>
 
-<h2>Projet 1 : <strong>Création d'un Tutoriel HTML/CSS 👩🏻‍💻</strong></h2>
+<h3>Projet 1 : <strong>Création d'un Tutoriel HTML/CSS 👩🏻‍💻</strong></h3>
 <p><strong>Description :</strong><br>
 Ce projet est un tutoriel interactif conçu pour enseigner les bases du développement front-end en HTML et CSS.</p>
 <p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_tutoriel">Accéder à la branche du projet</a></p>
