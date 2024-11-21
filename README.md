@@ -1,6 +1,6 @@
 <h1>Projet : Analyse des performances des rameurs sur 2000m 🏅</h1>
 
-👉 Voir le notebook ici : <a href="https://tonlienverslenotebook.com"> Notebook</a>
+👉 Voir le notebook ici : <a href="https://github.com/Liily77/lydianeghad.github.io/blob/analyse-donn%C3%A9es-sportives/analyse-rameurs.ipynb"> Notebook</a>
 <ul>
   <li><b>Exemples de visualisations :</b>
     <ul>
