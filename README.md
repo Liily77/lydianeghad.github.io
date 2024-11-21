@@ -16,7 +16,7 @@
 <h2>Description 🖋️</h2>
 
 Ce projet Python a pour objectif d'analyser les performances des rameurs sur une distance de 2000m en utilisant des données segmentées par portions de 500m. À travers plusieurs visualisations interactives et statiques, nous avons exploré les facteurs influençant la performance et comparé les rameurs entre eux. Ce projet met également en évidence des analyses avancées comme les corrélations entre cadence et calories, ou encore la comparaison des performances avec des champions mondiaux.
-
+Ce projet a été réalisé en collaboration avec plusieurs coéquipiers dans le cadre de nos études. 
 <h2>Structure du projet 💡</h2>
 Le projet est structuré autour de plusieurs étapes :
 <li><b>Préparation des données</b> : Extraction et nettoyage des données au format JSON, transformation des données pour obtenir des informations par participants et segments.</li>
