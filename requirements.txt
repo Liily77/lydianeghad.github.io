@@ -1,0 +1,12 @@
+numpy>=1.24.4,<2.0
+pandas>=1.5.3,<2.0
+matplotlib>=3.9
+seaborn>=0.12.2
+scipy>=1.10
+spacy>=3.8
+fr-core-news-sm==3.8.0  # Modèle SpaCy pour le français
+altair>=4.2
+streamlit>=1.25
+plotly>=5.17
+wordcloud>=1.8
+Pillow>=9.0
