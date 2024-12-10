@@ -1,0 +1,43 @@
+<<<<<<< HEAD
+La connexion aux hotspots wifi publics n'est pas si sécurisée que ça. Avant de s'y connecter, voici les risques dont il faut avoir conscience.
+
+En vacances, dans un hôtel, une gare, un café, ou tout simplement parce que vous avez une petite galère avec votre abonnement, il peut vous arriver de vous connecter à un point d'accès wifi public, ou hotspot.
+Vous vous dites que vous êtes hors de danger ? Faux ! Une telle connexion présente certains risques dont chacun doit être conscient avant de se jeter corps et âme dans un piège potentiel.
+
+Un hotspot pirate ?
+Le premier danger des hotspots est certes, le plus improbable, mais aussi le plus inquiétant. 
+Il est possible qu'un hotspot ait été créé et qu'il soit sous le contrôle de pirates malintentionnés. 
+Une sorte de réseau miroir qui semble officiel mais qui ne l'est pas. Il sera alors en mesure d'intercepter tout le trafic entre votre ordinateur et ce grand nuage qu'est l'internet. 
+Un telle possibilité compromettrait toutes vos données personnelles, les laissant à la merci de qui voudra bien s'en emparer.
+
+Bien entendu, un cas de figure de ce genre reste très rare. 
+Le pirate devrait alors être en lien avec une autorité de certification TLS, qui permet de chiffrer les données et assurer l'authentification des sites sur lesquels vous naviguez.
+C'est rare, mais possible, il faut donc être prudent.
+
+Un réseau complètement ouvert
+Dans le second cas de figure, vous êtes connectés à un hotspot qui provient d'une source sûre et qui n'est pas émis par un malveillant pirate.
+Cela veut-il dire que vous êtes en sécurité absolue ? Attendez la suite. Imaginez que vous êtes dans une pièce, complètement fermée, hermétique et insonorisée.
+Cette pièce représente votre connexion au réseau. Dans cette pièce, vous prononcez à voix haute vos noms d'utilisateur, mots de passe ou toute information supposée rester privée.
+Jusqu'ici, rien de bien dramatique, puisque pour rentrer dans cette pièce, il faut déverrouiller la porte avec le code wifi qui sécurise votre box.
+
+Sauf que dans le cas qui nous intéresse, cette pièce est un hotspot.
+Il n'y a pas de verrou sur la porte. N'importe qui d'assez compétent et avec de mauvaises intentions, peut y rentrer, se cacher dans un coin et 
+vous écouter crier tous vos mots de passe et informations privées, le tout, sans que vous ne vous en rendiez compte. 
+On appelle cette pratique le "sniffing". Un logiciel gratuit suffit pour s'introduire dans votre "pièce" et y absorber toutes les cookies et autres données non-cryptées. 
+Pendant que vous buvez tranquillement boisson dans un café, insouciant, vous vous faites virtuellement cambrioler. Tout ça à cause d'un hotspot et d'une connexion non-sécurisée.
+
+Comment se protéger contre les hotspots ?
+On voit bien que vous êtes en panique et que vous êtes en train de réfléchir à toutes ces fois où vous vous êtes connectés à des hotspots et tout ce que vous avez fait sur le web à ce moment-là.
+Malheureusement, comme nous ne pouvons pas changer le passé, tentons au moins d'adapter nos usages pour le futur et éviter les risques.
+
+D'abord, pour éviter de vous connecter à un réseau pirate qui essaye de se faire passer pour un hotspot fiable, n'hésitez pas à demander confirmation du nom du réseau de l'endroit dans lequel vous vous trouvez.
+Ça ne mange pas de pain, ça ne mange pas de data non-plus, ça vous évitera bien des troubles.
+
+Deuxième réflexe : évitez d'entrer vos mots de passe, surtout si vous avez tendance à utiliser les mêmes identifiants sur chacune de vos connexions. 
+Mais surtout, ne consultez jamais vos sites bancaires sur un hotspot. Vous ne voudriez pas vous réveiller un matin avec une mauvaise surprise et votre compte en banque complètement vide.
+
+Enfin, dernier réflexe, si jamais vous avez besoin de vous connecter à quoi que ce soit, n'allez que sur des sites cryptés, c'est à dire dont l'URL commence par "https".
+Ici, c'est le "s" qui est important, il indique que le site utilise un protocole sécurisé et donc que toutes les données que vous indiquez sont cryptées.
+
+Mais surtout, ô grand surtout, vous l'aurez probablement compris, évitez tant que possible les hotspots. 
+Moins vous les utilisez, mieux vous serez protégés. Privilégiez plutôt votre smartphone en partage de données, avec une clé de sécurité. 
