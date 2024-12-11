@@ -2,6 +2,11 @@ streamlit
 numpy
 pandas
 plotly
+matplotlib
+seaborn
+scipy
+altair
+
 
 
 
