@@ -706,18 +706,17 @@ elif menu == "Les appareils et leurs usages 🤳🏼":
         )
         st.plotly_chart(fig)
 
-# ---- Importation des bibliothèques nécessaires ---- #
-    
-    from wordcloud import WordCloud
-    import matplotlib.pyplot as plt
-    from PIL import Image
-    import numpy as np
-    import spacy
 
-    # ---- Chargement du modèle SpaCy ---- #
-    nlp = spacy.load("fr_core_news_sm")
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+from PIL import Image
+import numpy as np
+import spacy
 
-    # ---- Lecture et analyse du texte ---- #
+# ---- Chargement du modèle SpaCy ---- #
+nlp = spacy.load("fr_core_news_sm")
+
+# ---- Lecture et analyse du texte ---- #
     try:
         with open("articlepresse.txt", "r", encoding="utf-8") as file:
             text = file.read()
@@ -770,6 +769,9 @@ elif menu == "Les appareils et leurs usages 🤳🏼":
     ax.axis("off")
     ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
     st.pyplot(fig)
+
+
+
 
 
 
