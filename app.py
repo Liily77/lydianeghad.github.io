@@ -5,10 +5,18 @@ import plotly.graph_objects as go
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
-import zipfile  # Ajouté pour lire les fichiers ZIP
+import zipfile  # Pour lire les fichiers ZIP
+import os
+import gdown  # Pour télécharger des fichiers depuis Google Drive
 
+# ---- Fonction de téléchargement depuis Google Drive ---- #
+def download_data_from_drive(file_id, output_file):
+    url = f"https://drive.google.com/uc?id={file_id}"
+    if not os.path.exists(output_file):  # Télécharger uniquement si le fichier n'existe pas
+        st.info(f"Téléchargement de {output_file} depuis Google Drive...")
+        gdown.download(url, output_file, quiet=False)
 
-# ---- Lecture des données ---- #
+# ---- Fonction de chargement des données ---- #
 def load_data(file_path, file_inside_zip=None):
     try:
         # Si le fichier est compressé (ZIP)
@@ -26,13 +34,22 @@ def load_data(file_path, file_inside_zip=None):
         st.error(f"Erreur lors du chargement des données : {e}")
         st.stop()
 
-# Nom du fichier compressé et du fichier CSV à l'intérieur
-file_path = "wifi_usage_data.zip"
-file_inside_zip = "wifi_usage_data.csv"
+# ---- Définir les chemins et Google Drive ID ---- #
+file_id = "1wBrRnTNv6dgZuHZ6fbMGicsniFhrsBok"  # ID de votre fichier Google Drive
+zip_file_path = "wifi_usage_data.zip"
+csv_file_inside_zip = "wifi_usage_data.csv"
 
-# Charger les données
-wifi_usage_data = load_data(file_path, file_inside_zip)
+# ---- Télécharger et charger les données ---- #
+# Télécharger le fichier ZIP depuis Google Drive
+download_data_from_drive(file_id, zip_file_path)
 
+# Charger les données à partir du fichier ZIP
+wifi_usage_data = load_data(zip_file_path, csv_file_inside_zip)
+
+
+
+# ---- Sidebar Navigation ---- #
+# Ajouter votre code de navigation ici...
 
 # ---- Sidebar Navigation ---- #
 
