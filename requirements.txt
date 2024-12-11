@@ -7,3 +7,5 @@ spacy==3.8.2
 altair==5.5.0
 streamlit==1.41.0
 plotly==5.24.1
+
+
