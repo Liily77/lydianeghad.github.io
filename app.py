@@ -707,20 +707,21 @@ elif menu == "Les appareils et leurs usages 🤳🏼":
         st.plotly_chart(fig)
 
 
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
-from PIL import Image
-import numpy as np
-import spacy
+# ---- Importation des bibliothèques nécessaires ---- #
+    from wordcloud import WordCloud
+    import matplotlib.pyplot as plt
+    from PIL import Image
+    import numpy as np
+    import spacy
 
-# ---- Chargement du modèle SpaCy ---- #
-nlp = spacy.load("fr_core_news_sm")
+    # ---- Chargement du modèle SpaCy ---- #
+    nlp = spacy.load("fr_core_news_sm")
 
-# ---- Lecture et analyse du texte ---- #
-try:
-    with open("articlepresse.txt", "r", encoding="utf-8") as file:
+    # ---- Lecture et analyse du texte ---- #
+    try:
+        with open("articlepresse.txt", "r", encoding="utf-8") as file:
             text = file.read()
-except FileNotFoundError:
+    except FileNotFoundError:
         st.error("Le fichier `articlepresse.txt` est introuvable. Veuillez vérifier son emplacement.")
         st.stop()
 
@@ -735,12 +736,12 @@ except FileNotFoundError:
         "Téléversez une image pour définir le masque du WordCloud (format PNG)", type=["png"]
     )
 
-if uploaded_image:
-    try:
+    if uploaded_image:
+        try:
             # Charger l'image téléversée comme masque
             mask = np.array(Image.open(uploaded_image).convert("L"))
             mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
-    except Exception as e:
+        except Exception as e:
             st.error(f"Erreur lors du chargement de l'image : {e}")
             st.stop()
     else:
@@ -769,6 +770,8 @@ if uploaded_image:
     ax.axis("off")
     ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
     st.pyplot(fig)
+
+
 
 
 
