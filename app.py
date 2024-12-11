@@ -717,8 +717,8 @@ import spacy
 nlp = spacy.load("fr_core_news_sm")
 
 # ---- Lecture et analyse du texte ---- #
-    try:
-        with open("articlepresse.txt", "r", encoding="utf-8") as file:
+try:
+    with open("articlepresse.txt", "r", encoding="utf-8") as file:
             text = file.read()
     except FileNotFoundError:
         st.error("Le fichier `articlepresse.txt` est introuvable. Veuillez vérifier son emplacement.")
@@ -735,12 +735,12 @@ nlp = spacy.load("fr_core_news_sm")
         "Téléversez une image pour définir le masque du WordCloud (format PNG)", type=["png"]
     )
 
-    if uploaded_image:
-        try:
+if uploaded_image:
+    try:
             # Charger l'image téléversée comme masque
             mask = np.array(Image.open(uploaded_image).convert("L"))
             mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
-        except Exception as e:
+    except Exception as e:
             st.error(f"Erreur lors du chargement de l'image : {e}")
             st.stop()
     else:
