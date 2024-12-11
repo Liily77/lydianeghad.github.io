@@ -8,6 +8,9 @@ seaborn
 scipy
 altair
 zipfile36
+wordcloud
+Pillow
+spacy
 
 
 
