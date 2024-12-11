@@ -720,7 +720,7 @@ nlp = spacy.load("fr_core_news_sm")
 try:
     with open("articlepresse.txt", "r", encoding="utf-8") as file:
             text = file.read()
-    except FileNotFoundError:
+except FileNotFoundError:
         st.error("Le fichier `articlepresse.txt` est introuvable. Veuillez vérifier son emplacement.")
         st.stop()
 
