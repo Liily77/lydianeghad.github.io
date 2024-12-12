@@ -52,8 +52,8 @@ wifi_usage_data = load_data(zip_file_path, csv_file_inside_zip)
 st.sidebar.title("Navigation")
 menu = st.sidebar.radio("Choisissez une section :", ["Origine des données 🔎", "Géographique et infrastructure🌎", "Temporalité et comportement d'utilisation ⏲", "Les utilisateurs 👩‍💻", "Les appareils et leurs usages 🤳🏼","WorldCloud 🌎"])
 
-# ------------------- Section "Origine des données" ------------------------------------------- #
 
+# ------------------- Section "Origine des données" ------------------------------------------- #
 if menu == "Origine des données 🔎":
 
     # Afficher les deux images côte à côte
@@ -75,7 +75,6 @@ if menu == "Origine des données 🔎":
     """)
 
     # ---- Création d'un tableau récapitulatif ---- #
-
     nombre_observations = wifi_usage_data.shape[0]
     nombre_variables = wifi_usage_data.shape[1]
 
@@ -89,30 +88,25 @@ if menu == "Origine des données 🔎":
     st.subheader("Description du Dataset")
     st.write("Nombre total d'observations :", nombre_observations)
     st.write("Nombre total de variables :", nombre_variables)
-    
 
     # ---- Tableau récapitulatif avec filtre ---- #
-
     st.subheader("🔎 Filtre interactif des colonnes")
     st.markdown("Utilisez le filtre pour sélectionner les colonnes que vous souhaitez afficher dans le tableau.")
 
-  
     colonnes_disponibles = wifi_usage_data.columns.tolist()
 
     # --- Widget multiselect pour choisir les colonnes
-
     colonnes_selectionnees = st.multiselect(
         "Sélectionnez les colonnes à afficher :",
         options=colonnes_disponibles,
         default=colonnes_disponibles  # Par défaut, toutes les colonnes sont affichées
     )
 
-    #---- Affichage du tableau filtré
+    # ---- Limiter l'affichage à 10 lignes ---- #
     if colonnes_selectionnees:
-        st.dataframe(wifi_usage_data[colonnes_selectionnees])
+        st.dataframe(wifi_usage_data[colonnes_selectionnees].head(10))  # Limite à 10 lignes
     else:
         st.warning("Veuillez sélectionner au moins une colonne pour afficher le tableau.")
-    
 
 # ------------------- Section "Géographique et infrastructure" ------------------------------------------- #
 
