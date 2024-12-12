@@ -1,6 +1,6 @@
 gdown
 streamlit
-numpy
+numpy==1.23.5
 pandas
 plotly
 matplotlib
@@ -10,8 +10,8 @@ altair
 zipfile36
 wordcloud
 Pillow
-spacy
-
+spacy==3.5.0
+thinc==8.1.10
 
 
 
