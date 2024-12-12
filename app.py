@@ -40,128 +40,140 @@ zip_file_path = "wifi_usage_data.zip"
 csv_file_inside_zip = "wifi_usage_data.csv"
 
 # ---- Télécharger et charger les données ---- #
-# Télécharger le fichier ZIP depuis Google Drive
 download_data_from_drive(file_id, zip_file_path)
-
-# Charger les données à partir du fichier ZIP
 wifi_usage_data = load_data(zip_file_path, csv_file_inside_zip)
 
 # ---- Sidebar Navigation ---- #
-
 st.sidebar.title("Navigation")
-menu = st.sidebar.radio("Choisissez une section :", ["Origine des données 🔎", "Géographique et infrastructure🌎", "Temporalité et comportement d'utilisation ⏲️", "Les utilisateurs 👩‍💻", "Les appareils et leurs usages 🤳🏼","WorldCloud 🌎"])
+menu = st.sidebar.radio(
+    "Choisissez une section :",
+    [
+        "Origine des données 🔎",
+        "Géographique et infrastructure🌎",
+        "Temporalité et comportement d'utilisation ⏲️",
+        "Les utilisateurs 👩‍💻",
+        "Les appareils et leurs usages 🤳🏼",
+        "WorldCloud 🌎",
+    ],
+)
 
 # ------------------- Section "Origine des données" ------------------------------------------- #
-
 if menu == "Origine des données 🔎":
-
     # Afficher les deux images côte à côte
     col1, col2 = st.columns([1, 1])  # Crée deux colonnes de largeur égale
-
     with col1:
         st.image("Logo1.PNG", use_container_width=True)  # Charger la première image
-
     with col2:
         st.image("Logo2.PNG", use_container_width=True)  # Charger la seconde image
 
     st.title("Projet Data Management 📊")
-    st.markdown("""
-    Bienvenue sur cette application Streamlit dédiée à l'analyse des données d'utilisation des hotspots Wi-Fi de Paris.
-                
-    Source des données : [Open Data](https://opendata.paris.fr/explore/dataset/paris-wi-fi-utilisation-des-hotspots-paris-wi-fi/table/?disjunctive.incomingzonelabel&disjunctive.incomingnetworklabel&disjunctive.device_portal_format&disjunctive.device_constructor_name&disjunctive.device_operating_system_name_version&disjunctive.device_browser_name_version&disjunctive.userlanguage).
+    st.markdown(
+        """
+        Bienvenue sur cette application Streamlit dédiée à l'analyse des données d'utilisation des hotspots Wi-Fi de Paris.
 
-    Objectif : Explorer les tendances d'utilisation des hotspots Wi-Fi, y compris les répartitions géographiques, temporelles, et comportementales.
-    """)
+        Source des données : [Open Data](https://opendata.paris.fr/explore/dataset/paris-wi-fi-utilisation-des-hotspots-paris-wi-fi/table/?disjunctive.incomingzonelabel&disjunctive.incomingnetworklabel&disjunctive.device_portal_format&disjunctive.device_constructor_name&disjunctive.device_operating_system_name_version&disjunctive.device_browser_name_version&disjunctive.userlanguage).
+
+        Objectif : Explorer les tendances d'utilisation des hotspots Wi-Fi, y compris les répartitions géographiques, temporelles, et comportementales.
+        """
+    )
 
     # ---- Création d'un tableau récapitulatif ---- #
-
     nombre_observations = wifi_usage_data.shape[0]
     nombre_variables = wifi_usage_data.shape[1]
 
-    description_tableau = pd.DataFrame({
-        "Nom de la colonne": wifi_usage_data.columns,
-        "Type de variable": wifi_usage_data.dtypes.values,
-        "Nombre de valeurs": wifi_usage_data.count().values,
-        "Valeurs manquantes": wifi_usage_data.isnull().sum().values
-    })
+    description_tableau = pd.DataFrame(
+        {
+            "Nom de la colonne": wifi_usage_data.columns,
+            "Type de variable": wifi_usage_data.dtypes.values,
+            "Nombre de valeurs": wifi_usage_data.count().values,
+            "Valeurs manquantes": wifi_usage_data.isnull().sum().values,
+        }
+    )
 
     st.subheader("Description du Dataset")
     st.write("Nombre total d'observations :", nombre_observations)
     st.write("Nombre total de variables :", nombre_variables)
-    
 
     # ---- Tableau récapitulatif avec filtre ---- #
-
     st.subheader("🔎 Filtre interactif des colonnes")
-    st.markdown("Utilisez le filtre pour sélectionner les colonnes que vous souhaitez afficher dans le tableau.")
+    st.markdown(
+        "Utilisez le filtre pour sélectionner les colonnes que vous souhaitez afficher dans le tableau."
+    )
 
-  
     colonnes_disponibles = wifi_usage_data.columns.tolist()
 
     # --- Widget multiselect pour choisir les colonnes
-
     colonnes_selectionnees = st.multiselect(
         "Sélectionnez les colonnes à afficher :",
         options=colonnes_disponibles,
-        default=colonnes_disponibles  # Par défaut, toutes les colonnes sont affichées
+        default=colonnes_disponibles,  # Par défaut, toutes les colonnes sont affichées
     )
 
-# ---- Affichage du tableau filtré avec limitation à 10 lignes ---- #
-if colonnes_selectionnees:
-    st.dataframe(wifi_usage_data[colonnes_selectionnees].head(10))
-    st.write(f"Affichage des 10 premières lignes (sur un total de {wifi_usage_data.shape[0]} observations).")
-else:
-    st.warning("Veuillez sélectionner au moins une colonne pour afficher le tableau.")
-
-    
+    # ---- Affichage du tableau filtré avec limitation à 10 lignes ---- #
+    if colonnes_selectionnees:
+        st.dataframe(wifi_usage_data[colonnes_selectionnees].head(10))
+        st.write(
+            f"Affichage des 10 premières lignes (sur un total de {wifi_usage_data.shape[0]} observations)."
+        )
+    else:
+        st.warning("Veuillez sélectionner au moins une colonne pour afficher le tableau.")
 
 # ------------------- Section "Géographique et infrastructure" ------------------------------------------- #
-
 elif menu == "Géographique et infrastructure🌎":
     st.title("Analyse géographique et infrastructure 🌎")
-    st.markdown("""
-    Cette section explore la répartition géographique et l'état des infrastructures Wi-Fi, permettant de visualiser l'utilisation des hotspots à travers Paris. 
-    Elle inclut l'analyse des connexions par arrondissement, une carte interactive des bornes, et une évolution temporelle des états des sites Wi-Fi.
-    """)
+    st.markdown(
+        """
+        Cette section explore la répartition géographique et l'état des infrastructures Wi-Fi, permettant de visualiser l'utilisation des hotspots à travers Paris. 
+        Elle inclut l'analyse des connexions par arrondissement, une carte interactive des bornes, et une évolution temporelle des états des sites Wi-Fi.
+        """
+    )
 
     # ---- Création des onglets ---- #
-    tab1, tab2, tab3 = st.tabs(["📊 Répartition par arrondissement", "🗺️ Carte interactive des bornes", "📈 Évolution des états des sites"])
+    tab1, tab2, tab3 = st.tabs(
+        [
+            "📊 Répartition par arrondissement",
+            "🗺️ Carte interactive des bornes",
+            "📈 Évolution des états des sites",
+        ]
+    )
 
-    # ---- Graphique 1 : Répartition des connexions par arrondissement ---- #
-    
     with tab1:
-
-        connexions_par_arrondissement = (   
+        connexions_par_arrondissement = (
             wifi_usage_data.groupby("Pénétration Géographique")["Nombre de connexions"]
             .sum()
             .reset_index()
             .rename(columns={"Nombre de connexions": "Total des connexions"})
         )
-        connexions_par_arrondissement = connexions_par_arrondissement.sort_values(by="Total des connexions", ascending=False)
+        connexions_par_arrondissement = connexions_par_arrondissement.sort_values(
+            by="Total des connexions", ascending=False
+        )
         fig_arrondissement = px.bar(
             connexions_par_arrondissement,
             x="Pénétration Géographique",
             y="Total des connexions",
             color="Total des connexions",
             title="Répartition des connexions Wi-Fi par arrondissement",
-            color_continuous_scale="Viridis"
+            color_continuous_scale="Viridis",
         )
-        fig_arrondissement.update_layout(xaxis_title="Arrondissements", yaxis_title="Nombre de connexions", title_font=dict(size=18))
+        fig_arrondissement.update_layout(
+            xaxis_title="Arrondissements",
+            yaxis_title="Nombre de connexions",
+            title_font=dict(size=18),
+        )
         st.plotly_chart(fig_arrondissement)
 
-    # ---- Graphique 2 : Carte interactive des bornes Wi-Fi ---- #
-
     with tab2:
-
-        # Séparer latitude et longitude
-        wifi_usage_data[["Latitude", "Longitude"]] = wifi_usage_data["geo_point_2d"].str.split(',', expand=True)
+        wifi_usage_data[["Latitude", "Longitude"]] = wifi_usage_data[
+            "geo_point_2d"
+        ].str.split(",", expand=True)
         wifi_usage_data["Latitude"] = wifi_usage_data["Latitude"].astype(float)
         wifi_usage_data["Longitude"] = wifi_usage_data["Longitude"].astype(float)
 
-        # Groupement des données par latitude et longitude
-        geo_data = wifi_usage_data.groupby(["Latitude", "Longitude"]).size().reset_index(name="Nombre de connexions")
-
-        # Création du graphique
+        geo_data = (
+            wifi_usage_data.groupby(["Latitude", "Longitude"])
+            .size()
+            .reset_index(name="Nombre de connexions")
+        )
         fig_carte = px.scatter_mapbox(
             geo_data,
             lat="Latitude",
@@ -171,23 +183,22 @@ elif menu == "Géographique et infrastructure🌎":
             color_continuous_scale=px.colors.sequential.Plasma,
             title="Carte interactive des bornes Wi-Fi avec volume de connexions",
             mapbox_style="carto-positron",
-            zoom=10
+            zoom=10,
         )
         st.plotly_chart(fig_carte)
 
-    # ---- Graphique 3 : Évolution des états des sites Wi-Fi ---- #
-
     with tab3:
-        
-        # Conversion et extraction de l'année
         if "Date_début" in wifi_usage_data.columns:
-            wifi_usage_data["Date_début"] = pd.to_datetime(wifi_usage_data["Date_début"], errors="coerce")
+            wifi_usage_data["Date_début"] = pd.to_datetime(
+                wifi_usage_data["Date_début"], errors="coerce"
+            )
             wifi_usage_data["Année"] = wifi_usage_data["Date_début"].dt.year
 
-        # Groupement des données par année et état des sites
-        etats_par_annee = wifi_usage_data.groupby(["Année", "Etat du site"]).size().reset_index(name="Nombre")
-
-        # Création du graphique
+        etats_par_annee = (
+            wifi_usage_data.groupby(["Année", "Etat du site"])
+            .size()
+            .reset_index(name="Nombre")
+        )
         fig_etats = px.bar(
             etats_par_annee,
             x="Année",
@@ -195,10 +206,15 @@ elif menu == "Géographique et infrastructure🌎":
             color="Etat du site",
             title="Évolution des états des sites Wi-Fi par année",
             barmode="group",
-            color_discrete_sequence=px.colors.qualitative.Pastel
+            color_discrete_sequence=px.colors.qualitative.Pastel,
         )
-        fig_etats.update_layout(xaxis_title="Année", yaxis_title="Nombre de sites", title_font=dict(size=18))
+        fig_etats.update_layout(
+            xaxis_title="Année",
+            yaxis_title="Nombre de sites",
+            title_font=dict(size=18),
+        )
         st.plotly_chart(fig_etats)
+
 
 # ------------------- Section "Temporalité et comportement d'utilisation" ------------------------------------------- #
 
