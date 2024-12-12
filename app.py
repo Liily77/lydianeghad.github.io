@@ -726,8 +726,7 @@ from PIL import Image
 import numpy as np
 import streamlit as st
 
-# ---------------------- WORLDCLOUD --------------------------#
-    elif menu == "WorldCloud 🌎":
+elif menu == "WorldCloud 🌎":
         # ---- Titre et description ---- #
         st.title("Visualisation WorldCloud 🌎")
         st.markdown("""
