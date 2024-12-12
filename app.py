@@ -724,48 +724,30 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
-import streamlit as st
 import nltk
-from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-from collections import Counter
+from nltk.tokenize import word_tokenize
+from nltk import pos_tag
+import streamlit as st
 
-# ---- Télécharger les ressources NLTK ---- #
-nltk.download("punkt")  # Pour la tokenisation
-nltk.download("averaged_perceptron_tagger")  # Pour le tagging grammatical
-nltk.download("stopwords")  # Pour filtrer les mots inutiles
+# ---- Téléchargement des ressources NLTK nécessaires ---- #
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 
-# ---- Téléversement ou lecture d'un fichier texte ---- #
-uploaded_file = st.file_uploader("Téléversez un fichier texte (format .txt)", type=["txt"])
-
-if uploaded_file:
-    text = uploaded_file.read().decode("utf-8")
-else:
-    try:
-        with open("articlepresse.txt", "r", encoding="utf-8") as file:
-            text = file.read()
-    except FileNotFoundError:
-        st.error("Le fichier `articlepresse.txt` est introuvable. Veuillez vérifier son emplacement.")
-        st.stop()
+# ---- Lecture du fichier texte de base ---- #
+try:
+    with open("articlepresse.txt", "r", encoding="utf-8") as file:
+        text = file.read()
+except FileNotFoundError:
+    st.error("Le fichier `articlepresse.txt` est introuvable. Veuillez vérifier son emplacement.")
+    st.stop()
 
 # ---- Analyse de texte avec NLTK ---- #
 try:
-    # Tokeniser le texte
-    tokens = word_tokenize(text)
-
-    # Ajouter les stopwords en français
-    stop_words = set(stopwords.words("french"))
-    tokens = [word for word in tokens if word.lower() not in stop_words]
-
-    # Identifier les noms à l'aide des tags NLTK
-    tagged_words = nltk.pos_tag(tokens, lang="fra")
-    nouns = [word for word, pos in tagged_words if pos.startswith("N")]
-
-    # Convertir en texte filtré
+    tokens = word_tokenize(text)  # Tokeniser le texte
+    pos_tags = pos_tag(tokens)  # Obtenir les étiquettes grammaticales
+    nouns = [word for word, tag in pos_tags if tag in ["NN", "NNS"]]  # Sélectionner uniquement les noms
     filtered_text = " ".join(nouns)
-
-    # Compter les occurrences des noms
-    noun_counts = Counter(nouns)
 except Exception as e:
     st.error(f"Erreur lors de l'analyse du texte : {e}")
     st.stop()
@@ -785,7 +767,7 @@ if uploaded_image:
         st.stop()
 else:
     try:
-        # Masque par défaut si aucune image n'est téléversée
+        # Utiliser le masque par défaut si aucune image n'est téléversée
         mask = np.array(Image.open("wf.png").convert("L"))
         mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
     except FileNotFoundError:
@@ -793,14 +775,18 @@ else:
         st.stop()
 
 # ---- Générer le WordCloud ---- #
-wordcloud = WordCloud(
-    background_color="white",
-    mask=mask,
-    contour_width=1,
-    contour_color="black",
-    colormap="viridis",
-    max_words=200
-).generate(filtered_text)
+try:
+    wordcloud = WordCloud(
+        background_color="white",
+        mask=mask,
+        contour_width=1,
+        contour_color="black",
+        colormap="viridis",
+        max_words=200
+    ).generate(filtered_text)
+except ValueError as e:
+    st.error(f"Erreur lors de la génération du WordCloud : {e}")
+    st.stop()
 
 # ---- Afficher le WordCloud ---- #
 st.subheader("WordCloud des concepts principaux")
@@ -809,6 +795,7 @@ ax.imshow(wordcloud, interpolation="bilinear")
 ax.axis("off")
 ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
 st.pyplot(fig)
+
 
 
 
