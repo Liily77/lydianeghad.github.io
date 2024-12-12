@@ -11,6 +11,8 @@ zipfile36
 wordcloud
 Pillow
 spacy>=3.5,<3.8
+spacy-loggers
+spacy-legacy
 
 
 
