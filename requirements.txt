@@ -10,7 +10,7 @@ altair
 zipfile36
 wordcloud
 Pillow
-nltk
+
 
 
 
