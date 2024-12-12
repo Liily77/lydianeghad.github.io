@@ -733,6 +733,7 @@ import streamlit as st
 # ---- Téléchargement des ressources NLTK nécessaires ---- #
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
+nltk.download('stopwords')
 
 # ---- Lecture du fichier texte de base ---- #
 try:
@@ -795,7 +796,6 @@ ax.imshow(wordcloud, interpolation="bilinear")
 ax.axis("off")
 ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
 st.pyplot(fig)
-
 
 
 
