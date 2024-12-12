@@ -729,14 +729,22 @@ from nltk.tokenize import word_tokenize
 from nltk import pos_tag
 import streamlit as st
 
+# ---- Supprimer les anciennes données NLTK si elles existent ---- #
+import shutil
+import os
+
+nltk_data_path = '/home/appuser/nltk_data'
+if os.path.exists(nltk_data_path):
+    shutil.rmtree(nltk_data_path)  # Supprime l'ancien répertoire NLTK
+
 # ---- Téléchargement des ressources NLTK nécessaires ---- #
 nltk_data_packages = ['punkt', 'averaged_perceptron_tagger', 'stopwords']
 for package in nltk_data_packages:
     try:
-        nltk.data.find(f'tokenizers/{package}' if package == 'punkt' else f'corpora/{package}')
-    except LookupError:
-        st.info(f"Téléchargement du package NLTK : {package}...")
         nltk.download(package)
+    except Exception as e:
+        st.error(f"Erreur lors du téléchargement de la ressource {package}: {e}")
+        st.stop()
 
 # ---- Lecture du fichier texte de base ---- #
 try:
@@ -799,7 +807,6 @@ ax.imshow(wordcloud, interpolation="bilinear")
 ax.axis("off")
 ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
 st.pyplot(fig)
-
 
 
 
