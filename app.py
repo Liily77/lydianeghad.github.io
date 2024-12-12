@@ -9,8 +9,7 @@ import os
 import gdown  # Pour télécharger des fichiers depuis Google Drive
 from wordcloud import WordCloud
 from PIL import Image
-import numpy as np
-
+import zipfile  # Nécessaire pour gérer les fichiers ZIP
 
 # ---- Fonction de téléchargement depuis Google Drive ---- #
 def download_data_from_drive(file_id, output_file):
