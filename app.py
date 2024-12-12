@@ -45,7 +45,6 @@ csv_file_inside_zip = "wifi_usage_data.csv"
 download_data_from_drive(file_id, zip_file_path)
 wifi_usage_data = load_data(zip_file_path, csv_file_inside_zip)
 
-
 # ---- Sidebar Navigation ---- #
 
 st.sidebar.title("Navigation")
