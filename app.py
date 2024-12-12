@@ -706,18 +706,29 @@ elif menu == "Les appareils et leurs usages 🤳🏼":
         )
         st.plotly_chart(fig)
 
-
 # ---- Importation des bibliothèques nécessaires ---- #
-    from wordcloud import WordCloud
-    import matplotlib.pyplot as plt
-    from PIL import Image
-    import numpy as np
-    import spacy
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+from PIL import Image
+import numpy as np
+import spacy
+import streamlit as st
 
-    # ---- Chargement du modèle SpaCy ---- #
+# ---- Vérifier et charger le modèle SpaCy ---- #
+try:
+    nlp = spacy.load("fr_core_news_sm")
+except OSError:
+    st.warning("Téléchargement du modèle SpaCy...")
+    import spacy.cli
+    spacy.cli.download("fr_core_news_sm")
     nlp = spacy.load("fr_core_news_sm")
 
-    # ---- Lecture et analyse du texte ---- #
+# ---- Téléversement ou lecture d'un fichier texte ---- #
+uploaded_file = st.file_uploader("Téléversez un fichier texte (format .txt)", type=["txt"])
+
+if uploaded_file:
+    text = uploaded_file.read().decode("utf-8")
+else:
     try:
         with open("articlepresse.txt", "r", encoding="utf-8") as file:
             text = file.read()
@@ -725,53 +736,52 @@ elif menu == "Les appareils et leurs usages 🤳🏼":
         st.error("Le fichier `articlepresse.txt` est introuvable. Veuillez vérifier son emplacement.")
         st.stop()
 
-    doc = nlp(text)
+# ---- Analyse de texte avec SpaCy ---- #
+doc = nlp(text)
 
-    # ---- Filtrer les noms uniquement ---- #
-    nouns = [token.text for token in doc if token.pos_ == "NOUN"]
-    filtered_text = " ".join(nouns)
+# ---- Extraire uniquement les noms (NOUNS) ---- #
+nouns = [token.text for token in doc if token.pos_ == "NOUN"]
+filtered_text = " ".join(nouns)
 
-    # ---- Téléversement d'une image ---- #
-    uploaded_image = st.file_uploader(
-        "Téléversez une image pour définir le masque du WordCloud (format PNG)", type=["png"]
-    )
+# ---- Téléversement d'une image ---- #
+uploaded_image = st.file_uploader(
+    "Téléversez une image pour définir le masque du WordCloud (format PNG)", type=["png"]
+)
 
-    if uploaded_image:
-        try:
-            # Charger l'image téléversée comme masque
-            mask = np.array(Image.open(uploaded_image).convert("L"))
-            mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
-        except Exception as e:
-            st.error(f"Erreur lors du chargement de l'image : {e}")
-            st.stop()
-    else:
-        try:
-            # Masque par défaut si aucune image n'est téléversée
-            mask = np.array(Image.open("wf.png").convert("L"))
-            mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
-        except FileNotFoundError:
-            st.error("Le fichier par défaut `wf.png` est introuvable. Téléversez une image pour continuer.")
-            st.stop()
+if uploaded_image:
+    try:
+        # Charger l'image téléversée comme masque
+        mask = np.array(Image.open(uploaded_image).convert("L"))
+        mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
+    except Exception as e:
+        st.error(f"Erreur lors du chargement de l'image : {e}")
+        st.stop()
+else:
+    try:
+        # Masque par défaut si aucune image n'est téléversée
+        mask = np.array(Image.open("wf.png").convert("L"))
+        mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
+    except FileNotFoundError:
+        st.error("Le fichier par défaut `wf.png` est introuvable. Téléversez une image pour continuer.")
+        st.stop()
 
-    # ---- Générer le WordCloud ---- #
-    wordcloud = WordCloud(
-        background_color="white",
-        mask=mask,
-        contour_width=1,
-        contour_color="black",
-        colormap="viridis",
-        max_words=200
-    ).generate(filtered_text)
+# ---- Générer le WordCloud ---- #
+wordcloud = WordCloud(
+    background_color="white",
+    mask=mask,
+    contour_width=1,
+    contour_color="black",
+    colormap="viridis",
+    max_words=200
+).generate(filtered_text)
 
-    # ---- Afficher le WordCloud ---- #
-    st.subheader("WordCloud des concepts principaux")
-    fig, ax = plt.subplots(figsize=(10, 10))
-    ax.imshow(wordcloud, interpolation="bilinear")
-    ax.axis("off")
-    ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
-    st.pyplot(fig)
-
-
+# ---- Afficher le WordCloud ---- #
+st.subheader("WordCloud des concepts principaux")
+fig, ax = plt.subplots(figsize=(10, 10))
+ax.imshow(wordcloud, interpolation="bilinear")
+ax.axis("off")
+ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
+st.pyplot(fig)
 
 
 
