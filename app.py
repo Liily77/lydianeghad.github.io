@@ -719,7 +719,6 @@ elif menu == "Les appareils et leurs usages 🤳🏼":
         )
         st.plotly_chart(fig)
 
-# ---- Importation des bibliothèques nécessaires ---- #
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -736,6 +735,7 @@ for package in nltk_data_packages:
     try:
         nltk.data.find(f'tokenizers/{package}' if package == 'punkt' else f'corpora/{package}')
     except LookupError:
+        st.info(f"Téléchargement du package NLTK : {package}...")
         nltk.download(package)
 
 # ---- Lecture du fichier texte de base ---- #
@@ -799,7 +799,6 @@ ax.imshow(wordcloud, interpolation="bilinear")
 ax.axis("off")
 ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
 st.pyplot(fig)
-
 
 
 
