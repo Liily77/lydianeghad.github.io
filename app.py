@@ -46,10 +46,6 @@ download_data_from_drive(file_id, zip_file_path)
 # Charger les données à partir du fichier ZIP
 wifi_usage_data = load_data(zip_file_path, csv_file_inside_zip)
 
-st.write("Aperçu des données chargées :")
-st.dataframe(wifi_usage_data.head())
-
-
 # ---- Sidebar Navigation ---- #
 
 st.sidebar.title("Navigation")
