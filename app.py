@@ -710,13 +710,22 @@ import spacy
 import streamlit as st
 
 # ---- Vérifier et charger le modèle SpaCy ---- #
-try:
-    nlp = spacy.load("fr_core_news_sm")
-except OSError:
-    st.warning("Téléchargement du modèle SpaCy...")
-    import spacy.cli
-    spacy.cli.download("fr_core_news_sm")
-    nlp = spacy.load("fr_core_news_sm")
+def load_spacy_model():
+    try:
+        # Charger le modèle SpaCy
+        return spacy.load("fr_core_news_sm")
+    except OSError:
+        st.warning("Le modèle SpaCy n'est pas disponible. Téléchargement en cours...")
+        import spacy.cli
+        spacy.cli.download("fr_core_news_sm")
+        return spacy.load("fr_core_news_sm")
+    except Exception as e:
+        st.error(f"Erreur lors du chargement de SpaCy : {e}")
+        st.stop()
+
+# Charger le modèle
+nlp = load_spacy_model()
+
 
 # ---- Téléversement ou lecture d'un fichier texte ---- #
 uploaded_file = st.file_uploader("Téléversez un fichier texte (format .txt)", type=["txt"])
