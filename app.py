@@ -723,28 +723,7 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
-import nltk
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from nltk import pos_tag
 import streamlit as st
-
-# ---- Supprimer les anciennes données NLTK si elles existent ---- #
-import shutil
-import os
-
-nltk_data_path = '/home/appuser/nltk_data'
-if os.path.exists(nltk_data_path):
-    shutil.rmtree(nltk_data_path)  # Supprime l'ancien répertoire NLTK
-
-# ---- Téléchargement des ressources NLTK nécessaires ---- #
-nltk_data_packages = ['punkt', 'averaged_perceptron_tagger', 'stopwords']
-for package in nltk_data_packages:
-    try:
-        nltk.download(package)
-    except Exception as e:
-        st.error(f"Erreur lors du téléchargement de la ressource {package}: {e}")
-        st.stop()
 
 # ---- Lecture du fichier texte de base ---- #
 try:
@@ -754,15 +733,11 @@ except FileNotFoundError:
     st.error("Le fichier `articlepresse.txt` est introuvable. Veuillez vérifier son emplacement.")
     st.stop()
 
-# ---- Analyse de texte avec NLTK ---- #
-try:
-    tokens = word_tokenize(text)  # Tokeniser le texte
-    pos_tags = pos_tag(tokens)  # Obtenir les étiquettes grammaticales
-    nouns = [word for word, tag in pos_tags if tag in ["NN", "NNS"]]  # Sélectionner uniquement les noms
-    filtered_text = " ".join(nouns)
-except Exception as e:
-    st.error(f"Erreur lors de l'analyse du texte : {e}")
-    st.stop()
+# ---- Nettoyage de texte simple ---- #
+stopwords = set(["le", "la", "les", "de", "des", "un", "une", "et", "à", "en", "dans"])  # Exemple de stopwords en français
+tokens = text.split()
+filtered_words = [word for word in tokens if word.lower() not in stopwords and len(word) > 3]
+filtered_text = " ".join(filtered_words)
 
 # ---- Téléversement d'une image ---- #
 uploaded_image = st.file_uploader(
@@ -771,7 +746,6 @@ uploaded_image = st.file_uploader(
 
 if uploaded_image:
     try:
-        # Charger l'image téléversée comme masque
         mask = np.array(Image.open(uploaded_image).convert("L"))
         mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
     except Exception as e:
@@ -779,7 +753,6 @@ if uploaded_image:
         st.stop()
 else:
     try:
-        # Utiliser le masque par défaut si aucune image n'est téléversée
         mask = np.array(Image.open("wf.png").convert("L"))
         mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
     except FileNotFoundError:
@@ -787,18 +760,14 @@ else:
         st.stop()
 
 # ---- Générer le WordCloud ---- #
-try:
-    wordcloud = WordCloud(
-        background_color="white",
-        mask=mask,
-        contour_width=1,
-        contour_color="black",
-        colormap="viridis",
-        max_words=200
-    ).generate(filtered_text)
-except ValueError as e:
-    st.error(f"Erreur lors de la génération du WordCloud : {e}")
-    st.stop()
+wordcloud = WordCloud(
+    background_color="white",
+    mask=mask,
+    contour_width=1,
+    contour_color="black",
+    colormap="viridis",
+    max_words=200
+).generate(filtered_text)
 
 # ---- Afficher le WordCloud ---- #
 st.subheader("WordCloud des concepts principaux")
@@ -807,7 +776,4 @@ ax.imshow(wordcloud, interpolation="bilinear")
 ax.axis("off")
 ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
 st.pyplot(fig)
-
-
-
 
