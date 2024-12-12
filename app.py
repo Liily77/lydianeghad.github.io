@@ -46,54 +46,6 @@ download_data_from_drive(file_id, zip_file_path)
 # Charger les données à partir du fichier ZIP
 wifi_usage_data = load_data(zip_file_path, csv_file_inside_zip)
 
-import pandas as pd
-import streamlit as st
-import plotly.express as px
-import plotly.graph_objects as go
-import seaborn as sns
-import matplotlib.pyplot as plt
-import numpy as np
-import zipfile  # Pour lire les fichiers ZIP
-import os
-import gdown  # Pour télécharger des fichiers depuis Google Drive
-
-# ---- Fonction de téléchargement depuis Google Drive ---- #
-def download_data_from_drive(file_id, output_file):
-    url = f"https://drive.google.com/uc?id={file_id}"
-    if not os.path.exists(output_file):  # Télécharger uniquement si le fichier n'existe pas
-        st.info(f"Téléchargement de {output_file} depuis Google Drive...")
-        gdown.download(url, output_file, quiet=False)
-
-# ---- Fonction de chargement des données ---- #
-def load_data(file_path, file_inside_zip=None):
-    try:
-        # Si le fichier est compressé (ZIP)
-        if file_path.endswith('.zip'):
-            with zipfile.ZipFile(file_path, 'r') as z:
-                with z.open(file_inside_zip) as f:
-                    data = pd.read_csv(f)
-        else:  # Lecture classique si non compressé
-            data = pd.read_csv(file_path)
-        return data
-    except FileNotFoundError:
-        st.error(f"Fichier introuvable : {file_path}. Vérifiez le chemin.")
-        st.stop()
-    except Exception as e:
-        st.error(f"Erreur lors du chargement des données : {e}")
-        st.stop()
-
-# ---- Définir les chemins et Google Drive ID ---- #
-file_id = "1wBrRnTNv6dgZuHZ6fbMGicsniFhrsBok"  # ID de votre fichier Google Drive
-zip_file_path = "wifi_usage_data.zip"
-csv_file_inside_zip = "wifi_usage_data.csv"
-
-# ---- Télécharger et charger les données ---- #
-# Télécharger le fichier ZIP depuis Google Drive
-download_data_from_drive(file_id, zip_file_path)
-
-# Charger les données à partir du fichier ZIP
-wifi_usage_data = load_data(zip_file_path, csv_file_inside_zip)
-
 st.write("Aperçu des données chargées :")
 st.dataframe(wifi_usage_data.head())
 
