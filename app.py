@@ -5,7 +5,6 @@ import plotly.graph_objects as go
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
-import zipfile  # Pour lire les fichiers ZIP
 import os
 import gdown  # Pour télécharger des fichiers depuis Google Drive
 from wordcloud import WordCloud
