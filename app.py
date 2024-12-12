@@ -731,9 +731,12 @@ from nltk import pos_tag
 import streamlit as st
 
 # ---- Téléchargement des ressources NLTK nécessaires ---- #
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('stopwords')
+nltk_data_packages = ['punkt', 'averaged_perceptron_tagger', 'stopwords']
+for package in nltk_data_packages:
+    try:
+        nltk.data.find(f'tokenizers/{package}' if package == 'punkt' else f'corpora/{package}')
+    except LookupError:
+        nltk.download(package)
 
 # ---- Lecture du fichier texte de base ---- #
 try:
@@ -796,6 +799,7 @@ ax.imshow(wordcloud, interpolation="bilinear")
 ax.axis("off")
 ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
 st.pyplot(fig)
+
 
 
 
