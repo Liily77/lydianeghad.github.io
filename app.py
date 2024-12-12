@@ -724,26 +724,16 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
-import spacy
 import streamlit as st
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from collections import Counter
 
-# ---- Vérifier et charger le modèle SpaCy ---- #
-def load_spacy_model():
-    try:
-        # Charger le modèle SpaCy
-        return spacy.load("fr_core_news_sm")
-    except OSError:
-        st.warning("Le modèle SpaCy n'est pas disponible. Téléchargement en cours...")
-        import spacy.cli
-        spacy.cli.download("fr_core_news_sm")
-        return spacy.load("fr_core_news_sm")
-    except Exception as e:
-        st.error(f"Erreur lors du chargement de SpaCy : {e}")
-        st.stop()
-
-# Charger le modèle
-nlp = load_spacy_model()
-
+# ---- Télécharger les ressources NLTK ---- #
+nltk.download("punkt")  # Pour la tokenisation
+nltk.download("averaged_perceptron_tagger")  # Pour le tagging grammatical
+nltk.download("stopwords")  # Pour filtrer les mots inutiles
 
 # ---- Téléversement ou lecture d'un fichier texte ---- #
 uploaded_file = st.file_uploader("Téléversez un fichier texte (format .txt)", type=["txt"])
@@ -758,12 +748,27 @@ else:
         st.error("Le fichier `articlepresse.txt` est introuvable. Veuillez vérifier son emplacement.")
         st.stop()
 
-# ---- Analyse de texte avec SpaCy ---- #
-doc = nlp(text)
+# ---- Analyse de texte avec NLTK ---- #
+try:
+    # Tokeniser le texte
+    tokens = word_tokenize(text)
 
-# ---- Extraire uniquement les noms (NOUNS) ---- #
-nouns = [token.text for token in doc if token.pos_ == "NOUN"]
-filtered_text = " ".join(nouns)
+    # Ajouter les stopwords en français
+    stop_words = set(stopwords.words("french"))
+    tokens = [word for word in tokens if word.lower() not in stop_words]
+
+    # Identifier les noms à l'aide des tags NLTK
+    tagged_words = nltk.pos_tag(tokens, lang="fra")
+    nouns = [word for word, pos in tagged_words if pos.startswith("N")]
+
+    # Convertir en texte filtré
+    filtered_text = " ".join(nouns)
+
+    # Compter les occurrences des noms
+    noun_counts = Counter(nouns)
+except Exception as e:
+    st.error(f"Erreur lors de l'analyse du texte : {e}")
+    st.stop()
 
 # ---- Téléversement d'une image ---- #
 uploaded_image = st.file_uploader(
@@ -804,7 +809,6 @@ ax.imshow(wordcloud, interpolation="bilinear")
 ax.axis("off")
 ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
 st.pyplot(fig)
-
 
 
 
