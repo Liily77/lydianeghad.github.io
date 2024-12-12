@@ -719,74 +719,76 @@ elif menu == "Les appareils et leurs usages 🤳🏼":
         )
         st.plotly_chart(fig)
 
-#----------------------WORLDCLOUD--------------------------#
-
-elif menu == "WorldCloud 🌎":
-    st.title("Visualisation WorldCloud 🌎")
-    st.markdown("""
-    Cet onglet présente une visualisation sous forme de **nuage de mots** pour explorer les concepts les plus présents dans les données textuelles.
-    
-    L'article de presse est la suivante : https://actus.sfr.fr/tech/internet/les-hotspots-wifi-un-danger_AN-201908020003.html
-    
-    Vous pouvez également téléverser une image pour personnaliser le masque du WordCloud.
-     
-    """)
-    st.markdown(""" **Pour un rendu optimal du WordCloud, il est recommandé d'utiliser une image avec un fond blanc et des objets noirs, car seules les zones noires seront prises en compte pour la génération des mots.** """)
+# ---- Importation des bibliothèques nécessaires ---- #
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
 import streamlit as st
 
-# ---- Lecture du fichier texte de base ---- #
-try:
-    with open("articlepresse.txt", "r", encoding="utf-8") as file:
-        text = file.read()
-except FileNotFoundError:
-    st.error("Le fichier `articlepresse.txt` est introuvable. Veuillez vérifier son emplacement.")
-    st.stop()
+# ---------------------- WORLDCLOUD --------------------------#
+elif menu == "WorldCloud 🌎":
+    # ---- Titre et description ---- #
+    st.title("Visualisation WorldCloud 🌎")
+    st.markdown("""
+    Cet onglet présente une visualisation sous forme de **nuage de mots** pour explorer les concepts les plus présents dans les données textuelles.
+    
+    L'article de presse est le suivant : [Les hotspots WiFi : un danger ?](https://actus.sfr.fr/tech/internet/les-hotspots-wifi-un-danger_AN-201908020003.html)
+    
+    Vous pouvez également téléverser une image pour personnaliser le masque du WordCloud.
+    """)
+    st.markdown("""
+    **Pour un rendu optimal du WordCloud, il est recommandé d'utiliser une image avec un fond blanc et des objets noirs, car seules les zones noires seront prises en compte pour la génération des mots.**
+    """)
 
-# ---- Nettoyage de texte simple ---- #
-stopwords = set(["le", "la", "les", "de", "des", "un", "une", "et", "à", "en", "dans"])  # Exemple de stopwords en français
-tokens = text.split()
-filtered_words = [word for word in tokens if word.lower() not in stopwords and len(word) > 3]
-filtered_text = " ".join(filtered_words)
-
-# ---- Téléversement d'une image ---- #
-uploaded_image = st.file_uploader(
-    "Téléversez une image pour définir le masque du WordCloud (format PNG)", type=["png"]
-)
-
-if uploaded_image:
+    # ---- Lecture du fichier texte de base ---- #
     try:
-        mask = np.array(Image.open(uploaded_image).convert("L"))
-        mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
-    except Exception as e:
-        st.error(f"Erreur lors du chargement de l'image : {e}")
-        st.stop()
-else:
-    try:
-        mask = np.array(Image.open("wf.png").convert("L"))
-        mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
+        with open("articlepresse.txt", "r", encoding="utf-8") as file:
+            text = file.read()
     except FileNotFoundError:
-        st.error("Le fichier par défaut `wf.png` est introuvable. Téléversez une image pour continuer.")
+        st.error("Le fichier `articlepresse.txt` est introuvable. Veuillez vérifier son emplacement.")
         st.stop()
 
-# ---- Générer le WordCloud ---- #
-wordcloud = WordCloud(
-    background_color="white",
-    mask=mask,
-    contour_width=1,
-    contour_color="black",
-    colormap="viridis",
-    max_words=200
-).generate(filtered_text)
+    # ---- Nettoyage de texte simple ---- #
+    stopwords = set(["le", "la", "les", "de", "des", "un", "une", "et", "à", "en", "dans"])  # Exemple de stopwords en français
+    tokens = text.split()
+    filtered_words = [word for word in tokens if word.lower() not in stopwords and len(word) > 3]
+    filtered_text = " ".join(filtered_words)
 
-# ---- Afficher le WordCloud ---- #
-st.subheader("WordCloud des concepts principaux")
-fig, ax = plt.subplots(figsize=(10, 10))
-ax.imshow(wordcloud, interpolation="bilinear")
-ax.axis("off")
-ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
-st.pyplot(fig)
+    # ---- Téléversement d'une image ---- #
+    uploaded_image = st.file_uploader(
+        "Téléversez une image pour définir le masque du WordCloud (format PNG)", type=["png"]
+    )
 
+    if uploaded_image:
+        try:
+            mask = np.array(Image.open(uploaded_image).convert("L"))
+            mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
+        except Exception as e:
+            st.error(f"Erreur lors du chargement de l'image : {e}")
+            st.stop()
+    else:
+        try:
+            mask = np.array(Image.open("wf.png").convert("L"))
+            mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
+        except FileNotFoundError:
+            st.error("Le fichier par défaut `wf.png` est introuvable. Téléversez une image pour continuer.")
+            st.stop()
+
+    # ---- Générer le WordCloud ---- #
+    wordcloud = WordCloud(
+        background_color="white",
+        mask=mask,
+        contour_width=1,
+        contour_color="black",
+        colormap="viridis",
+        max_words=200
+    ).generate(filtered_text)
+
+    # ---- Afficher le WordCloud ---- #
+    st.subheader("WordCloud des concepts principaux")
+    fig, ax = plt.subplots(figsize=(10, 10))
+    ax.imshow(wordcloud, interpolation="bilinear")
+    ax.axis("off")
+    ax.set_title("Visualisation des Concepts : Sécurité et Connexions Wi-Fi", fontsize=16, weight="bold")
+    st.pyplot(fig)
