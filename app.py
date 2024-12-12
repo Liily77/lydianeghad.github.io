@@ -106,11 +106,13 @@ if menu == "Origine des données 🔎":
         default=colonnes_disponibles  # Par défaut, toutes les colonnes sont affichées
     )
 
-    #---- Affichage du tableau filtré
-    if colonnes_selectionnees:
-        st.dataframe(wifi_usage_data[colonnes_selectionnees])
-    else:
-        st.warning("Veuillez sélectionner au moins une colonne pour afficher le tableau.")
+# ---- Affichage du tableau filtré avec limitation à 10 lignes ---- #
+if colonnes_selectionnees:
+    st.dataframe(wifi_usage_data[colonnes_selectionnees].head(10))
+    st.write(f"Affichage des 10 premières lignes (sur un total de {wifi_usage_data.shape[0]} observations).")
+else:
+    st.warning("Veuillez sélectionner au moins une colonne pour afficher le tableau.")
+
     
 
 # ------------------- Section "Géographique et infrastructure" ------------------------------------------- #
