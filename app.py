@@ -719,6 +719,19 @@ elif menu == "Les appareils et leurs usages 🤳🏼":
         )
         st.plotly_chart(fig)
 
+#----------------------WORLDCLOUD--------------------------#
+
+elif menu == "WorldCloud 🌎":
+    st.title("Visualisation WorldCloud 🌎")
+    st.markdown("""
+    Cet onglet présente une visualisation sous forme de **nuage de mots** pour explorer les concepts les plus présents dans les données textuelles.
+    
+    L'article de presse est la suivante : https://actus.sfr.fr/tech/internet/les-hotspots-wifi-un-danger_AN-201908020003.html
+    
+    Vous pouvez également téléverser une image pour personnaliser le masque du WordCloud.
+     
+    """)
+    st.markdown(""" **Pour un rendu optimal du WordCloud, il est recommandé d'utiliser une image avec un fond blanc et des objets noirs, car seules les zones noires seront prises en compte pour la génération des mots.** """)
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from PIL import Image
