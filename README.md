@@ -1,74 +1,69 @@
-# Projet : Analyse de données avec Databricks 🚀
+# Projet Databricks : Analyse Scala et PySpark 🚀
 
-## Description du projet 🖋️
+[📂 **Accéder au projet complet en HTML ici**](https://github.com/Liily77/lydianeghad.github.io/blob/Databricks_Scala_Project/Projet%20Databricks%20Lydia.html)
 
-Ce projet a été réalisé dans le cadre de l'analyse des données grâce à Databricks et PySpark. Il vise à manipuler et visualiser des données afin de répondre à diverses questions analytiques, comme l'extraction d'informations spécifiques, la mise en relation des données, ou encore la création de visualisations claires. 
+## Description 🖋️
 
-Les étapes du projet incluent :
-- Chargement et traitement des données JSON fournies.
-- Application des transformations et calculs pour répondre aux besoins analytiques.
-- Création de visualisations pour explorer les données et en tirer des insights.
+Ce projet a été réalisé sur **Databricks** en utilisant Scala et PySpark pour analyser des données complexes et effectuer des calculs avancés. L'objectif était de manipuler, transformer et visualiser les données en respectant les consignes du sujet fourni.
 
-## Contenu des fichiers 📂
-
- 1. **`Data_TP2_MSD`**  
-Fichier JSON contenant les données sources. Il inclut deux ensembles de données principaux :
-- **Etudiants** : Données relatives aux étudiants, telles que leurs bourses, universités, et formations.
-- **Profs** : Données sur les professeurs, leurs formations associées et les années correspondantes.
-
- 2. **`Projet Databricks Lydia`**  
-Lien HTML pour visualiser le code exécuté et les résultats obtenus directement depuis Databricks.
-
- 3. **`Sujet projet Databricks`**  
-Document PDF décrivant les consignes du projet et les objectifs à atteindre, avec les questions détaillées.
-
-## Objectifs atteints ✔️
-
-- **Chargement et exploration des données JSON** :
-  - Exploitation des fichiers avec PySpark pour effectuer des calculs et transformations.
-- **Jointures et agrégations** :
-  - Association entre étudiants et professeurs pour déterminer les correspondances et les absences de correspondances.
-- **Création de cubes de données** :
-  - Mise en place d'agrégations avec des cubes multidimensionnels pour analyser les données en fonction des universités et des années.
-- **Calculs avancés** :
-  - Mise en ordre des données grâce à des index personnalisés et résolution des valeurs manquantes avec des catégories par défaut.
-- **Visualisations** :
-  - Production de graphiques à partir des données agrégées et classées.
+## Objectifs principaux ✔️
+1. Chargement et traitement des données JSON.
+2. Création de cubes de données pour analyse multi-dimensionnelle.
+3. Réalisation d'analyses croisées entre étudiants et professeurs.
+4. Mise en place d'un système de priorisation et d'organisation des résultats.
+5. Génération de visualisations et tri logique des résultats.
 
 ## Technologies utilisées 💻
 
-- **Databricks** : Plateforme principale pour l'exécution et l'analyse.
-- **PySpark** : Manipulation des données massives.
-- **SQL** : Extractions et transformations analytiques.
+- **Databricks** : Plateforme collaborative pour l'analyse de données à grande échelle.
+- **Scala** et **PySpark** : Langages utilisés pour manipuler et analyser les données.
+- **SQL** : Pour les requêtes et analyses croisées.
 - **JSON** : Format des données sources.
 
-## Compétences acquises 🎯
+## Contenu du projet 📂
 
-- Traitement des données structurées et semi-structurées.
-- Jointures avancées entre différents ensembles de données.
-- Utilisation des cubes OLAP pour l'agrégation multidimensionnelle.
-- Création de pipelines de données pour répondre à des besoins spécifiques.
-- Visualisation des données et storytelling.
+- **[HTML interactif](https://github.com/Liily77/lydianeghad.github.io/blob/Databricks_Scala_Project/Projet%20Databricks%20Lydia.html)** : Code complet et analyses exportées depuis Databricks.
+- **Sujet PDF** : Les consignes et objectifs du projet (disponible dans le dépôt).
+- **Données JSON** : Données sources utilisées pour l'analyse.
 
-## Difficultés rencontrées et solutions apportées 🌟
+## Aperçu des analyses réalisées 📊
 
-### Problème : Gestion des doublons et des colonnes ambiguës  
-Certaines jointures ont généré des erreurs dues à des noms de colonnes similaires ou à des doublons.  
-**Solution :**  
-- Renommage des colonnes pour éviter les ambiguïtés.  
-- Suppression des doublons avec `.dropDuplicates()`.
+1. **Calcul des cubes multidimensionnels** :
+   
+   - Analyse des données étudiantes et des bourses.
+   - Organisation des résultats par universités et années avec priorisation (`All_Years`, `All_Univ`).
+     
+3. **Analyse croisée des étudiants et professeurs** :
+   
+   - Association des professeurs selon leurs cours.
+   - Gestion des cas où aucun professeur n'est associé (`Profs_No_Recompensés`).
+     
+5. **Tri logique des résultats** :
+   
+   - Ordre personnalisé pour une meilleure lisibilité.
+   - Visualisation des données dans un format clair et structuré.
 
-### Problème : Absence de données dans certaines colonnes  
-Certaines valeurs étaient nulles dans les résultats des jointures.  
-**Solution :**  
-- Remplacement des valeurs nulles par des catégories par défaut, comme `"Profs_No_Recompensés"`.
+## Ce que j'ai appris 💪
+- **Manipulation des données** avec PySpark et Scala.
+- **Analyse des relations** entre entités (étudiants et professeurs).
+- **Structuration des résultats** avec SQL et transformations Spark.
+- **Développement collaboratif** sur une plateforme comme Databricks.
 
-### Problème : Classement des données selon un ordre personnalisé  
-L'ordre attendu par le projet ne correspondait pas à l'ordre naturel des données.  
-**Solution :**  
-- Ajout d'une colonne `orderIndex` pour contrôler l'ordre et tri final avec `.orderBy()`.
+## Difficultés rencontrées et solutions 🎯
+
+1. **Données ambiguës** :
+   - Problème : Colonnes avec des noms identiques (`Annee`).
+   - Solution : Renommer les colonnes pour éviter les conflits.
+2. **Organisation des résultats** :
+   - Problème : Tri logique des données.
+   - Solution : Création de colonnes spécifiques comme `orderIndex` pour gérer l'ordre.
+3. **Validation des cas limites** :
+   - Problème : Association des professeurs pour des cas particuliers.
+   - Solution : Utilisation de jointures spécifiques et gestion des valeurs nulles.
+
+## Voir le projet 👀
+- **Lien GitHub** : [Projet Databricks Lydia](https://github.com/Liily77/lydianeghad.github.io/blob/Databricks_Scala_Project/Projet%20Databricks%20Lydia.html)
+- **HTML interactif** : [Voir ici](https://github.com/Liily77/lydianeghad.github.io/blob/Databricks_Scala_Project/Projet%20Databricks%20Lydia.html)
 
 
-
-Merci de votre lecture ! 🌟
 
