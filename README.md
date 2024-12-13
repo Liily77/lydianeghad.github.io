@@ -1,67 +1,62 @@
-<h1>Projet : Analyse des Hotspots Wi-Fi à Paris 🌐</h1>
+# Projet : Analyse des Hotspots Wi-Fi à Paris 🌐
 
-👉 Voir l'application Streamlit ici : <a href="https://hotpost-wifi-paris-project.streamlit.app/">Lien vers l'application</a>
+👉 [Voir l'application Streamlit ici](https://hotpost-wifi-paris-project.streamlit.app/)
 
-<img src="assets/capture écran.png" alt="Capture d'écran de l'application" width="800"/>
+![Capture d'écran de l'application](assets/capture_ecran.png)
 
-<ul>
-  <li><b>Exemples de visualisations :</b>
-    <ul>
-      <li>Répartition des connexions par arrondissement.</li>
-      <li>Cartographie des hotspots avec volume de connexions.</li>
-      <li>Heatmap temporelle des connexions Wi-Fi.</li>
-      <li>Répartition des connexions par appareil et usage.</li>
-      <li>Visualisation WordCloud des concepts principaux.</li>
-    </ul>
-  </li>
-</ul>
+## Exemples de visualisations :
+- Répartition des connexions par arrondissement.
+- Cartographie des hotspots avec volume de connexions.
+- Heatmap temporelle des connexions Wi-Fi.
+- Répartition des connexions par appareil et usage.
+- Visualisation WordCloud des concepts principaux.
 
-<h2>Description 🖋️</h2>
+## Description 🖋️
 
 Ce projet Python vise à explorer et analyser les données d'utilisation des hotspots Wi-Fi à Paris. L'application Streamlit offre des visualisations interactives pour examiner les tendances géographiques, temporelles, et comportementales, ainsi que des analyses plus spécifiques comme les usages par appareil ou par type d'usage.
 
-<h2>Structure du projet 💡</h2>
+## Structure du projet 💡
 Le projet est structuré en plusieurs sections :
-<ul>
-  <li><b>Origine des données</b> : Présentation des données et aperçu des variables.</li>
-  <li><b>Analyse géographique</b> : Répartition par arrondissement et visualisation sur une carte interactive.</li>
-  <li><b>Analyse temporelle</b> : Variations annuelles, heatmap par jour/heure et évolution mensuelle des connexions.</li>
-  <li><b>Analyse des utilisateurs</b> : Langues utilisées et tendances par année.</li>
-  <li><b>WordCloud</b> : Représentation visuelle des mots-clés dans les données textuelles.</li>
-</ul>
+- **Origine des données** : Présentation des données et aperçu des variables.
+- **Analyse géographique** : Répartition par arrondissement et visualisation sur une carte interactive.
+- **Analyse temporelle** : Variations annuelles, heatmap par jour/heure et évolution mensuelle des connexions.
+- **Analyse des utilisateurs** : Langues utilisées et tendances par année.
+- **WordCloud** : Représentation visuelle des mots-clés dans les données textuelles.
 
-<h2>Technologies utilisées 💻</h2>
-<ul>
-  <li><b>Python</b> : Langage principal utilisé pour l'analyse et la création de l'application.</li> 
-  <li><b>Pandas</b> : Pour la manipulation et l'analyse des données tabulaires.</li>
-  <li><b>Plotly</b> : Pour des visualisations interactives comme les cartes et les graphiques.</li>
-  <li><b>Seaborn</b> et <b>Matplotlib</b> : Pour des visualisations analytiques et statistiques.</li>
-  <li><b>Streamlit</b> : Framework pour créer une interface utilisateur interactive et déployer l'application.</li>
-</ul>
+## Technologies utilisées 💻
+- **Python** : Langage principal utilisé pour l'analyse et la création de l'application.
+- **Pandas** : Pour la manipulation et l'analyse des données tabulaires.
+- **Plotly** : Pour des visualisations interactives comme les cartes et les graphiques.
+- **Seaborn** et **Matplotlib** : Pour des visualisations analytiques et statistiques.
+- **Streamlit** : Framework pour créer une interface utilisateur interactive et déployer l'application.
 
-<h2>Compétences acquises ✔️</h2>
-<ul>
-  <li><b>Exploration de données</b> : Analyse, transformation et visualisation des données avec Pandas.</li>
-  <li><b>Visualisations interactives</b> : Création de graphiques dynamiques et intuitifs avec Plotly.</li>
-  <li><b>Développement d'application</b> : Création d'une interface utilisateur avec Streamlit.</li>
-  <li><b>Storytelling avec les données</b> : Présentation claire et visuelle des insights pour un public non technique.</li>
-</ul>
+## Compétences acquises ✔️
+- **Exploration de données** : Analyse, transformation et visualisation des données avec Pandas.
+- **Visualisations interactives** : Création de graphiques dynamiques et intuitifs avec Plotly.
+- **Développement d'application** : Création d'une interface utilisateur avec Streamlit.
+- **Storytelling avec les données** : Présentation claire et visuelle des insights pour un public non technique.
 
-<h2>Ce que j'ai appris 💪</h2>
-<ul>
-  <li><b>Nettoyage et transformation des données</b> : Préparer les données brutes pour les rendre exploitables.</li>
-  <li><b>Visualisation avancée</b> : Maîtrise des outils comme Plotly et Seaborn.</li>
-  <li><b>Développement full-stack léger</b> : Conception d'une application complète avec Streamlit.</li>
-  <li><b>Analyse des tendances</b> : Identifier des patterns dans les données pour mieux comprendre l'utilisation des hotspots Wi-Fi.</li>
-</ul>
+## Ce que j'ai appris 💪
+- **Nettoyage et transformation des données** : Préparer les données brutes pour les rendre exploitables.
+- **Visualisation avancée** : Maîtrise des outils comme Plotly et Seaborn.
+- **Développement full-stack léger** : Conception d'une application complète avec Streamlit.
+- **Analyse des tendances** : Identifier des patterns dans les données pour mieux comprendre l'utilisation des hotspots Wi-Fi.
 
-<h2>Organisation des fichiers 📂</h2>
-<ul>
-  <li><b>app.py</b> : Code principal de l'application Streamlit.</li>
-  <li><b>requirements.txt</b> : Dépendances Python à installer.</li>
-  <li><b>README.md</b> : Documentation du projet.</li>
-  <li><b>Projet Data Viz.ipynb</b> : Analyses préliminaires sous Jupyter Notebook.</li>
-  <li><b>assets/</b> : Images et fichiers supplémentaires.</li>
-  <li><b>.streamlit/</b> : Paramètres de configuration Streamlit.</li>
-</ul>
+## Difficultés rencontrées et solutions 🎯
+- **Données complexes à manipuler :** Certaines colonnes contenaient des formats inattendus ou des valeurs manquantes.
+  - **Solution :** Utilisation des fonctions de nettoyage de Pandas, comme `pd.to_datetime` pour les dates ou `fillna()` pour les valeurs manquantes.
+- **Création des visualisations interactives :** Rendre les graphiques intuitifs tout en manipulant des datasets volumineux.
+  - **Solution :** Optimisation avec Plotly et ajustement des paramètres pour des performances optimales.
+- **Personnalisation des sections WordCloud et géographiques :** Ajouter un masque pour le WordCloud et intégrer une carte interactive.
+  - **Solution :** Expérimentation avec les bibliothèques WordCloud et Mapbox pour répondre aux besoins du projet.
+- **Déploiement sur Streamlit Cloud :** Problèmes avec les dépendances non installées.
+  - **Solution :** Mise à jour du fichier `requirements.txt` avec toutes les bibliothèques nécessaires.
+
+## Organisation des fichiers 📂
+- **app.py** : Code principal de l'application Streamlit.
+- **requirements.txt** : Dépendances Python à installer.
+- **README.md** : Documentation du projet.
+- **Projet Data Viz.ipynb** : Analyses préliminaires sous Jupyter Notebook.
+- **assets/** : Images et fichiers supplémentaires.
+- **.streamlit/** : Paramètres de configuration Streamlit.
 
