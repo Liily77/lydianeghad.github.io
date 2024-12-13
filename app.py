@@ -58,10 +58,10 @@ if menu == "Origine des données 🔎":
     col1, col2 = st.columns([1, 1])  # Crée deux colonnes de largeur égale
 
     with col1:
-        st.image("Logo1.PNG", use_container_width=True)  # Charger la première image
+        st.image("assets/Logo1.PNG", use_container_width=True)  # Charger la première image
 
     with col2:
-        st.image("Logo2.PNG", use_container_width=True)  # Charger la seconde image
+        st.image("assets/Logo2.PNG", use_container_width=True)  # Charger la seconde image
 
     st.title("Projet Data Management 📊")
     st.markdown("""
@@ -712,7 +712,7 @@ elif menu == "WorldCloud 🌎":
     
         # ---- Lecture du fichier texte de base ---- #
         try:
-            with open("articlepresse.txt", "r", encoding="utf-8") as file:
+            with open("assets/articlepresse.txt", "r", encoding="utf-8") as file:
                 text = file.read()
         except FileNotFoundError:
             st.error("Le fichier `articlepresse.txt` est introuvable. Veuillez vérifier son emplacement.")
@@ -738,7 +738,7 @@ elif menu == "WorldCloud 🌎":
                 st.stop()
         else:
             try:
-                mask = np.array(Image.open("wf.png").convert("L"))
+                mask = np.array(Image.open("assets/wf.png").convert("L"))
                 mask = np.where(mask > 128, 255, 0)  # S'assurer que le masque est binaire
             except FileNotFoundError:
                 st.error("Le fichier par défaut `wf.png` est introuvable. Téléversez une image pour continuer.")
