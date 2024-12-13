@@ -3,11 +3,26 @@
 <p>Bienvenue sur mon portfolio ! Ici, vous trouverez une sélection de mes projets réalisés dans le cadre de mes études, ainsi que de mes expérimentations personnelles en développement web et en data analytics. 
 Chaque projet met en avant mes compétences dans ces deux domaines, illustrant ma polyvalence et ma passion pour le code et l'analyse des données.</p>
 
-
 <hr>
 <h2> Mes projets en Data Analytics 📈</h2>
+
+<h3>Projet : <strong>Analyse des Hotspots Wi-Fi à Paris 🌐</strong></h3>
+<p><strong>Description :</strong><br>
+Ce projet Python vise à explorer et analyser les données d'utilisation des hotspots Wi-Fi à Paris, en mettant en avant des tendances géographiques, temporelles et comportementales. 
+L'application Streamlit propose des visualisations interactives pour examiner les connexions, les appareils, les langues utilisées et les usages. Ce projet a été réalisé dans le cadre de la matière "Data Management et Visualisation".</p>
+<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_hotspots_wifi">Accéder à la branche du projet</a></p>
+<p align="center">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original-wordmark.svg" alt="Pandas" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/plotly/plotly-original.svg" alt="Plotly" width="60" height="60" />
+  <img src="https://streamlit.io/images/brand/streamlit-mark-light.svg" alt="Streamlit" width="120" height="60" />
+</p>
+
+<hr>
+
 <h3>Projet : <strong>Analyse des performances des rameurs 🚣‍♂️📊</strong></h3>
-<p><strong>Description :</strong><br>Ce projet Python vise à analyser les performances des rameurs sur une distance de 2000m, segmentée par portions de 500m.
+<p><strong>Description :</strong><br>
+Ce projet Python vise à analyser les performances des rameurs sur une distance de 2000m, segmentée par portions de 500m.
 À travers des visualisations interactives et des analyses avancées, nous avons exploré les facteurs influençant les performances et comparé les rameurs entre eux.
 Ce projet a été réalisé en collaboration avec une équipe pour simuler des situations professionnelles de travail en groupe.
 <p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/analyse-donn%C3%A9es-sportives">Accéder à la branche du projet</a></p>
@@ -19,7 +34,6 @@ Ce projet a été réalisé en collaboration avec une équipe pour simuler des s
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/plotly/plotly-original.svg" alt="Plotly" width="60" height="60" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg" alt="Jupyter" width="60" height="60" />
 </p>
-
 
 <hr>
 
@@ -33,7 +47,6 @@ Ce projet est un tutoriel interactif conçu pour enseigner les bases du dévelop
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
 </p>
-
 
 <hr>
 
@@ -63,13 +76,3 @@ Ce projet permet aux utilisateurs de suivre leurs expériences de conduite en en
   <img src="https://www.phpmyadmin.net/static/images/logo-og.png" alt="phpMyAdmin" width="60" height="60" />
   <img src="https://img.icons8.com/fluency/344/database.png" alt="LocalStorage" width="60" height="60" />
 </p>
-
-
-<hr>
-
-<h2>Projet : <strong>Codecademy Python Exercises 🐍</strong></h2>
-<p><strong>Description :</strong><br>
-Compilation d'exercices réalisés pour apprendre Python.</p>
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/codecademy_school_exercises">Accéder à la branche du projet</a></p>
-
-<hr>
