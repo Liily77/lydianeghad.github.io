@@ -7,6 +7,7 @@
 Ce projet a été réalisé sur **Databricks** en utilisant Scala et PySpark pour analyser des données complexes et effectuer des calculs avancés. L'objectif était de manipuler, transformer et visualiser les données en respectant les consignes du sujet fourni.
 
 ## Objectifs principaux ✔️
+
 1. Chargement et traitement des données JSON.
 2. Création de cubes de données pour analyse multi-dimensionnelle.
 3. Réalisation d'analyses croisées entre étudiants et professeurs.
@@ -33,12 +34,12 @@ Ce projet a été réalisé sur **Databricks** en utilisant Scala et PySpark pou
    - Analyse des données étudiantes et des bourses.
    - Organisation des résultats par universités et années avec priorisation (`All_Years`, `All_Univ`).
      
-3. **Analyse croisée des étudiants et professeurs** :
+2. **Analyse croisée des étudiants et professeurs** :
    
    - Association des professeurs selon leurs cours.
    - Gestion des cas où aucun professeur n'est associé (`Profs_No_Recompensés`).
      
-5. **Tri logique des résultats** :
+3. **Tri logique des résultats** :
    
    - Ordre personnalisé pour une meilleure lisibilité.
    - Visualisation des données dans un format clair et structuré.
@@ -52,18 +53,18 @@ Ce projet a été réalisé sur **Databricks** en utilisant Scala et PySpark pou
 ## Difficultés rencontrées et solutions 🎯
 
 1. **Données ambiguës** :
+   
    - Problème : Colonnes avec des noms identiques (`Annee`).
    - Solution : Renommer les colonnes pour éviter les conflits.
+     
 2. **Organisation des résultats** :
+   
    - Problème : Tri logique des données.
    - Solution : Création de colonnes spécifiques comme `orderIndex` pour gérer l'ordre.
+     
 3. **Validation des cas limites** :
+   
    - Problème : Association des professeurs pour des cas particuliers.
    - Solution : Utilisation de jointures spécifiques et gestion des valeurs nulles.
-
-## Voir le projet 👀
-- **Lien GitHub** : [Projet Databricks Lydia](https://github.com/Liily77/lydianeghad.github.io/blob/Databricks_Scala_Project/Projet%20Databricks%20Lydia.html)
-- **HTML interactif** : [Voir ici](https://github.com/Liily77/lydianeghad.github.io/blob/Databricks_Scala_Project/Projet%20Databricks%20Lydia.html)
-
 
 
