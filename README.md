@@ -2,7 +2,7 @@
 
 👉 Voir l'application Streamlit ici : <a href="https://hotpost-wifi-paris-project.streamlit.app/">Lien vers l'application</a>
 
-<img src="assets/capture_ecran.png" alt="Capture d'écran de l'application" width="800"/>
+<img src="assets/capture écran.png" alt="Capture d'écran de l'application" width="800"/>
 
 <ul>
   <li><b>Exemples de visualisations :</b>
