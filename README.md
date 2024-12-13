@@ -4,7 +4,7 @@
 Chaque projet met en avant mes compétences dans ces deux domaines, illustrant ma polyvalence et ma passion pour le code et l'analyse des données.</p>
 
 <hr>
-<h2> Mes projets en Data Analytics 📈</h2>
+<h2 align="center"> Mes projets en Data 📈</h2>
 
 <h3>Projet : <strong>Analyse des Hotspots Wi-Fi à Paris 🌐</strong></h3>
 <p><strong>Description :</strong><br>
@@ -37,7 +37,7 @@ Ce projet a été réalisé en collaboration avec une équipe pour simuler des s
 
 <hr>
 
-<h2> Mes projets dans le développement web 👩🏻‍💻</h2>
+<h2 align="center"> Mes projets dans le développement web 👩🏻‍💻</h2>
 
 <h3>Projet : <strong>Création d'un Tutoriel HTML/CSS 👩🏻‍💻</strong></h3>
 <p><strong>Description :</strong><br>
