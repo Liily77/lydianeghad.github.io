@@ -1,78 +1,74 @@
-<h1 align="center">Portfolio - Lydia Neghad</h1>
+# Projet : Analyse de données avec Databricks 🚀
 
-<p>Bienvenue sur mon portfolio ! Ici, vous trouverez une sélection de mes projets réalisés dans le cadre de mes études, ainsi que de mes expérimentations personnelles en développement web et en data analytics. 
-Chaque projet met en avant mes compétences dans ces deux domaines, illustrant ma polyvalence et ma passion pour le code et l'analyse des données.</p>
+## Description du projet 🖋️
 
-<hr>
-<h2 align="center"> Mes projets en Data 📈</h2>
+Ce projet a été réalisé dans le cadre de l'analyse des données grâce à Databricks et PySpark. Il vise à manipuler et visualiser des données afin de répondre à diverses questions analytiques, comme l'extraction d'informations spécifiques, la mise en relation des données, ou encore la création de visualisations claires. 
 
-<h3>Projet : <strong>Analyse des Hotspots Wi-Fi à Paris 🌐</strong></h3>
-<p><strong>Description :</strong><br>
-Ce projet Python vise à explorer et analyser les données d'utilisation des hotspots Wi-Fi à Paris, en mettant en avant des tendances géographiques, temporelles et comportementales. 
-L'application Streamlit propose des visualisations interactives pour examiner les connexions, les appareils, les langues utilisées et les usages. Ce projet a été réalisé dans le cadre de la matière "Data Management et Visualisation".</p>
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_hotspots_wifi">Accéder à la branche du projet</a></p>
-<p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original-wordmark.svg" alt="Pandas" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/plotly/plotly-original.svg" alt="Plotly" width="60" height="60" />
-  <img src="https://streamlit.io/images/brand/streamlit-mark-light.svg" alt="Streamlit" width="120" height="60" />
-</p>
+Les étapes du projet incluent :
+- Chargement et traitement des données JSON fournies.
+- Application des transformations et calculs pour répondre aux besoins analytiques.
+- Création de visualisations pour explorer les données et en tirer des insights.
 
-<hr>
+## Contenu des fichiers 📂
 
-<h3>Projet : <strong>Analyse des performances des rameurs 🚣‍♂️📊</strong></h3>
-<p><strong>Description :</strong><br>
-Ce projet Python vise à analyser les performances des rameurs sur une distance de 2000m, segmentée par portions de 500m.
-À travers des visualisations interactives et des analyses avancées, nous avons exploré les facteurs influençant les performances et comparé les rameurs entre eux.
-Ce projet a été réalisé en collaboration avec une équipe pour simuler des situations professionnelles de travail en groupe.
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/analyse-donn%C3%A9es-sportives">Accéder à la branche du projet</a></p>
-<p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original-wordmark.svg" alt="Pandas" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matplotlib/matplotlib-original.svg" alt="Matplotlib" width="60" height="60" />
-  <img src="https://seaborn.pydata.org/_images/logo-tall-lightbg.svg" alt="Seaborn" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/plotly/plotly-original.svg" alt="Plotly" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg" alt="Jupyter" width="60" height="60" />
-</p>
+ 1. **`Data_TP2_MSD`**  
+Fichier JSON contenant les données sources. Il inclut deux ensembles de données principaux :
+- **Etudiants** : Données relatives aux étudiants, telles que leurs bourses, universités, et formations.
+- **Profs** : Données sur les professeurs, leurs formations associées et les années correspondantes.
 
-<hr>
+ 2. **`Projet Databricks Lydia`**  
+Lien HTML pour visualiser le code exécuté et les résultats obtenus directement depuis Databricks.
 
-<h2 align="center"> Mes projets dans le développement web 👩🏻‍💻</h2>
+ 3. **`Sujet projet Databricks`**  
+Document PDF décrivant les consignes du projet et les objectifs à atteindre, avec les questions détaillées.
 
-<h3>Projet : <strong>Création d'un Tutoriel HTML/CSS 👩🏻‍💻</strong></h3>
-<p><strong>Description :</strong><br>
-Ce projet est un tutoriel interactif conçu pour enseigner les bases du développement front-end en HTML et CSS.</p>
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_tutoriel">Accéder à la branche du projet</a></p>
-<p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
-</p>
+## Objectifs atteints ✔️
 
-<hr>
+- **Chargement et exploration des données JSON** :
+  - Exploitation des fichiers avec PySpark pour effectuer des calculs et transformations.
+- **Jointures et agrégations** :
+  - Association entre étudiants et professeurs pour déterminer les correspondances et les absences de correspondances.
+- **Création de cubes de données** :
+  - Mise en place d'agrégations avec des cubes multidimensionnels pour analyser les données en fonction des universités et des années.
+- **Calculs avancés** :
+  - Mise en ordre des données grâce à des index personnalisés et résolution des valeurs manquantes avec des catégories par défaut.
+- **Visualisations** :
+  - Production de graphiques à partir des données agrégées et classées.
 
-<h2>Projet: <strong>Clinique Oscar - Prise de Rendez-vous Ostéopathie ⚕️</strong></h2>
-<p><strong>Description :</strong><br>
-Un site web de prise de rendez-vous pour une clinique d'ostéopathie.</p>
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_clinique_oscar">Accéder à la branche du projet</a></p>
-<p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" width="60" height="60" />
-</p>
+## Technologies utilisées 💻
 
-<hr>
+- **Databricks** : Plateforme principale pour l'exécution et l'analyse.
+- **PySpark** : Manipulation des données massives.
+- **SQL** : Extractions et transformations analytiques.
+- **JSON** : Format des données sources.
 
-<h2>Projet : <strong>Carnet de Suivi d'Expérience de Conduite 🚗</strong></h2>
-<p><strong>Description :</strong><br>
-Ce projet permet aux utilisateurs de suivre leurs expériences de conduite en enregistrant des détails comme la météo, le trafic, et la distance parcourue.</p>
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_SP_conduite">Accéder à la branche du projet</a></p>
-<p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" width="60" height="60" />
-  <img src="https://www.phpmyadmin.net/static/images/logo-og.png" alt="phpMyAdmin" width="60" height="60" />
-  <img src="https://img.icons8.com/fluency/344/database.png" alt="LocalStorage" width="60" height="60" />
-</p>
+## Compétences acquises 🎯
+
+- Traitement des données structurées et semi-structurées.
+- Jointures avancées entre différents ensembles de données.
+- Utilisation des cubes OLAP pour l'agrégation multidimensionnelle.
+- Création de pipelines de données pour répondre à des besoins spécifiques.
+- Visualisation des données et storytelling.
+
+## Difficultés rencontrées et solutions apportées 🌟
+
+### Problème : Gestion des doublons et des colonnes ambiguës  
+Certaines jointures ont généré des erreurs dues à des noms de colonnes similaires ou à des doublons.  
+**Solution :**  
+- Renommage des colonnes pour éviter les ambiguïtés.  
+- Suppression des doublons avec `.dropDuplicates()`.
+
+### Problème : Absence de données dans certaines colonnes  
+Certaines valeurs étaient nulles dans les résultats des jointures.  
+**Solution :**  
+- Remplacement des valeurs nulles par des catégories par défaut, comme `"Profs_No_Recompensés"`.
+
+### Problème : Classement des données selon un ordre personnalisé  
+L'ordre attendu par le projet ne correspondait pas à l'ordre naturel des données.  
+**Solution :**  
+- Ajout d'une colonne `orderIndex` pour contrôler l'ordre et tri final avec `.orderBy()`.
+
+
+
+Merci de votre lecture ! 🌟
+
