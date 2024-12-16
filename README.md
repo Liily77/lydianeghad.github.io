@@ -10,7 +10,7 @@ Chaque projet met en avant mes compétences dans ces deux domaines, illustrant m
 <p><strong>Description :</strong><br>
 Ce projet Python vise à explorer et analyser les données d'utilisation des hotspots Wi-Fi à Paris, en mettant en avant des tendances géographiques, temporelles et comportementales. 
 L'application Streamlit propose des visualisations interactives pour examiner les connexions, les appareils, les langues utilisées et les usages. Ce projet a été réalisé dans le cadre de la matière "Data Management et Visualisation".</p>
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_hotspots_wifi">Accéder à la branche du projet</a></p>
+<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/Streamlit">Accéder à la branche du projet</a></p>
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original-wordmark.svg" alt="Pandas" width="60" height="60" />
