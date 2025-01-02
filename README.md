@@ -2,7 +2,7 @@
 
 👉 [Voir l'application Streamlit ici](https://hotpost-wifi-paris-project.streamlit.app/)
 
-![Capture d'écran de l'application](capture_ecran.png)
+
 
 ## Exemples de visualisations :
 - Répartition des connexions par arrondissement.
