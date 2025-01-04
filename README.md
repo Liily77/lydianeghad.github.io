@@ -25,7 +25,7 @@ L'application Streamlit propose des visualisations interactives pour examiner le
 
 <h3>Projet : <strong>Analyse des performances des rameurs 🚣‍♂️📊</strong></h3>
 
-👉 Voir le notebook ici : <a href="https://github.com/Liily77/lydianeghad.github.io/blob/analyse-donn%C3%A9es-sportives/analyse-rameurs.ipynb"> Notebook</a>
+👉 Voir le notebook ici : <a href="https://github.com/Liily77/lydianeghad.github.io/blob/Analyse-Donn%C3%A9es-Sportives/analyse-rameurs.ipynb"> Notebook</a>
 
 <p><strong>Description :</strong><br>
 Ce projet Python vise à analyser les performances des rameurs sur une distance de 2000m, segmentée par portions de 500m.
