@@ -3,8 +3,9 @@
 <p>Bienvenue sur mon portfolio ! Ici, vous trouverez une sélection de mes projets réalisés dans le cadre de mes études, ainsi que de mes expérimentations personnelles en développement web et en data analytics. 
 Chaque projet met en avant mes compétences dans ces deux domaines, illustrant ma polyvalence et ma passion pour le code et l'analyse des données.</p>
 
-<hr>
+
 <h2 align="center">📈 Mes projets en Data</h2>
+<br>
 
 ### **Projet : Analyse Scala et PySpark sur Databricks 🚀**
 
@@ -46,7 +47,7 @@ Ce projet Python vise à explorer et analyser les données d'utilisation des hot
 
 <hr>
 
-### **Projet : Analyse des performances des rameurs 🚣‍♂️📊**
+<h3><strong>Projet : Analyse des performances des rameurs 🚣‍♂️📊</strong></h3>
 
 👉 [Voir le notebook ici](https://github.com/Liily77/lydianeghad.github.io/blob/Analyse-Donn%C3%A9es-Sportives/analyse-rameurs.ipynb)
 
@@ -66,31 +67,53 @@ Ce projet Python vise à analyser les performances des rameurs sur une distance 
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg" alt="Jupyter" width="60" height="60" />
 </p>
 
-<hr>
 
 <h2 align="center">👩🏻‍💻 Mes projets dans le développement web</h2>
+<br>
 
-### **Projet : Création d'un Tutoriel HTML/CSS 👩🏻‍💻**
+<h3>Projet : <strong>Création d'un Tutoriel HTML/CSS 👩🏻‍💻</strong></h3>
 
-👉 [Voir le site ici](https://lydianeghad.alwaysdata.net/duweb24/CSS/TP3/Template.html)
+👉 Voir le site ici : <a href="https://lydianeghad.alwaysdata.net/duweb24/CSS/TP3/Template.html"> Site Tutoriel</a> 
 
-**Description :**  
-Ce projet est un tutoriel interactif conçu pour enseigner les bases du développement front-end en HTML et CSS.
-
-👉 [Accéder à la branche du projet](https://github.com/Liily77/lydianeghad.github.io/tree/projet_tutoriel)
-
-**Technologies :** HTML5, CSS3
-
+<p><strong>Description :</strong><br>
+Ce projet est un tutoriel interactif conçu pour enseigner les bases du développement front-end en HTML et CSS.</p>
+<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_tutoriel">Accéder à la branche du projet</a></p>
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
 </p>
 
----
+<hr>
 
-### ✅ **Modifications apportées :**
-1. Ajout des sections **Technologies** pour chaque projet.  
-2. Correction des icônes **PySpark** et **Databricks** avec des sources fiables.  
-3. Uniformisation du format des projets.
+<h3>Projet: <strong>Clinique Oscar - Prise de Rendez-vous Ostéopathie ⚕️</strong></h3>
 
-Dis-moi si tout s'affiche correctement maintenant ou si d'autres ajustements sont nécessaires ! 😊🚀
+👉 Voir le site ici : <a href="https://lydianeghad.alwaysdata.net/Clinique_Oscar/"> Site Clinique Oscar</a> 
+
+<p><strong>Description :</strong><br>
+Un site web de prise de rendez-vous pour une clinique d'ostéopathie.</p>
+<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_clinique_oscar">Accéder à la branche du projet</a></p>
+<p align="center">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" width="60" height="60" />
+</p>
+
+<hr>
+
+<h3>Projet : <strong>Carnet de Suivi d'Expérience de Conduite 🚗</strong></h3>
+
+👉 Voir le site ici : <a href="https://lydianeghad.alwaysdata.net/SPConduite/index.html"> SP Conduite</a>
+
+<p><strong>Description :</strong><br>
+Ce projet permet aux utilisateurs de suivre leurs expériences de conduite en enregistrant des détails comme la météo, le trafic, et la distance parcourue.</p>
+<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_SP_conduite">Accéder à la branche du projet</a></p>
+<p align="center">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" width="60" height="60" />
+  <img src="https://www.phpmyadmin.net/static/images/logo-og.png" alt="phpMyAdmin" width="60" height="60" />
+  <img src="https://img.icons8.com/fluency/344/database.png" alt="LocalStorage" width="60" height="60" />
+</p>
