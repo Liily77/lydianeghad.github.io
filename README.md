@@ -1,7 +1,5 @@
 # Projet Databricks : Analyse Scala et PySpark 🚀
 
-[📂 **Accéder au projet complet en HTML ici**](https://github.com/Liily77/lydianeghad.github.io/blob/Databricks_Scala_Project/Projet%20Databricks%20Lydia.html)
-
 ## Description 🖋️
 
 Ce projet a été réalisé sur **Databricks** en utilisant Scala et PySpark pour analyser des données complexes et effectuer des calculs avancés. L'objectif était de manipuler, transformer et visualiser les données en respectant les consignes du sujet fourni.
