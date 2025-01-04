@@ -7,7 +7,7 @@ Chaque projet met en avant mes compétences dans ces deux domaines, illustrant m
 <h2 align="center">📈 Mes projets en Data</h2>
 <br>
 
-### **Projet : Analyse Scala et PySpark sur Databricks 🚀**
+### **🔹 Projet : Analyse Scala et PySpark sur Databricks 🚀**
 
 👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/Databricks_Scala_Project)
 
@@ -15,7 +15,7 @@ Chaque projet met en avant mes compétences dans ces deux domaines, illustrant m
 Ce projet a été réalisé sur **Databricks** avec **Scala** et **PySpark** pour analyser des données complexes. L'objectif était de manipuler, transformer et visualiser les données efficacement, en créant des cubes de données et en réalisant des analyses croisées entre étudiants et professeurs.
 
 
-**Technologies :** Scala, PySpark, SQL, JSON, Databricks
+**🛠️ Technologies :** Scala, PySpark, SQL, JSON, Databricks
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scala/scala-original.svg" alt="Scala" width="60" height="60" />
@@ -27,7 +27,7 @@ Ce projet a été réalisé sur **Databricks** avec **Scala** et **PySpark** pou
 
 <hr>
 
-### **Projet : Analyse des Hotspots Wi-Fi à Paris 🌐**
+### **🔹 Projet : Analyse des Hotspots Wi-Fi à Paris 🌐**
 
 👉 [Voir l'application Streamlit ici](https://hotpost-wifi-paris-project.streamlit.app/)
 
@@ -36,7 +36,7 @@ Ce projet Python vise à explorer et analyser les données d'utilisation des hot
 
 👉 [Accéder à la branche du projet](https://github.com/Liily77/lydianeghad.github.io/tree/Streamlit)
 
-**Technologies :** Python, Pandas, Plotly, Streamlit
+**🛠️ Technologies :** Python, Pandas, Plotly, Streamlit
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
@@ -47,7 +47,7 @@ Ce projet Python vise à explorer et analyser les données d'utilisation des hot
 
 <hr>
 
-<h3><strong>Projet : Analyse des performances des rameurs 🚣‍♂️📊</strong></h3>
+<h3><strong>🔹 Projet : Analyse des performances des rameurs 🚣‍♂️📊</strong></h3>
 
 👉 [Voir le notebook ici](https://github.com/Liily77/lydianeghad.github.io/blob/Analyse-Donn%C3%A9es-Sportives/analyse-rameurs.ipynb)
 
@@ -56,7 +56,7 @@ Ce projet Python vise à analyser les performances des rameurs sur une distance 
 
 👉 [Accéder à la branche du projet](https://github.com/Liily77/lydianeghad.github.io/tree/Analyse-Donn%C3%A9es-Sportives)
 
-**Technologies :** Python, Pandas, Matplotlib, Seaborn, Plotly, Jupyter
+**🛠️ Technologies :** Python, Pandas, Matplotlib, Seaborn, Plotly, Jupyter
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
@@ -71,7 +71,7 @@ Ce projet Python vise à analyser les performances des rameurs sur une distance 
 <h2 align="center">👩🏻‍💻 Mes projets dans le développement web</h2>
 <br>
 
-<h3>Projet : <strong>Création d'un Tutoriel HTML/CSS 👩🏻‍💻</strong></h3>
+<h3>🔹 Projet : <strong>Création d'un Tutoriel HTML/CSS 👩🏻‍💻</strong></h3>
 
 👉 Voir le site ici : <a href="https://lydianeghad.alwaysdata.net/duweb24/CSS/TP3/Template.html"> Site Tutoriel</a> 
 
@@ -85,7 +85,7 @@ Ce projet est un tutoriel interactif conçu pour enseigner les bases du dévelop
 
 <hr>
 
-<h3>Projet: <strong>Clinique Oscar - Prise de Rendez-vous Ostéopathie ⚕️</strong></h3>
+<h3>🔹 Projet: <strong>Clinique Oscar - Prise de Rendez-vous Ostéopathie ⚕️</strong></h3>
 
 👉 Voir le site ici : <a href="https://lydianeghad.alwaysdata.net/Clinique_Oscar/"> Site Clinique Oscar</a> 
 
@@ -101,7 +101,7 @@ Un site web de prise de rendez-vous pour une clinique d'ostéopathie.</p>
 
 <hr>
 
-<h3>Projet : <strong>Carnet de Suivi d'Expérience de Conduite 🚗</strong></h3>
+<h3>🔹 Projet : <strong>Carnet de Suivi d'Expérience de Conduite 🚗</strong></h3>
 
 👉 Voir le site ici : <a href="https://lydianeghad.alwaysdata.net/SPConduite/index.html"> SP Conduite</a>
 
