@@ -13,18 +13,15 @@ Chaque projet met en avant mes compétences dans ces deux domaines, illustrant m
 **Description :**  
 Ce projet a été réalisé sur **Databricks** avec **Scala** et **PySpark** pour analyser des données complexes. L'objectif était de manipuler, transformer et visualiser les données efficacement, en créant des cubes de données et en réalisant des analyses croisées entre étudiants et professeurs.
 
-👉 [Accéder à la branche du projet](https://github.com/Liily77/lydianeghad.github.io/tree/Databricks_Scala_Project)
 
 **Technologies :** Scala, PySpark, SQL, JSON, Databricks
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scala/scala-original.svg" alt="Scala" width="60" height="60" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/PySpark-logo.png/600px-PySpark-logo.png" alt="PySpark" width="120" height="60" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Apache_Spark_logo.svg" alt="PySpark" width="120" height="60" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="SQL" width="60" height="60" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/json/json-original.svg" alt="JSON" width="60" height="60" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/1/10/Databricks_Logo.png" alt="Databricks" width="120" height="60" />
 </p>
-
 
 
 <hr>
