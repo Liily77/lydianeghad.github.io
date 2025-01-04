@@ -31,7 +31,7 @@ L'application Streamlit propose des visualisations interactives pour examiner le
 Ce projet Python vise à analyser les performances des rameurs sur une distance de 2000m, segmentée par portions de 500m.
 À travers des visualisations interactives et des analyses avancées, nous avons exploré les facteurs influençant les performances et comparé les rameurs entre eux.
 Ce projet a été réalisé en collaboration avec une équipe pour simuler des situations professionnelles de travail en groupe.
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/blob/Analyse-Donn%C3%A9es-Sportives/README.md">Accéder à la branche du projet</a></p>
+<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/Analyse-Donn%C3%A9es-Sportives">Accéder à la branche du projet</a></p>
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original-wordmark.svg" alt="Pandas" width="60" height="60" />
