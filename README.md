@@ -7,6 +7,9 @@ Chaque projet met en avant mes compétences dans ces deux domaines, illustrant m
 <h2 align="center"> Mes projets en Data 📈</h2>
 
 <h3>Projet : <strong>Analyse des Hotspots Wi-Fi à Paris 🌐</strong></h3>
+
+👉 [Voir l'application Streamlit ici](https://hotpost-wifi-paris-project.streamlit.app/)
+
 <p><strong>Description :</strong><br>
 Ce projet Python vise à explorer et analyser les données d'utilisation des hotspots Wi-Fi à Paris, en mettant en avant des tendances géographiques, temporelles et comportementales. 
 L'application Streamlit propose des visualisations interactives pour examiner les connexions, les appareils, les langues utilisées et les usages. Ce projet a été réalisé dans le cadre de la matière "Data Management et Visualisation".</p>
@@ -21,6 +24,9 @@ L'application Streamlit propose des visualisations interactives pour examiner le
 <hr>
 
 <h3>Projet : <strong>Analyse des performances des rameurs 🚣‍♂️📊</strong></h3>
+
+👉 Voir le notebook ici : <a href="https://github.com/Liily77/lydianeghad.github.io/blob/analyse-donn%C3%A9es-sportives/analyse-rameurs.ipynb"> Notebook</a>
+
 <p><strong>Description :</strong><br>
 Ce projet Python vise à analyser les performances des rameurs sur une distance de 2000m, segmentée par portions de 500m.
 À travers des visualisations interactives et des analyses avancées, nous avons exploré les facteurs influençant les performances et comparé les rameurs entre eux.
@@ -40,6 +46,9 @@ Ce projet a été réalisé en collaboration avec une équipe pour simuler des s
 <h2 align="center"> Mes projets dans le développement web 👩🏻‍💻</h2>
 
 <h3>Projet : <strong>Création d'un Tutoriel HTML/CSS 👩🏻‍💻</strong></h3>
+
+👉 Voir le site ici : <a href="https://lydianeghad.alwaysdata.net/duweb24/CSS/TP3/Template.html"> Site Tutoriel</a> 
+
 <p><strong>Description :</strong><br>
 Ce projet est un tutoriel interactif conçu pour enseigner les bases du développement front-end en HTML et CSS.</p>
 <p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_tutoriel">Accéder à la branche du projet</a></p>
@@ -51,6 +60,9 @@ Ce projet est un tutoriel interactif conçu pour enseigner les bases du dévelop
 <hr>
 
 <h2>Projet: <strong>Clinique Oscar - Prise de Rendez-vous Ostéopathie ⚕️</strong></h2>
+
+👉 Voir le site ici : <a href="https://lydianeghad.alwaysdata.net/Clinique_Oscar/"> Site Clinique Oscar</a> 
+
 <p><strong>Description :</strong><br>
 Un site web de prise de rendez-vous pour une clinique d'ostéopathie.</p>
 <p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_clinique_oscar">Accéder à la branche du projet</a></p>
@@ -64,6 +76,9 @@ Un site web de prise de rendez-vous pour une clinique d'ostéopathie.</p>
 <hr>
 
 <h2>Projet : <strong>Carnet de Suivi d'Expérience de Conduite 🚗</strong></h2>
+
+👉 Voir le site ici : <a href="https://lydianeghad.alwaysdata.net/SPConduite/index.html"> SP Conduite</a>
+
 <p><strong>Description :</strong><br>
 Ce projet permet aux utilisateurs de suivre leurs expériences de conduite en enregistrant des détails comme la météo, le trafic, et la distance parcourue.</p>
 <p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_SP_conduite">Accéder à la branche du projet</a></p>
