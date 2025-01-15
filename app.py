@@ -9,7 +9,7 @@ import os
 import gdown  # Pour télécharger des fichiers depuis Google Drive
 from wordcloud import WordCloud
 from PIL import Image
-import zipfile  # Nécessaire pour gérer les fichiers ZIP
+
 
 # ---- Fonction de téléchargement depuis Google Drive ---- #
 def download_data_from_drive(file_id, output_file):
@@ -19,15 +19,10 @@ def download_data_from_drive(file_id, output_file):
         gdown.download(url, output_file, quiet=False)
 
 # ---- Fonction de chargement des données ---- #
-def load_data(file_path, file_inside_zip=None):
+def load_data(file_path):
     try:
-        # Si le fichier est compressé (ZIP)
-        if file_path.endswith('.zip'):
-            with zipfile.ZipFile(file_path, 'r') as z:
-                with z.open(file_inside_zip) as f:
-                    data = pd.read_csv(f)
-        else:  # Lecture classique si non compressé
-            data = pd.read_csv(file_path)
+        # Lecture du fichier CSV
+        data = pd.read_csv(file_path)
         return data
     except FileNotFoundError:
         st.error(f"Fichier introuvable : {file_path}. Vérifiez le chemin.")
@@ -37,13 +32,12 @@ def load_data(file_path, file_inside_zip=None):
         st.stop()
 
 # ---- Définir les chemins et Google Drive ID ---- #
-file_id = "1wBrRnTNv6dgZuHZ6fbMGicsniFhrsBok"  # ID de votre fichier Google Drive
-zip_file_path = "wifi_usage_data.zip"
-csv_file_inside_zip = "wifi_usage_data.csv"
+file_id = "1k3Ob2dROYX_KglmZqhAiraC0i2id4gRH"  # ID de votre fichier CSV Google Drive
+csv_file_path = "wifi_usage_data.csv"
 
 # ---- Télécharger et charger les données ---- #
-download_data_from_drive(file_id, zip_file_path)
-wifi_usage_data = load_data(zip_file_path, csv_file_inside_zip)
+download_data_from_drive(file_id, csv_file_path)
+wifi_usage_data = load_data(csv_file_path)
 
 # ---- Sidebar Navigation ---- #
 
