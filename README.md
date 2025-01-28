@@ -1,5 +1,7 @@
 # Projet Databricks : Analyse Scala et PySpark 🚀
 
+👉 [Voir le projet ici](https://lydianeghad.alwaysdata.net/databricks/index.html)
+
 ## Description 🖋️
 
 Ce projet a été réalisé sur **Databricks** en utilisant Scala et PySpark pour analyser des données complexes et effectuer des calculs avancés. L'objectif était de manipuler, transformer et visualiser les données en respectant les consignes du sujet fourni.
