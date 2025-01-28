@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🚀 **Projet Spark Scala : Pipeline de Traitement et Analyse de Données**
 
 ## 🖋️ **Description**
@@ -55,4 +54,3 @@ Ce projet utilise **Scala** et **Apache Spark** pour automatiser un **pipeline d
 - **Agrégation des données :** Structure complexe des données → Aplatissement des colonnes JSON/XML.
 - **Validation des résultats :** Tests robustes avec **ScalaTest**.
 
----
