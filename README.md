@@ -7,6 +7,25 @@ Chaque projet met en avant mes compétences dans ces deux domaines, illustrant m
 <h2 align="center">📈 Mes projets en Data</h2>
 <br>
 
+### **🔹 Projet : Pipeline de Traitement et Analyse de Données avec Spark et Scala 🚀**
+
+👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/spark-data-pipeline)
+
+**Description :**  
+Ce projet utilise **Scala** et **Apache Spark** pour automatiser un pipeline de traitement de données. L'objectif était de manipuler, transformer et analyser des ensembles de données complexes tout en respectant une structure modulaire et des bonnes pratiques d'ingénierie des données.  
+Les analyses incluent l'extraction, le nettoyage, la transformation et l'agrégation des données avec validation par tests unitaires.
+
+**🛠️ Technologies :** Scala, Apache Spark, Spark SQL, SBT, ScalaTest, Log4j2
+
+<p align="center">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scala/scala-original.svg" alt="Scala" width="60" height="60" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Apache_Spark_logo.svg" alt="Apache Spark" width="120" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="SQL" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/json/json-original.svg" alt="JSON" width="60" height="60" />
+</p>
+
+<hr>
+
 ### **🔹 Projet : Analyse Scala et PySpark sur Databricks 🚀**
 
 👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/Databricks_Scala_Project)
