@@ -1,0 +1,5 @@
+Id_Client#HTT_TVA#MetaData
+1#100,5|0,19#{"MetaTransaction":[{"Ville":"Paris","Date_End_contrat":"2020-12-23 00:00:00"},{"TypeProd":"Laitier","produit":["yaourt","laitcoco"]}]}
+2#120,546|0,20#{"MetaTransaction":[{"Ville":"Alger","Date_End_contrat":"2023-12-23 00:00:00"},{"TypeProd":"Boison","produit":["coca","fanta"]}]}
+3#123,6|0,201#{"MetaTransaction":[{"Ville":"Dakar","Date_End_contrat":"2020-12-23 00:00:00"},{"TypeProd":"Laitier","produit":["yaourt"]}]}
+4#5,546|0,15#{"MetaTransaction":[{"Ville":"Abidjan","Date_End_contrat":"2024-12-23 00:00:00"},{"TypeProd":"Laitier","produit":["laitcoco"]}]}
