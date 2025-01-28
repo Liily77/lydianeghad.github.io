@@ -1,0 +1,22 @@
+[
+  {
+    "Id_Client": "1",
+    "HTT_TVA": "100,5|0,19",
+    "MetaData": "{\"MetaTransaction\":[{\"Ville\":\"Paris\",\"Date_End_contrat\":\"2024-12-23 00:00:00\"},{\"TypeProd\":\"Laitier\",\"produit\":[\"yaourt\",\"laitcoco\"]}]}"
+  },
+  {
+    "Id_Client": "2",
+    "HTT_TVA": "120,546|0,20",
+    "MetaData": "{\"MetaTransaction\":[{\"Ville\":\"Alger\",\"Date_End_contrat\":\"2024-12-23 00:00:00\"},{\"TypeProd\":\"Boison\",\"produit\":[\"coca\",\"fanta\"]}]}"
+  },
+  {
+    "Id_Client": "3",
+    "HTT_TVA": "123,6|0,201",
+    "MetaData": "{\"MetaTransaction\":[{\"Ville\":\"Dakar\",\"Date_End_contrat\":\"2020-12-23 00:00:00\"},{\"TypeProd\":\"Laitier\",\"produit\":[\"yaourt\"]}]}"
+  },
+  {
+    "Id_Client": "4",
+    "HTT_TVA": "5,546|0,15",
+    "MetaData": "{\"MetaTransaction\":[{\"Ville\":\"Abidjan\",\"Date_End_contrat\":\"2024-12-23 00:00:00\"},{\"TypeProd\":\"Laitier\",\"produit\":[\"laitcoco\"]}]}"
+  }
+]
