@@ -61,7 +61,6 @@ Ce projet a été réalisé sur **Databricks** avec **Scala** et **PySpark** pou
 
 
 <hr>
-<hr>
 
 ### **🔹 Projet : Machine Learning - Analyse de sentiments des films oscars (2020-2024) 🎬**
 
