@@ -7,6 +7,31 @@ Chaque projet met en avant mes compétences dans ces deux domaines, illustrant m
 <h2 align="center">📈 Mes projets en Data</h2>
 <br>
 
+### **🔹 Projet : Classification de panneaux de signalisation avec CNN 🚦🧠**
+
+👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_Deep_Learning)
+
+**Description :**  
+Ce projet vise à classifier automatiquement les **panneaux de signalisation routière** à partir du dataset **GTSRB**, en utilisant des **réseaux de neurones convolutifs (CNN)**. L’objectif est de simuler une tâche clé pour les systèmes de conduite autonome.
+
+**Objectifs principaux :**
+
+◾ **Prétraitement** : redimensionnement, normalisation, augmentation des images  
+◾ **Modélisation** : implémentation de modèles **CNN simples et avancés**  
+◾ **Optimisation** : régularisation, fine-tuning, EarlyStopping, LR Scheduler  
+◾ **Évaluation** : précision, F1 score, matrice de confusion  
+◾ **Expérimentation** : **Transfer Learning avec EfficientNetB0**, Grad-CAM pour interprétation
+
+**🛠️ Technologies :** Python, TensorFlow, Keras, CNN, EfficientNet, Grad-CAM
+
+<p align="center">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Tensorflow_logo.svg" alt="TensorFlow" width="60" height="60" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Keras_logo.svg" alt="Keras" width="60" height="60" />
+</p> 
+
+<br> 
+
 ### **🔹 Projet : 🧠 Neo4j - Procédures stockées pour réseau de neurones graphé 🚀**
 
 👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_Neo4J)
