@@ -1,0 +1,101 @@
+ID_Produit,Nom_Produit,Categorie,Prix_Achat,Prix_Vente,Stock_Disponible
+P001,Table basse Modèle 1,Tables,328.4,459.05,30
+P002,Table à manger Modèle 2,Tables,262.84,319.13,81
+P003,Table de chevet Modèle 3,Tables,293.82,417.59,21
+P004,Table de salon Modèle 4,Tables,60.33,80.72,70
+P005,Table extensible Modèle 5,Tables,272.78,418.42,93
+P006,Table de jardin Modèle 6,Tables,263.65,490.33,87
+P007,Table de bureau Modèle 7,Tables,157.77,304.05,94
+P008,Table de conférence Modèle 8,Tables,304.45,490.83,97
+P009,Table pliante Modèle 9,Tables,408.42,725.23,9
+P010,Table bar Modèle 10,Tables,448.07,869.26,9
+P011,Chaise de salle à manger Modèle 1,Chaises,158.8,192.0,94
+P012,Chaise de bureau Modèle 2,Chaises,346.19,582.83,17
+P013,Chaise pliante Modèle 3,Chaises,169.68,278.8,46
+P014,Chaise de jardin Modèle 4,Chaises,140.68,246.05,88
+P015,Chaise haute Modèle 5,Chaises,302.42,600.09,8
+P016,Chaise de bar Modèle 6,Chaises,142.98,190.39,27
+P017,Chaise de salon Modèle 7,Chaises,207.2,356.81,35
+P018,Chaise design Modèle 8,Chaises,449.98,699.3,80
+P019,Chaise empilable Modèle 9,Chaises,88.99,173.08,66
+P020,Chaise en bois Modèle 10,Chaises,79.14,155.87,0
+P021,Canapé d'angle Modèle 1,Canapés,383.77,736.78,13
+P022,Canapé convertible Modèle 2,Canapés,436.03,768.27,67
+P023,Canapé 2 places Modèle 3,Canapés,464.74,767.99,3
+P024,Canapé 3 places Modèle 4,Canapés,84.8,150.66,49
+P025,Canapé en cuir Modèle 5,Canapés,136.38,229.86,63
+P026,Canapé en tissu Modèle 6,Canapés,476.5,891.31,64
+P027,Canapé modulaire Modèle 7,Canapés,73.1,124.79,45
+P028,Canapé design Modèle 8,Canapés,373.26,491.98,1
+P029,Canapé vintage Modèle 9,Canapés,183.86,290.27,68
+P030,Canapé scandinave Modèle 10,Canapés,255.58,409.92,79
+P031,Armoire de chambre Modèle 1,Armoires,81.12,161.88,79
+P032,Armoire de salon Modèle 2,Armoires,471.8,880.59,22
+P033,Armoire de cuisine Modèle 3,Armoires,306.34,579.16,60
+P034,Armoire à linge Modèle 4,Armoires,268.4,455.28,42
+P035,Armoire bibliothèque Modèle 5,Armoires,365.04,592.05,31
+P036,Armoire design Modèle 6,Armoires,142.05,180.76,57
+P037,Armoire vintage Modèle 7,Armoires,495.34,980.19,2
+P038,Armoire moderne Modèle 8,Armoires,69.97,137.95,65
+P039,Armoire en bois massif Modèle 9,Armoires,495.37,721.27,45
+P040,Armoire à chaussures Modèle 10,Armoires,197.29,322.21,24
+P041,Étagère murale Modèle 1,Étagères,162.99,276.07,31
+P042,Étagère de salon Modèle 2,Étagères,217.07,343.35,50
+P043,Étagère de cuisine Modèle 3,Étagères,438.52,849.1,64
+P044,Étagère de bureau Modèle 4,Étagères,458.18,607.13,42
+P045,Étagère design Modèle 5,Étagères,176.34,302.63,73
+P046,Étagère en bois Modèle 6,Étagères,301.18,441.82,61
+P047,Étagère métallique Modèle 7,Étagères,211.97,346.05,38
+P048,Étagère modulable Modèle 8,Étagères,244.05,351.34,29
+P049,Étagère à livres Modèle 9,Étagères,494.51,906.91,6
+P050,Étagère industrielle Modèle 10,Étagères,499.92,822.75,0
+P051,Bureau d'ordinateur Modèle 1,Bureaux,181.01,312.3,83
+P052,Bureau d'écrivain Modèle 2,Bureaux,482.85,687.36,93
+P053,Bureau design Modèle 3,Bureaux,234.49,322.73,38
+P054,Bureau vintage Modèle 4,Bureaux,96.93,153.56,16
+P055,Bureau en bois Modèle 5,Bureaux,330.03,524.57,18
+P056,Bureau réglable en hauteur Modèle 6,Bureaux,143.83,263.27,67
+P057,Bureau de coin Modèle 7,Bureaux,142.96,255.24,97
+P058,Bureau moderne Modèle 8,Bureaux,216.4,389.73,1
+P059,Bureau pour enfant Modèle 9,Bureaux,391.08,671.42,60
+P060,Bureau pliant Modèle 10,Bureaux,336.03,515.35,25
+P061,Lit simple Modèle 1,Lits,347.9,564.3,52
+P062,Lit double Modèle 2,Lits,126.45,185.41,100
+P063,Lit superposé Modèle 3,Lits,454.99,573.74,31
+P064,Lit mezzanine Modèle 4,Lits,464.6,832.89,6
+P065,Lit gigogne Modèle 5,Lits,367.22,629.88,16
+P066,Lit design Modèle 6,Lits,207.24,396.37,74
+P067,Lit en bois Modèle 7,Lits,470.92,851.76,73
+P068,Lit vintage Modèle 8,Lits,228.89,444.96,51
+P069,Lit à baldaquin Modèle 9,Lits,253.93,307.58,13
+P070,Lit escamotable Modèle 10,Lits,211.86,314.07,27
+P071,Commode de chambre Modèle 1,Commodes,292.59,545.91,41
+P072,Commode de salon Modèle 2,Commodes,495.04,920.92,72
+P073,Commode design Modèle 3,Commodes,203.36,349.47,89
+P074,Commode vintage Modèle 4,Commodes,52.73,102.55,6
+P075,Commode en bois Modèle 5,Commodes,88.73,160.38,0
+P076,Commode à tiroirs Modèle 6,Commodes,324.42,621.28,73
+P077,Commode moderne Modèle 7,Commodes,364.1,494.26,20
+P078,Commode scandinave Modèle 8,Commodes,361.87,588.27,57
+P079,Commode à portes Modèle 9,Commodes,461.93,795.06,14
+P080,Commode industrielle Modèle 10,Commodes,325.17,452.82,84
+P081,Fauteuil de salon Modèle 1,Fauteuils,451.8,587.41,13
+P082,Fauteuil club Modèle 2,Fauteuils,103.32,164.0,43
+P083,Fauteuil design Modèle 3,Fauteuils,91.01,169.73,19
+P084,Fauteuil vintage Modèle 4,Fauteuils,160.21,227.33,72
+P085,Fauteuil en cuir Modèle 5,Fauteuils,281.51,541.73,61
+P086,Fauteuil en tissu Modèle 6,Fauteuils,102.52,158.85,32
+P087,Fauteuil relax Modèle 7,Fauteuils,265.53,512.45,50
+P088,Fauteuil pivotant Modèle 8,Fauteuils,223.6,291.36,51
+P089,Fauteuil suspendu Modèle 9,Fauteuils,332.15,450.18,90
+P090,Fauteuil scandinave Modèle 10,Fauteuils,326.57,438.92,48
+P091,Tabouret de bar Modèle 1,Tabourets,294.18,564.03,48
+P092,Tabouret de cuisine Modèle 2,Tabourets,73.76,109.45,43
+P093,Tabouret design Modèle 3,Tabourets,469.49,845.17,11
+P094,Tabouret vintage Modèle 4,Tabourets,102.28,154.27,87
+P095,Tabouret en bois Modèle 5,Tabourets,223.18,339.0,21
+P096,Tabouret réglable Modèle 6,Tabourets,314.93,398.41,77
+P097,Tabouret empilable Modèle 7,Tabourets,337.51,645.38,28
+P098,Tabouret industriel Modèle 8,Tabourets,78.01,138.29,42
+P099,Tabouret scandinave Modèle 9,Tabourets,413.66,673.83,60
+P100,Tabouret pliant Modèle 10,Tabourets,363.18,479.4,58

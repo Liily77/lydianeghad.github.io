@@ -1,0 +1,14 @@
+ID_Magasin,Nom_Magasin,Ville,Pays
+M01,Mobilier & Co,Lyon,France
+M02,Brico Pro,Lyon,France
+M03,Maison Confort,Lyon,France
+M04,Atelier du Meuble,Toulouse,France
+M05,Brico Dépôt,Marseille,France
+M06,Déco Maison,Toulouse,France
+M07,Espace Bricolage,Marseille,France
+M08,Le Coin du Bricoleur,Nice,France
+M09,Mobilier Moderne,Paris,France
+M10,Brico Éco,Toulouse,France
+M11,Maison & Style,Marseille,France
+M12,Brico Plus,Paris,France
+M13,Mobilier Design,Lyon,France
