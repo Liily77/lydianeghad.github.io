@@ -30,27 +30,6 @@ Le projet est structuré en plusieurs sections :
 - **Seaborn** et **Matplotlib** : Pour des visualisations analytiques et statistiques.
 - **Streamlit** : Framework pour créer une interface utilisateur interactive et déployer l'application.
 
-## Compétences acquises ✔️
-- **Exploration de données** : Analyse, transformation et visualisation des données avec Pandas.
-- **Visualisations interactives** : Création de graphiques dynamiques et intuitifs avec Plotly.
-- **Développement d'application** : Création d'une interface utilisateur avec Streamlit.
-- **Storytelling avec les données** : Présentation claire et visuelle des insights pour un public non technique.
-
-## Ce que j'ai appris 💪
-- **Nettoyage et transformation des données** : Préparer les données brutes pour les rendre exploitables.
-- **Visualisation avancée** : Maîtrise des outils comme Plotly et Seaborn.
-- **Développement full-stack léger** : Conception d'une application complète avec Streamlit.
-- **Analyse des tendances** : Identifier des patterns dans les données pour mieux comprendre l'utilisation des hotspots Wi-Fi.
-
-## Difficultés rencontrées et solutions 🎯
-- **Données complexes à manipuler :** Certaines colonnes contenaient des formats inattendus ou des valeurs manquantes.
-  - **Solution :** Utilisation des fonctions de nettoyage de Pandas, comme `pd.to_datetime` pour les dates ou `fillna()` pour les valeurs manquantes.
-- **Création des visualisations interactives :** Rendre les graphiques intuitifs tout en manipulant des datasets volumineux.
-  - **Solution :** Optimisation avec Plotly et ajustement des paramètres pour des performances optimales.
-- **Personnalisation des sections WordCloud et géographiques :** Ajouter un masque pour le WordCloud et intégrer une carte interactive.
-  - **Solution :** Expérimentation avec les bibliothèques WordCloud et Mapbox pour répondre aux besoins du projet.
-- **Déploiement sur Streamlit Cloud :** Problèmes avec les dépendances non installées.
-  - **Solution :** Mise à jour du fichier `requirements.txt` avec toutes les bibliothèques nécessaires.
 
 ## Organisation des fichiers 📂
 - **app.py** : Code principal de l'application Streamlit.
