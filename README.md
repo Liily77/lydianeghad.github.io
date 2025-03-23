@@ -7,6 +7,37 @@ Chaque projet met en avant mes compétences dans ces deux domaines, illustrant m
 <h2 align="center">📈 Mes projets en Data</h2>
 <br>
 
+### **🔹 Projet : 🧠 Neo4j - Procédures stockées pour réseau de neurones graphé 🚀**
+
+👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_Neo4J)
+
+**Description :**  
+Ce projet s'appuie sur un dépôt académique que nous avons enrichi par l'ajout de **procédures stockées en Java** pour **Neo4j**, dans le but de modéliser et entraîner un réseau de neurones directement dans une base orientée graphe. Les requêtes Cypher ont été encapsulées dans des classes Java compilées pour plus de modularité et de performance.
+
+**Objectifs principaux :**
+
+◾ Transformer des scripts Cypher en **procédures stockées Java**.  
+◾ **Créer et configurer** un réseau de neurones (couches, neurones, entrées/sorties).  
+◾ **Charger des données d'entrée** et **sortie attendue** dans Neo4j.  
+◾ Implémenter le **passage avant**, la **rétropropagation avec Adam**, et le **calcul de la perte**.  
+◾ Gérer les **résultats et contraintes sur les poids** via des classes spécialisées.  
+
+**Structure des classes :**  
+- `CreateNetwork.class`, `CreateNeuron.class`, `SetInputs.class`, etc.  
+- `ForwardPass.class`, `BackwardPassAdam.class`, `ComputeLoss.class`, etc.  
+- Chaque fichier `.class` a sa version `*Result.class` pour le retour d'exécution.
+
+**🛠️ Technologies :** Neo4j, Java, Cypher, Python, Git, IntelliJ, Maven/Gradle
+
+<p align="center">
+  <img src="https://dist.neo4j.com/wp-content/uploads/20201006110518/neo4j-logo-1.svg" alt="Neo4j" width="100" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/intellij/intellij-original.svg" alt="IntelliJ" width="60" height="60" />
+</p>
+
+<br>
+
 ### **🔹 Projet : Pipeline de traitement et analyse de données avec Spark et Scala 🚀**
 
 👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/spark-data-pipeline)
