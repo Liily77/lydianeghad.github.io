@@ -45,20 +45,9 @@ Chaque classe dispose également d’une version `*Result.class` pour la gestion
 
 ## ✅ Étapes réalisées
 
-- ✅ Clonage du dépôt de base
-- ✅ Implémentation des procédures Java
-- ✅ Compilation des classes
-- ✅ Ajout des fichiers `.class` au projet
-- ✅ Test via les appels depuis Neo4j Desktop ou les scripts Python
-
-
-## 📌 Pour lancer le projet
-
-1. Cloner ce dépôt  
-2. Lancer Neo4j Desktop avec le plugin APOC activé  
-3. Importer les procédures compilées dans le dossier `plugins/` de Neo4j  
-4. Redémarrer la base  
-5. Utiliser les procédures via Cypher ou les scripts Python fournis
-
-
+-  Clonage du dépôt de base
+-  Implémentation des procédures Java
+-  Compilation des classes
+-  Ajout des fichiers `.class` au projet
+-  Test via les appels depuis Neo4j Desktop ou les scripts Python
 
