@@ -32,23 +32,3 @@ Le projet est structuré autour de plusieurs étapes :
 <li><b>Plotly</b> : Pour des visualisations interactives et dynamiques, comme des animations et des graphiques interactifs.</li> 
 <li><b>Jupyter Notebook</b> : Environnement de développement utilisé pour coder, visualiser, et documenter le projet de manière claire et interactive.</li> 
 </ul>
-
-
-<h2>Compétences acquises ✔️</h2>
-<li><b>Manipulation de données avec Pandas</b> : Analyse, transformation et visualisation des données.</li>
-<li><b>Création de visualisations dynamiques</b> : Utilisation de Plotly pour des graphiques interactifs (barres, cartes thermiques, régressions).</li>
-<li><b>Statistiques et corrélations</b> : Calculs avancés comme la corrélation entre cadence et calories consommées.</li>
-<li><b>Storytelling avec les données</b> : Présentation claire et visuelle des analyses pour faciliter l'interprétation.</li>
-
-<h2>Ce que j'ai appris 💪</h2>
-<li><b>Nettoyage et transformation des données</b> : Traitement de données complexes au format JSON pour les rendre exploitables.</li>
-<li><b>Visualisation avancée</b> : Maîtrise de bibliothèques comme Plotly, Seaborn et Matplotlib.</li>
-<li><b>Analyse critique des données</b> : Identifier des patterns de performance et des facteurs influençant les résultats des rameurs.</li>
-<li><b>Création d'animations interactives</b> : Animation des graphiques pour représenter l'évolution des performances sur 2000m.</li>
-
-<h2>Difficultés rencontrées et solutions 🎯</h2>
-<li><b>Données JSON imbriquées</b> : Les données étaient complexes à manipuler. <b>Solution</b> : Utilisation de <code>pd.json_normalize</code> pour extraire efficacement les informations.</li>
-<li><b>Visualisations interactives</b> : Créer des graphiques dynamiques adaptés à des métriques variées. <b>Solution</b> : Expérimentation avec Plotly pour des visualisations intuitives.</li>
-<li><b>Corrélation des variables</b> : Analyser des relations non linéaires entre calories et temps. <b>Solution</b> : Utiliser des régressions linéaires et des cartes thermiques pour mieux interpréter les résultats.</li>
-
-
