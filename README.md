@@ -1,4 +1,4 @@
-# 🧠 Projet Neo4j : Procédures Stockées pour Réseau de Neurones Graphé 🚀
+# 🧠 Projet Neo4j : Procédures stockées pour réseau de neurones graphé 🚀
 
 ## 🔄 Contexte
 
