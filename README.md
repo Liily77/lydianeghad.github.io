@@ -26,22 +26,3 @@ Grâce à une interface intuitive, les utilisateurs peuvent suivre leur progress
 <li><b>LocalStorage</b> : Pour stocker temporairement les données des expériences avant leur enregistrement définitif en base de données.</li>
 <li><b>MySQL & phpMyAdmin</b> Utilisés pour gérer les données des expériences de conduite sur un serveur.
 Grâce à phpMyAdmin, la base de données est facilement accessible et modifiable via une interface web intuitive.</li>
-
-<h2>Compétences acquises ✔️</h2>
-
-<li><b>Manipulation du DOM</b> : Ajout dynamique d'éléments HTML avec JavaScript, comme les options des listes déroulantes et les lignes de tableaux.</li>
-<li><b>Gestion du LocalStorage/MySQL</b></li>: J'ai appris à gérer le stockage local des données avant de les insérer dans une base de données MySQL, tout en assurant leur récupération via phpMyAdmin.</li>
-<li><b>Validation de formulaires</b> : J'ai mis en place une validation robuste pour garantir la cohérence des données avant leur enregistrement.</li>
-<li><b>Calculs statistiques dynamiques</b> : Calculs automatisés pour afficher la distance moyenne, la durée totale et l'avancement par rapport à un objectif défini.</li>
-<li><b>Conception responsive</b> : J'ai veillé à ce que le site soit utilisable sur toutes les tailles d'écran (mobile, tablette, desktop).</li>
-
-<h2>Ce que j'ai appris 💪</h2>
-<li><b>Validation de données et stockage en base</b> : J'ai appris à valider des données complexes (dates, heures, distances) avant de les enregistrer dans une base de données MySQL, tout en gérant les erreurs utilisateur avec des messages d'avertissement clairs.</li>
-<li><b>Intégration de MySQL avec phpMyAdmin</b> : L'utilisation de phpMyAdmin m'a permis de gérer facilement les tables, d'exécuter des requêtes SQL, et de maintenir une base de données structurée.</li>
-<li><b>Gestion des événements</b></li> : J'ai approfondi la gestion des événements en JavaScript, en particulier pour des actions comme la validation des formulaires et la mise à jour dynamique du contenu.</li>
-<li><b>Optimisation de l'UX</b> : J'ai appris à structurer des formulaires et à guider l'utilisateur via des messages d'erreur clairs, garantissant ainsi une expérience utilisateur fluide et intuitive.</li>
-
-<h2>Difficultés rencontrées et solutions 🎯</h2>
-<li><b>Validation des dates et heures</b> : Vérifier que l'heure d'arrivée est postérieure à l'heure de départ a été un défi. J'ai utilisé une conversion des heures en minutes pour faciliter la comparaison.</li>
-<li><b>Synchronisation avec MySQL</b> : L'intégration des données locales stockées dans le LocalStorage avec MySQL a demandé une bonne gestion des requêtes SQL pour éviter les doublons et garantir la cohérence des informations.</li>
-<li><b>Affichage dynamique des données</b> : Insérer des données dans le tableau de progression tout en conservant un format cohérent s'est avéré difficile. J'ai résolu cela en créant une fonction de formatage des dates et en optimisant le remplissage du tableau avec des boucles.</li>
