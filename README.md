@@ -5,6 +5,26 @@ Chaque projet met en avant mes compétences dans ces deux domaines, illustrant m
 
 
 <h2 align="center">📈 Mes projets en Data</h2>
+
+<br>
+
+### **🔹 Projet : Power BI & Azure – Analyse de l’entreprise Meublatex 🛋️📊**
+
+👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_PowerBI_Azure)
+
+**Description :**  
+Ce projet combine **Power BI** et **Azure Data Factory** pour construire un système décisionnel complet autour des données de l'entreprise fictive **Meublatex**. L’objectif était de centraliser, transformer et analyser les données pour aider à la prise de décision stratégique.
+
+**Objectifs principaux :**
+
+◾ Stockage : Centralisation des données dans un **Data Lake Azure**  
+◾ ETL : Création de pipelines avec **Azure Data Factory** (ODS & DWH)  
+◾ Modélisation : Mise en place d’un **Data Warehouse** structuré  
+◾ Visualisation : Tableau de bord **Power BI interactif multi-pages**  
+◾ Analyse : Calculs DAX pour le **CA**, la **marge**, les **bénéfices**, les **produits** et **clients clés**
+
+**🛠️ Technologies :** Azure Data Factory, Azure Data Lake, Power BI, SQL, DAX, Git
+
 <br>
 
 ### **🔹 Projet : Classification de panneaux de signalisation avec CNN 🚦🧠**
