@@ -1,41 +1,38 @@
-# Projet : Analyse des Hotspots Wi-Fi à Paris 🌐
+### **🔹 Project: Analysis of Wi-Fi Hotspots in Paris 🌐**
 
-👉 [Voir l'application Streamlit ici](https://hotpost-wifi-paris-project.streamlit.app/)
+👉 [View the Streamlit app here](https://hotpost-wifi-paris-project.streamlit.app/)
 
-
-
-## Exemples de visualisations :
-- Répartition des connexions par arrondissement.
-- Cartographie des hotspots avec volume de connexions.
-- Heatmap temporelle des connexions Wi-Fi.
-- Répartition des connexions par appareil et usage.
-- Visualisation WordCloud des concepts principaux.
+## Visualization Examples:
+- Distribution of connections by district.
+- Mapping hotspots with connection volume.
+- Time-based heatmap of Wi-Fi connections.
+- Distribution of connections by device and usage.
+- WordCloud visualization of key concepts.
 
 ## Description 🖋️
 
-Ce projet Python vise à explorer et analyser les données d'utilisation des hotspots Wi-Fi à Paris. L'application Streamlit offre des visualisations interactives pour examiner les tendances géographiques, temporelles, et comportementales, ainsi que des analyses plus spécifiques comme les usages par appareil ou par type d'usage.
+This Python project aims to explore and analyze Wi-Fi hotspot usage data in Paris. The Streamlit application provides interactive visualizations to examine geographic, temporal, and behavioral trends, along with specific analyses such as device usage and type of usage.
 
-## Structure du projet 💡
-Le projet est structuré en plusieurs sections :
-- **Origine des données** : Présentation des données et aperçu des variables.
-- **Analyse géographique** : Répartition par arrondissement et visualisation sur une carte interactive.
-- **Analyse temporelle** : Variations annuelles, heatmap par jour/heure et évolution mensuelle des connexions.
-- **Analyse des utilisateurs** : Langues utilisées et tendances par année.
-- **WordCloud** : Représentation visuelle des mots-clés dans les données textuelles.
+## Project Structure 💡
+The project is structured into several sections:
+- **Data Origin**: Introduction to the dataset and overview of variables.
+- **Geographic Analysis**: Distribution by district and interactive map visualization.
+- **Temporal Analysis**: Annual variations, daily/hourly heatmap, and monthly evolution of connections.
+- **User Analysis**: Languages used and annual trends.
+- **WordCloud**: Visual representation of keywords from textual data.
 
-## Technologies utilisées 💻
-- **Python** : Langage principal utilisé pour l'analyse et la création de l'application.
-- **Pandas** : Pour la manipulation et l'analyse des données tabulaires.
-- **Plotly** : Pour des visualisations interactives comme les cartes et les graphiques.
-- **Seaborn** et **Matplotlib** : Pour des visualisations analytiques et statistiques.
-- **Streamlit** : Framework pour créer une interface utilisateur interactive et déployer l'application.
+## Technologies Used 💻
+- **Python**: Main language used for analysis and app creation.
+- **Pandas**: For tabular data manipulation and analysis.
+- **Plotly**: For interactive visualizations such as maps and charts.
+- **Seaborn** and **Matplotlib**: For analytical and statistical visualizations.
+- **Streamlit**: Framework for creating interactive user interfaces and deploying the application.
 
-
-## Organisation des fichiers 📂
-- **app.py** : Code principal de l'application Streamlit.
-- **requirements.txt** : Dépendances Python à installer.
-- **README.md** : Documentation du projet.
-- **Projet Data Viz.ipynb** : Analyses préliminaires sous Jupyter Notebook.
-- **assets/** : Images et fichiers supplémentaires.
-- **.streamlit/** : Paramètres de configuration Streamlit.
+## File Organization 📂
+- **app.py**: Main Streamlit application code.
+- **requirements.txt**: Python dependencies to install.
+- **README.md**: Project documentation.
+- **Projet Data Viz.ipynb**: Preliminary analyses in Jupyter Notebook.
+- **assets/**: Images and supplementary files.
+- **.streamlit/**: Streamlit configuration settings.
 
