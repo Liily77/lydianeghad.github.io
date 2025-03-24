@@ -1,26 +1,26 @@
-### **🔹 Projet : Deep Learning – Classification de panneaux de signalisation 🚦🧠**
+### **🔹 Project: Deep Learning – Traffic Sign Classification 🚦🧠**
 
-👉 Voir le projet ici
+👉 [View the project here](#)
 
-**Description :**  
-Ce projet utilise l’apprentissage profond pour reconnaître automatiquement des **panneaux de signalisation** à partir du dataset **GTSRB**, un enjeu crucial dans les systèmes de **conduite autonome**. Le projet combine préparation des données, conception de modèles CNN, entraînement, évaluation, et interprétation des résultats.
+**Description:**  
+This project leverages deep learning techniques to automatically recognize **traffic signs** from the **GTSRB** dataset, addressing a critical challenge in **autonomous driving** systems. The project includes data preparation, CNN model design, training, evaluation, and result interpretation.
 
-**Phase 1 – Préparation des données :**
+**Phase 1 – Data Preparation:**
 
-◾ Chargement et exploration du dataset **GTSRB**  
-◾ Prétraitement : redimensionnement des images, normalisation, **one-hot encoding**  
-◾ **Augmentation des données** : rotation, zoom, translation, luminosité  
-◾ Gestion du déséquilibre : pondération des classes
+◾ Loading and exploring the **GTSRB** dataset  
+◾ Preprocessing: image resizing, normalization, **one-hot encoding**  
+◾ **Data augmentation**: rotation, zoom, translation, brightness adjustment  
+◾ Managing class imbalance: class weighting
 
-**Phase 2 – Conception & entraînement des modèles CNN :**
+**Phase 2 – CNN Model Design & Training:**
 
-◾ Modèles **simple** et **avancé** : convolution, MaxPooling, BatchNorm, Dropout  
-◾ Optimisation : **Adam**, **EarlyStopping**, Scheduler, régularisation  
-◾ **Fine-Tuning & Transfer Learning** avec **EfficientNetB0**  
-◾ Évaluation : précision, F1 Score, matrice de confusion  
-◾ Interprétation avec **Grad-CAM**
+◾ **Simple** and **advanced** models: convolution, MaxPooling, BatchNorm, Dropout  
+◾ Optimization: **Adam**, **EarlyStopping**, Scheduler, regularization  
+◾ **Fine-Tuning & Transfer Learning** with **EfficientNetB0**  
+◾ Evaluation: accuracy, F1 Score, confusion matrix  
+◾ Interpretation with **Grad-CAM**
 
-**🛠️ Technologies :** Python, TensorFlow, Keras, CNN, EfficientNet, Grad-CAM
+**🛠️ Technologies:** Python, TensorFlow, Keras, CNN, EfficientNet, Grad-CAM
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
