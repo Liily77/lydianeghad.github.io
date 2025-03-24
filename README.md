@@ -1,33 +1,32 @@
-# 🎬 Projet Machine Learning : Analyse de Sentiments des Films Oscar (2020-2024) 🚀
+# 🎬 Machine Learning Project: Sentiment Analysis of Oscar Films (2020-2024) 🚀
 
 ## Description 🖋️
 
-Ce projet applique le **Machine Learning** pour analyser les **avis** sur les films nommés ou récompensés aux **Oscars** entre **2020 et 2024**.  
-L'objectif est de classifier les critiques en **positives, négatives ou neutres**, tout en explorant les tendances et en fournissant des insights exploitables.
+This project applies **Machine Learning** to analyze **reviews** of films nominated or awarded at the **Oscars** between **2020 and 2024**. The goal is to classify reviews as **positive, negative, or neutral**, while exploring trends and providing actionable insights.
 
-## Objectifs principaux ✔️
+## Main Objectives ✔️
 
-1. **Extraction** : Collecte de critiques issues de **Allociné, IMDb, Rotten Tomatoes**.  
-2. **Nettoyage** : Suppression du bruit, gestion des emojis, tokenization et normalisation.  
-3. **Feature Engineering** : Vectorisation des critiques avec **TF-IDF, Word2Vec et embeddings pré-entraînés**.  
-4. **Modélisation** : Entraînement de modèles de classification (**Logistic Regression, Random Forest, LSTM**).  
-5. **Évaluation** : Validation des performances avec des métriques adaptées (**Accuracy, F1-score**).  
-6. **Visualisation** : Analyse des **tendances de notation et d'opinion** par année et catégorie de film.  
+1. **Extraction:** Collect reviews from **Allociné, IMDb, Rotten Tomatoes**.
+2. **Cleaning:** Remove noise, handle emojis, tokenize, and normalize text.
+3. **Feature Engineering:** Vectorize reviews using **TF-IDF, Word2Vec, and pre-trained embeddings**.
+4. **Modeling:** Train classification models (**Logistic Regression, Random Forest, LSTM**).
+5. **Evaluation:** Validate model performance using suitable metrics (**Accuracy, F1-score**).
+6. **Visualization:** Analyze **rating and opinion trends** by year and film category.
 
-## Technologies utilisées 💻
+## Technologies Used 💻
 
-- **Python** : Langage principal.  
-- **Scikit-learn** : Implémentation des modèles de Machine Learning.  
-- **NLTK / SpaCy** : Prétraitement du texte.  
-- **TensorFlow / PyTorch** : Entraînement de modèles avancés.  
-- **Matplotlib / Seaborn** : Visualisation des résultats.  
-- **Flask / FastAPI** : API pour exposer le modèle en production.  
+- **Python:** Main programming language.
+- **Scikit-learn:** Machine Learning model implementation.
+- **NLTK / SpaCy:** Text preprocessing.
+- **TensorFlow / PyTorch:** Training advanced models.
+- **Matplotlib / Seaborn:** Result visualization.
+- **Flask / FastAPI:** API for model deployment.
 
+## Overview of Analyses 📊
 
-## Aperçu des analyses réalisées 📊
-
-- **Distribution des sentiments** des critiques par film et par année.  
-- **Analyse des tendances** : Évolution des opinions sur les films oscarisés.  
-- **Comparaison des performances** des modèles de classification.  
-- **Impact des récompenses** sur la perception du public (avant/après les Oscars).  
+- **Sentiment distribution** of reviews by film and by year.
+- **Trend analysis:** Evolution of opinions on Oscar-winning films.
+- **Model performance comparison:** Evaluation of different classification models.
+- **Impact of awards** on public perception (before/after the Oscars).
+ 
 
