@@ -1,56 +1,41 @@
-# 🚀 **Projet Spark Scala : Pipeline de Traitement et Analyse de Données**
+# 🚀 **Spark Scala Project: Data Processing and Analysis Pipeline**
 
 ## 🖋️ **Description**
-Ce projet utilise **Scala** et **Apache Spark** pour automatiser un **pipeline de traitement de données**. L'objectif est de manipuler, transformer et analyser des ensembles de données complexes tout en respectant une structure modulaire et des bonnes pratiques d'ingénierie des données.
+This project leverages **Scala** and **Apache Spark** to automate a comprehensive **data processing pipeline**. The goal is to manipulate, transform, and analyze complex datasets while adhering to a modular structure and data engineering best practices.
 
 ---
 
-## ✔️ **Objectifs principaux**
-- **Extraction** : Lecture de fichiers **CSV**, **JSON**, **XML**.
-- **Nettoyage** : Harmonisation des formats et gestion des valeurs manquantes.
-- **Transformation** : Création de nouvelles colonnes (**TTC**, **Statut Contrat**).
-- **Analyse** : Agrégation et génération d'insights.
-- **Validation** : Tests unitaires avec **ScalaTest**.
+## ✔️ **Main Objectives**
+- **Extraction:** Reading data files in **CSV**, **JSON**, and **XML** formats.
+- **Cleaning:** Harmonizing formats and handling missing values.
+- **Transformation:** Creating new columns (**Total Price**, **Contract Status**).
+- **Analysis:** Aggregating data and generating insights.
+- **Validation:** Conducting unit tests using **ScalaTest**.
 
 ---
 
-## 💻 **Technologies utilisées**
-- **Scala** : Langage principal.
-- **Apache Spark** : Framework pour le traitement distribué.
-- **SBT** : Outil de build et gestion des dépendances.
-- **ScalaTest** : Framework de tests unitaires.
-- **Log4j2** : Gestion des logs.
+## 💻 **Technologies Used**
+- **Scala:** Main programming language.
+- **Apache Spark:** Framework for distributed processing.
+- **SBT:** Build tool and dependency management.
+- **ScalaTest:** Framework for unit testing.
+- **Log4j2:** Logging management.
 
 ---
 
-## 📂 **Structure du projet**
-- **main/MainBatch** : Point d'entrée du pipeline.
-- **args/Args** : Paramètres et arguments du programme.
-- **parser/** : Analyse des fichiers **JSON**, **CSV**, **XML**.
-- **reader/** : Classes de lecture des données.
-- **traitement/ServiceVente** : Transformation des données.
-- **test/** : Tests unitaires avec **ScalaTest**.
-- **build.sbt** : Configuration des dépendances.
+## 📂 **Project Structure**
+- **main/MainBatch:** Pipeline entry point.
+- **args/Args:** Program parameters and arguments.
+- **parser/:** Parsing of **JSON**, **CSV**, and **XML** files.
+- **reader/:** Data reading classes.
+- **traitement/ServiceVente:** Data transformation.
+- **test/:** Unit tests with **ScalaTest**.
+- **build.sbt:** Dependency configuration.
 
 ---
 
-## 📊 **Aperçu des analyses réalisées**
-- Calcul et structuration des données par **Statut de Contrat**.
-- Agrégation des métriques clés (**Moyenne TTC**, **Nombre de contrats**).
-- Validation des transformations avec des jeux de données tests.
-
----
-
-## 💪 **Ce que j'ai appris**
-- Automatisation d'un **pipeline de données Spark**.
-- Manipulation avancée de **DataFrames**.
-- Gestion des fichiers multi-formats (**CSV**, **JSON**, **XML**).
-- Développement modulaire et optimisé avec **Scala** et **SBT**.
-
----
-
-## 🎯 **Difficultés rencontrées et solutions**
-- **Formatage des fichiers :** Gestion des types hétérogènes → Nettoyage avec **Spark SQL**.
-- **Agrégation des données :** Structure complexe des données → Aplatissement des colonnes JSON/XML.
-- **Validation des résultats :** Tests robustes avec **ScalaTest**.
+## 📊 **Overview of Analyses**
+- Calculation and structuring data by **Contract Status**.
+- Aggregation of key metrics (**Average Total Price**, **Number of Contracts**).
+- Validation of transformations using test datasets.
 
