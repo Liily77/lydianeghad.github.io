@@ -1,59 +1,58 @@
-<h3>Codecademy student - <href="https://www.codecademy.com/learn/learn-python-3">Learn Python 🐍 </h3>
+# Codecademy Student - [Learn Python 🐍](https://www.codecademy.com/learn/learn-python-3)
 
-Bonjour à tous !
+Hello everyone!
 
-Dans ce projet, vous trouverez les consignes des différents exercices proposés par l'école Codecademy pour apprendre le langage de programmation Python.
+In this project, you'll find instructions for various exercises provided by Codecademy to learn Python programming.
 
-<h4><strong>Sal's Shipping 🛳️</strong></h4>
+## **Sal's Shipping 🛳️**
 
-Sal dirige la plus grande entreprise de transport maritime de la région des trois comtés, Sal’s Shippers. Sal veut s'assurer que chacun de ses clients bénéficie de la meilleure expérience, la plus abordable possible, pour l'expédition de leurs colis.
+Sal runs the largest shipping company in the Tri-County area, Sal's Shippers. Sal wants to ensure each customer receives the most affordable and best experience possible when shipping their packages.
 
-Dans ce projet, vous allez créer un programme qui prend le poids d'un colis et détermine la méthode la moins chère pour expédier ce colis avec Sal’s Shippers.
+In this project, you'll create a program that determines the cheapest method to ship a package based on its weight.
 
-<h4><strong>Magic 8-Ball 🎱</strong></h4>
+## **Magic 8-Ball 🎱**
 
-Le Magic 8-Ball est un jouet populaire développé dans les années 1950 pour prédire l'avenir ou donner des conseils.
+The Magic 8-Ball is a popular toy from the 1950s designed to predict the future or give advice.
 
-Écrivez un programme Python, magic8.py, qui peut répondre à n'importe quelle question "Oui" ou "Non" avec une réponse différente à chaque exécution.
+Write a Python program, `magic8.py`, that answers any "Yes" or "No" question with a different response each time it runs.
 
-Nous utiliserons les 9 réponses possibles suivantes pour notre Magic 8-Ball.
+We will use the following 9 possible answers for our Magic 8-Ball.
 
-<h4><strong>School Grades Program 🏫</strong></h4>
+## **School Grades Program 🏫**
 
-J'ai créé un petit programme qui stocke les informations sur les notes, les traite pour obtenir la note totale et le pourcentage, et effectue certaines opérations pour préparer ces informations avant de les afficher à l'écran.
+I've created a small program to store grade information, process it to obtain the total score and percentage, and perform certain operations to prepare this information before displaying it on the screen.
 
-<h4>Human Resources Program 🧑‍💼</h4>
+## **Human Resources Program 🧑‍💼**
 
-Notre département des ressources humaines est très occupé et nous a demandé de les aider à accélérer leur processus de recrutement.
+Our HR department is very busy and asked for our help to speed up their hiring process.
 
-Nous allons coder un programme qui décide d'embaucher ou non un candidat, en fonction de sa localisation et de son score.
+We will code a program that decides whether to hire a candidate based on their location and score.
 
-<h4>Password Security 🔐</h4>
+## **Password Security 🔐**
 
-Un client nous a demandé de vérifier le système de cybersécurité de son entreprise.
+A client has asked us to review their company's cybersecurity system.
 
-Créons un programme qui vérifie la robustesse du mot de passe du client. Nous devrions également vérifier combien de temps il pourrait falloir à un pirate pour deviner le mot de passe s'il connaissait les caractères mais pas leur ordre.
+Let's create a program that checks the robustness of the client's password. We'll also estimate how long it might take a hacker to guess the password if they knew the characters but not the order.
 
-<h4>Shopping List App 🛍️</h4>
+## **Shopping List App 🛍️**
 
-Rachel oublie souvent d'acheter certaines choses quand elle va à l'épicerie. J'ai développé une application pour l'aider à gérer une liste de courses !
+Rachel often forgets to buy certain items when she goes grocery shopping. I've developed an app to help her manage her shopping list!
 
-<h4>Plant Growth Analysis 🌱</h4>
+## **Plant Growth Analysis 🌱**
 
-George est préoccupé par la croissance irrégulière de sa plante. Il veut que nous écrivions un programme pour effectuer une analyse simple avec lui.
+George is concerned about his plant’s irregular growth. He wants us to write a simple analysis program to help him.
 
-<h4>Electronics Store ⚡</h4>
+## **Electronics Store ⚡**
 
-Vous travaillez dans un magasin d'électronique. Votre tâche est de nettoyer et de formater des données contenant des informations sur certains appareils.
+You work in an electronics store. Your task is to clean and format data containing information about certain devices.
 
-Créons un programme Python pour vous aider dans cette tâche !
+Let's create a Python program to assist you with this task!
 
-<h4>Gradebook 📒</h4>
+## **Gradebook 📒**
 
-Vous êtes étudiant et vous essayez d'organiser vos matières et vos notes en utilisant Python. Explorons ce que nous avons appris sur les listes pour organiser vos matières et vos résultats.
+You're a student trying to organize your subjects and grades using Python. Let's explore lists to organize your subjects and results.
 
-<a href='https://codespaces.new/Liily77/lydianeghad.github.io'><img src='https://github.com/codespaces/badge.svg' alt='Open in GitHub Codespaces' style='max-width: 100%;'></a>
-
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Liily77/lydianeghad.github.io)
 
 
 
