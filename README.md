@@ -7,7 +7,7 @@ Each project showcases my skills in these two areas, demonstrating my versatilit
 
 <br>
 
-### **🔹 Project: Power BI & Azure – Analysis of the Company Meublatex 🛋️📊**
+### **🔹 Project : Power BI & Azure – Analysis of the Company Meublatex 🛋️📊**
 
 👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_PowerBI_Azure)
 
@@ -27,7 +27,7 @@ This project combines **Power BI** and **Azure Data Factory** to build a compreh
 <br>
 
 
-### **🔹 Project: Traffic Sign Classification with CNN 🚦🧠**
+### **🔹 Project : Traffic Sign Classification with CNN 🚦🧠**
 
 👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_Deep_Learning)
 
@@ -52,7 +52,7 @@ This project aims to automatically classify **traffic signs** from the **GTSRB d
 
 <br>
 
-### **🔹 Project: 🧠 Neo4j - Stored Procedures for Graph-Based Neural Networks 🚀**
+### **🔹 Project : 🧠 Neo4j - Stored Procedures for Graph-Based Neural Networks 🚀**
 
 👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_Neo4J)
 
@@ -84,7 +84,7 @@ This project builds upon an academic repository that we enriched by adding **Jav
 <br>
 
 
-### **🔹 Project: Data Processing and Analysis Pipeline with Spark and Scala 🚀**
+### **🔹 Project : Data Processing and Analysis Pipeline with Spark and Scala 🚀**
 
 👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/spark-data-pipeline)
 
@@ -111,7 +111,7 @@ The analyses include data extraction, cleaning, transformation, and aggregation 
 
 <hr>
 
-### **🔹 Project: Scala and PySpark Analysis on Databricks 🚀**
+### **🔹 Project : Scala and PySpark Analysis on Databricks 🚀**
 
 👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/Databricks_Scala_Project)
 
@@ -126,7 +126,7 @@ This project was carried out on **Databricks** using **Scala** and **PySpark** t
 - **Implementing a prioritization system** and **organizing results**.
 - **Generating visualizations** and **logically sorting results**.
 
-**🛠️ Technologies:** Scala, PySpark, SQL, JSON, Databricks
+**🛠️ Technologies :** Scala, PySpark, SQL, JSON, Databricks
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scala/scala-original.svg" alt="Scala" width="60" height="60" />
@@ -139,7 +139,7 @@ This project was carried out on **Databricks** using **Scala** and **PySpark** t
 
 <hr>
 
-### **🔹 Project: Machine Learning - Sentiment Analysis of Oscar-Nominated Films (2020-2024) 🎬**
+### **🔹 Project : Machine Learning - Sentiment Analysis of Oscar-Nominated Films (2020-2024) 🎬**
 
 👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/projet_machine_learning)
 
@@ -168,7 +168,7 @@ The goal is to classify reviews as **positive, negative, or neutral**, while exp
 
 <hr>
 
-### **🔹 Project: Analysis of Wi-Fi Hotspots in Paris 🌐**
+### **🔹 Project : Analysis of Wi-Fi Hotspots in Paris 🌐**
 
 👉 [View the Streamlit application here](https://hotpost-wifi-paris-project.streamlit.app/)
 
@@ -185,7 +185,7 @@ This Python project aims to explore and analyze Wi-Fi hotspot usage data in Pari
 - **Interactive WordCloud :** Visual representation of **main concepts** in textual data.
 - **Deployment of an interactive application** with **Streamlit** for **data visualization**.
 
-**🛠️ Technologies:** Python, Pandas, Plotly, Streamlit
+**🛠️ Technologies :** Python, Pandas, Plotly, Streamlit
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
@@ -196,16 +196,16 @@ This Python project aims to explore and analyze Wi-Fi hotspot usage data in Pari
 
 <hr>
 
-### **🔹 Project: Analysis of Rowers' Performance 🚣‍♂️📊**
+### **🔹 Project : Analysis of Rowers' Performance 🚣‍♂️📊**
 
 👉 [View the notebook here](https://github.com/Liily77/lydianeghad.github.io/blob/Analyse-Donn%C3%A9es-Sportives/analyse-rameurs.ipynb)
 
-**Description:**
+**Description :**
 This Python project aims to analyze the performance of rowers over a 2000m distance, segmented into 500m portions. Through interactive visualizations and advanced analyses, we explored the factors influencing performance and compared rowers against each other.
 
 👉 [Access the project branch](https://github.com/Liily77/lydianeghad.github.io/tree/Analyse-Donn%C3%A9es-Sportives)
 
-**Main Objectives:**
+**Main Objectives :**
 
 - **Data Preparation :** Extraction and cleaning of **JSON** data, transformation to obtain **information per rower and per segment**.
 - **Exploratory Analysis :** Calculation of **average speeds, cadences, calories consumed per kilometer**.
@@ -213,7 +213,7 @@ This Python project aims to analyze the performance of rowers over a 2000m dista
 - **Dynamic Visualization :** Interactive graphs showing **performance evolution** over the race.
 - **Advanced Correlations :** Analysis of the impact of **cadence on energy expenditure** and **final speed**.
 
-**🛠️ Technologies:** Python, Pandas, Matplotlib, Seaborn, Plotly, Jupyter
+**🛠️ Technologies :** Python, Pandas, Matplotlib, Seaborn, Plotly, Jupyter
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
@@ -231,7 +231,7 @@ This Python project aims to analyze the performance of rowers over a 2000m dista
 
 <br>
 
-<h3>🔹 Project: <strong>HTML/CSS Tutorial Creation 👩🏻‍💻</strong></h3>
+<h3>🔹 Project : <strong>HTML/CSS Tutorial Creation 👩🏻‍💻</strong></h3>
 
 👉 View the site here: <a href="https://lydianeghad.alwaysdata.net/duweb24/CSS/TP3/Template.html"> Tutorial Website</a> 
 
@@ -245,7 +245,7 @@ This project is an interactive tutorial designed to teach the basics of front-en
 
 <hr>
 
-<h3>🔹 Project: <strong>Clinique Oscar - Osteopathy Appointment Booking ⚕️</strong></h3>
+<h3>🔹 Project : <strong>Clinique Oscar - Osteopathy Appointment Booking ⚕️</strong></h3>
 
 👉 View the site here: <a href="https://lydianeghad.alwaysdata.net/Clinique_Oscar/"> Clinique Oscar Website</a> 
 
@@ -261,11 +261,11 @@ A website for booking appointments at an osteopathy clinic.</p>
 
 <hr>
 
-<h3>🔹 Project: <strong>Driving Experience Tracking Log 🚗</strong></h3>
+<h3>🔹 Project : <strong>Driving Experience Tracking Log 🚗</strong></h3>
 
 👉 View the site here: <a href="https://lydianeghad.alwaysdata.net/SPConduite/index.html"> SP Driving</a>
 
-<p><strong>Description:</strong><br>
+<p><strong>Description :</strong><br>
 This project allows users to track their driving experience by recording details such as weather, traffic conditions, and distance driven.</p>
 <p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_SP_conduite">Access the project branch</a></p>
 <p align="center">
