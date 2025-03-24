@@ -1,78 +1,78 @@
 <h1 align="center">Portfolio</h1>
 
-<p>Bienvenue sur mon portfolio ! Ici, vous trouverez une sélection de mes projets réalisés dans le cadre de mes études, ainsi que de mes expérimentations personnelles en développement web et en data analytics. 
-Chaque projet met en avant mes compétences dans ces deux domaines, illustrant ma polyvalence et ma passion pour le code et l'analyse des données.</p>
+<p>Welcome to my portfolio! Here, you will find a selection of my projects completed as part of my studies, as well as my personal experiments in web development and data analytics.
+Each project showcases my skills in these two areas, demonstrating my versatility and passion for coding and data analysis.</p>
 
-
-<h2 align="center">📈 Mes projets en Data</h2>
-
-<br>
-
-### **🔹 Projet : Power BI & Azure – Analyse de l’entreprise Meublatex 🛋️📊**
-
-👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_PowerBI_Azure)
-
-**Description :**  
-Ce projet combine **Power BI** et **Azure Data Factory** pour construire un système décisionnel complet autour des données de l'entreprise fictive **Meublatex**. L’objectif était de centraliser, transformer et analyser les données pour aider à la prise de décision stratégique.
-
-**Objectifs principaux :**
-
-◾ Stockage : Centralisation des données dans un **Data Lake Azure**  
-◾ ETL : Création de pipelines avec **Azure Data Factory** (ODS & DWH)  
-◾ Modélisation : Mise en place d’un **Data Warehouse** structuré  
-◾ Visualisation : Tableau de bord **Power BI interactif multi-pages**  
-◾ Analyse : Calculs DAX pour le **CA**, la **marge**, les **bénéfices**, les **produits** et **clients clés**
-
-**🛠️ Technologies :** Azure Data Factory, Azure Data Lake, Power BI, SQL, DAX, Git
+<h2 align="center">📈 My Data Projects</h2>
 
 <br>
 
-### **🔹 Projet : Classification de panneaux de signalisation avec CNN 🚦🧠**
+### **🔹 Project: Power BI & Azure – Analysis of the Company Meublatex 🛋️📊**
 
-👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_Deep_Learning)
+👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_PowerBI_Azure)
 
-**Description :**  
-Ce projet vise à classifier automatiquement les **panneaux de signalisation routière** à partir du dataset **GTSRB**, en utilisant des **réseaux de neurones convolutifs (CNN)**. L’objectif est de simuler une tâche clé pour les systèmes de conduite autonome.
+**Description:**
+This project combines **Power BI** and **Azure Data Factory** to build a comprehensive decision-making system around the data of the fictional company **Meublatex**. The goal was to centralize, transform, and analyze the data to aid in strategic decision-making.
 
-**Objectifs principaux :**
+**Main Objectives:**
 
-◾ **Prétraitement** : redimensionnement, normalisation, augmentation des images  
-◾ **Modélisation** : implémentation de modèles **CNN simples et avancés**  
-◾ **Optimisation** : régularisation, fine-tuning, EarlyStopping, LR Scheduler  
-◾ **Évaluation** : précision, F1 score, matrice de confusion  
-◾ **Expérimentation** : **Transfer Learning avec EfficientNetB0**, Grad-CAM pour interprétation
+- **Storage** : Centralization of data in an **Azure Data Lake**
+- **ETL** : Creation of pipelines with **Azure Data Factory** (ODS & DWH)
+- **Modeling** : Implementation of a structured **Data Warehouse**
+- **Visualization** : Interactive multi-page **Power BI dashboard**
+- **Analysis** : DAX calculations for **revenue**, **margin**, **profits**, **key products**, and **customers**
 
-**🛠️ Technologies :** Python, TensorFlow, Keras, CNN, EfficientNet, Grad-CAM
+**🛠️ Technologies:** Azure Data Factory, Azure Data Lake, Power BI, SQL, DAX, Git
+
+<br>
+
+
+### **🔹 Project: Traffic Sign Classification with CNN 🚦🧠**
+
+👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_Deep_Learning)
+
+**Description:**
+This project aims to automatically classify **traffic signs** from the **GTSRB dataset** using **Convolutional Neural Networks (CNN)**. The goal is to simulate a key task for autonomous driving systems.
+
+**Main Objectives:**
+
+- **Preprocessing:** resizing, normalization, image augmentation
+- **Modeling:** implementation of **simple and advanced CNN models**
+- **Optimization:** regularization, fine-tuning, EarlyStopping, LR Scheduler
+- **Evaluation:** accuracy, F1 score, confusion matrix
+- **Experimentation:** **Transfer Learning with EfficientNetB0**, Grad-CAM for interpretation
+
+**🛠️ Technologies:** Python, TensorFlow, Keras, CNN, EfficientNet, Grad-CAM
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
   <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Tensorflow_logo.svg" alt="TensorFlow" width="60" height="60" />
   <img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Keras_logo.svg" alt="Keras" width="60" height="60" />
-</p> 
+</p>
 
-<br> 
+<br>
 
-### **🔹 Projet : 🧠 Neo4j - Procédures stockées pour réseau de neurones graphé 🚀**
+### **🔹 Project: 🧠 Neo4j - Stored Procedures for Graph-Based Neural Networks 🚀**
 
-👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_Neo4J)
+👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_Neo4J)
 
-**Description :**  
-Ce projet s'appuie sur un dépôt académique que nous avons enrichi par l'ajout de **procédures stockées en Java** pour **Neo4j**, dans le but de modéliser et entraîner un réseau de neurones directement dans une base orientée graphe. Les requêtes Cypher ont été encapsulées dans des classes Java compilées pour plus de modularité et de performance.
+**Description:**
+This project builds upon an academic repository that we enriched by adding **Java stored procedures** for **Neo4j**, with the goal of modeling and training a neural network directly within a graph-oriented database. Cypher queries were encapsulated in compiled Java classes for better modularity and performance.
 
-**Objectifs principaux :**
+**Main Objectives:**
 
-◾ Transformer des scripts Cypher en **procédures stockées Java**.  
-◾ **Créer et configurer** un réseau de neurones (couches, neurones, entrées/sorties).  
-◾ **Charger des données d'entrée** et **sortie attendue** dans Neo4j.  
-◾ Implémenter le **passage avant**, la **rétropropagation avec Adam**, et le **calcul de la perte**.  
-◾ Gérer les **résultats et contraintes sur les poids** via des classes spécialisées.  
+- Transform Cypher scripts into **Java stored procedures**.
+- **Create and configure** a neural network (layers, neurons, inputs/outputs).
+- **Load input data** and **expected output** into Neo4j.
+- Implement **forward pass**, **backpropagation with Adam**, and **loss computation**.
+- Manage **results and constraints on weights** through specialized classes.
 
-**Structure des classes :**  
-- `CreateNetwork.class`, `CreateNeuron.class`, `SetInputs.class`, etc.  
-- `ForwardPass.class`, `BackwardPassAdam.class`, `ComputeLoss.class`, etc.  
-- Chaque fichier `.class` a sa version `*Result.class` pour le retour d'exécution.
+**Class Structure:**
+- `CreateNetwork.class`, `CreateNeuron.class`, `SetInputs.class`, etc.
+- `ForwardPass.class`, `BackwardPassAdam.class`, `ComputeLoss.class`, etc.
+- Each `.class` file has its `*Result.class` version for execution return.
 
-**🛠️ Technologies :** Neo4j, Java, Cypher, Python, Git, IntelliJ, Maven/Gradle
+**🛠️ Technologies:** Neo4j, Java, Cypher, Python, Git, IntelliJ, Maven/Gradle
 
 <p align="center">
   <img src="https://dist.neo4j.com/wp-content/uploads/20201006110518/neo4j-logo-1.svg" alt="Neo4j" width="100" height="60" />
@@ -83,23 +83,24 @@ Ce projet s'appuie sur un dépôt académique que nous avons enrichi par l'ajout
 
 <br>
 
-### **🔹 Projet : Pipeline de traitement et analyse de données avec Spark et Scala 🚀**
 
-👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/spark-data-pipeline)
+### **🔹 Project: Data Processing and Analysis Pipeline with Spark and Scala 🚀**
 
-**Description :**  
-Ce projet utilise **Scala** et **Apache Spark** pour automatiser un pipeline de traitement de données. L'objectif était de manipuler, transformer et analyser des ensembles de données complexes tout en respectant une structure modulaire et des bonnes pratiques d'ingénierie des données.  
-Les analyses incluent l'extraction, le nettoyage, la transformation et l'agrégation des données avec validation par tests unitaires.
+👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/spark-data-pipeline)
 
-**Objectifs principaux :**  
+**Description:**
+This project uses **Scala** and **Apache Spark** to automate a data processing pipeline. The goal was to manipulate, transform, and analyze complex datasets while adhering to a modular structure and best practices in data engineering.
+The analyses include data extraction, cleaning, transformation, and aggregation with validation through unit tests.
 
-◾ **Extraction** : Lecture et ingestion de fichiers **CSV, JSON, XML**.  
-◾ **Nettoyage** : Harmonisation des formats et gestion des **valeurs manquantes**.  
-◾ **Transformation** : Création de nouvelles colonnes (**TTC, Statut Contrat**).  
-◾ **Analyse** : Agrégation des données et génération d'**insights**.  
-◾ **Validation** : Mise en place de **tests unitaires** avec **ScalaTest**.  
+**Main Objectives:**
 
-**🛠️ Technologies :** Scala, Apache Spark, Spark SQL, SBT, ScalaTest, Log4j2
+- **Extraction:** Reading and ingesting **CSV, JSON, XML** files.
+- **Cleaning:** Standardizing formats and handling **missing values**.
+- **Transformation:** Creating new columns (**TTC, Contract Status**).
+- **Analysis:** Aggregating data and generating **insights**.
+- **Validation:** Implementing **unit tests** with **ScalaTest**.
+
+**🛠️ Technologies:** Scala, Apache Spark, Spark SQL, SBT, ScalaTest, Log4j2
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scala/scala-original.svg" alt="Scala" width="60" height="60" />
@@ -110,23 +111,22 @@ Les analyses incluent l'extraction, le nettoyage, la transformation et l'agréga
 
 <hr>
 
-### **🔹 Projet : Analyse scala et PySpark sur databricks 🚀**
+### **🔹 Project: Scala and PySpark Analysis on Databricks 🚀**
 
-👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/Databricks_Scala_Project)
+👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/Databricks_Scala_Project)
 
-**Description :**  
-Ce projet a été réalisé sur **Databricks** avec **Scala** et **PySpark** pour analyser des données complexes. L'objectif était de manipuler, transformer et visualiser les données efficacement, en créant des cubes de données et en réalisant des analyses croisées entre étudiants et professeurs.
+**Description:**
+This project was carried out on **Databricks** using **Scala** and **PySpark** to analyze complex data. The goal was to efficiently manipulate, transform, and visualize the data by creating data cubes and performing cross-analyses between students and professors.
 
-**Objectifs principaux :** 
+**Main Objectives:**
 
-◾ **Chargement et traitement** des données **JSON**.  
-◾ **Création de cubes de données** pour **analyse multi-dimensionnelle**.  
-◾ **Réalisation d'analyses croisées** entre **étudiants et professeurs**.  
-◾ **Mise en place d'un système de priorisation** et **organisation des résultats**.  
-◾ **Génération de visualisations** et **tri logique des résultats**.  
+- **Loading and processing** **JSON** data.
+- **Creating data cubes** for **multi-dimensional analysis**.
+- **Performing cross-analyses** between **students and professors**.
+- **Implementing a prioritization system** and **organizing results**.
+- **Generating visualizations** and **logically sorting results**.
 
-
-**🛠️ Technologies :** Scala, PySpark, SQL, JSON, Databricks
+**🛠️ Technologies:** Scala, PySpark, SQL, JSON, Databricks
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scala/scala-original.svg" alt="Scala" width="60" height="60" />
@@ -136,25 +136,26 @@ Ce projet a été réalisé sur **Databricks** avec **Scala** et **PySpark** pou
 </p>
 
 
+
 <hr>
 
-### **🔹 Projet : Machine Learning - Analyse de sentiments des films oscars (2020-2024) 🎬**
+### **🔹 Project: Machine Learning - Sentiment Analysis of Oscar-Nominated Films (2020-2024) 🎬**
 
-👉 [Voir le projet ici](https://github.com/Liily77/lydianeghad.github.io/tree/projet_machine_learning)
+👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/projet_machine_learning)
 
-**Description :**  
-Ce projet applique le **Machine Learning** pour analyser les **avis** sur les films nommés ou récompensés aux **Oscars** entre **2020 et 2024**.  
-L'objectif est de classifier les critiques en **positives, négatives ou neutres**, tout en explorant les tendances et en fournissant des insights exploitables.
+**Description:**
+This project applies **Machine Learning** to analyze **reviews** of films nominated or awarded at the **Oscars** between **2020 and 2024**.
+The goal is to classify reviews as **positive, negative, or neutral**, while exploring trends and providing actionable insights.
 
-**Objectifs :**  
+**Objectives:**
 
-◾ **Collecte et nettoyage** des critiques issues de **Allociné, IMDb, Rotten Tomatoes**  
-◾ **Feature Engineering** avec **TF-IDF, Word2Vec et embeddings pré-entraînés**  
-◾ **Entraînement de modèles** : **Logistic Regression, Random Forest, LSTM**  
-◾ **Évaluation des performances** avec **Accuracy, F1-score**  
-◾ **Analyse des tendances de notation et d'opinion**  
+- **Collect and clean** reviews from **Allociné, IMDb, Rotten Tomatoes**
+- **Feature Engineering** with **TF-IDF, Word2Vec, and pre-trained embeddings**
+- **Model Training:** **Logistic Regression, Random Forest, LSTM**
+- **Performance Evaluation** with **Accuracy, F1-score**
+- **Analyze rating and opinion trends**
 
-**🛠️ Technologies :**  
+**🛠️ Technologies:**
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60"/>
@@ -163,26 +164,28 @@ L'objectif est de classifier les critiques en **positives, négatives ou neutres
   <img src="https://seaborn.pydata.org/_images/logo-tall-lightbg.svg" alt="Seaborn" width="60" height="60"/>
   <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg" alt="Flask" width="80" height="60"/>
 </p>
+
+
 <hr>
 
-### **🔹 Projet : Analyse des Hotspots Wi-Fi à Paris 🌐**
+### **🔹 Project: Analysis of Wi-Fi Hotspots in Paris 🌐**
 
-👉 [Voir l'application Streamlit ici](https://hotpost-wifi-paris-project.streamlit.app/)
+👉 [View the Streamlit application here](https://hotpost-wifi-paris-project.streamlit.app/)
 
-**Description :**  
-Ce projet Python vise à explorer et analyser les données d'utilisation des hotspots Wi-Fi à Paris, en mettant en avant des tendances géographiques, temporelles et comportementales. L'application Streamlit propose des visualisations interactives pour examiner les connexions, les appareils, les langues utilisées et les usages.
+**Description:**
+This Python project aims to explore and analyze Wi-Fi hotspot usage data in Paris, highlighting geographical, temporal, and behavioral trends. The Streamlit application offers interactive visualizations to examine connections, devices, languages used, and usage patterns.
 
-👉 [Accéder à la branche du projet](https://github.com/Liily77/lydianeghad.github.io/tree/Streamlit)
+👉 [Access the project branch](https://github.com/Liily77/lydianeghad.github.io/tree/Streamlit)
 
-**Objectifs principaux :**  
+**Main Objectives:**
 
-◾ **Analyse géographique** : Répartition des connexions **par arrondissement** et **cartographie interactive**.  
-◾ **Analyse temporelle** : Évolution des connexions par année, heatmap des connexions **par jour et par heure**.  
-◾ **Analyse des utilisateurs** : Répartition des **langues utilisées** et **tendances d'usage**.  
-◾ **WordCloud interactif** : Représentation visuelle des **concepts principaux** dans les données textuelles.  
-◾ **Déploiement d’une application interactive** avec **Streamlit** pour la **data visualisation**. 
+- **Geographical Analysis :** Distribution of connections **by district** and **interactive mapping**.
+- **Temporal Analysis :** Evolution of connections by year, heatmap of connections **by day and hour**.
+- **User Analysis :** Distribution of **languages used** and **usage trends**.
+- **Interactive WordCloud :** Visual representation of **main concepts** in textual data.
+- **Deployment of an interactive application** with **Streamlit** for **data visualization**.
 
-**🛠️ Technologies :** Python, Pandas, Plotly, Streamlit
+**🛠️ Technologies:** Python, Pandas, Plotly, Streamlit
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
@@ -193,24 +196,24 @@ Ce projet Python vise à explorer et analyser les données d'utilisation des hot
 
 <hr>
 
-<h3><strong>🔹 Projet : Analyse des performances des rameurs 🚣‍♂️📊</strong></h3>
+### **🔹 Project: Analysis of Rowers' Performance 🚣‍♂️📊**
 
-👉 [Voir le notebook ici](https://github.com/Liily77/lydianeghad.github.io/blob/Analyse-Donn%C3%A9es-Sportives/analyse-rameurs.ipynb)
+👉 [View the notebook here](https://github.com/Liily77/lydianeghad.github.io/blob/Analyse-Donn%C3%A9es-Sportives/analyse-rameurs.ipynb)
 
-**Description :**  
-Ce projet Python vise à analyser les performances des rameurs sur une distance de 2000m, segmentée par portions de 500m. À travers des visualisations interactives et des analyses avancées, nous avons exploré les facteurs influençant les performances et comparé les rameurs entre eux.
+**Description:**
+This Python project aims to analyze the performance of rowers over a 2000m distance, segmented into 500m portions. Through interactive visualizations and advanced analyses, we explored the factors influencing performance and compared rowers against each other.
 
-👉 [Accéder à la branche du projet](https://github.com/Liily77/lydianeghad.github.io/tree/Analyse-Donn%C3%A9es-Sportives)
+👉 [Access the project branch](https://github.com/Liily77/lydianeghad.github.io/tree/Analyse-Donn%C3%A9es-Sportives)
 
-**Objectifs principaux :**  
+**Main Objectives:**
 
-◾ **Préparation des données** : Extraction et nettoyage des données **JSON**, transformation pour obtenir des **informations par rameur et par segment**.  
-◾ **Analyse exploratoire** : Calculs des **vitesses moyennes, cadences, calories consommées par kilomètre**.  
-◾ **Comparaison des rameurs** : Étude des **stratégies adoptées** et des **différences de performances**.  
-◾ **Visualisation dynamique** : Graphiques interactifs montrant **l'évolution des performances** sur la course.  
-◾ **Corrélations avancées** : Analyse de l'impact de la **cadence sur la dépense énergétique** et la **vitesse finale**.
+- **Data Preparation :** Extraction and cleaning of **JSON** data, transformation to obtain **information per rower and per segment**.
+- **Exploratory Analysis :** Calculation of **average speeds, cadences, calories consumed per kilometer**.
+- **Comparison of Rowers :** Study of **adopted strategies** and **performance differences**.
+- **Dynamic Visualization :** Interactive graphs showing **performance evolution** over the race.
+- **Advanced Correlations :** Analysis of the impact of **cadence on energy expenditure** and **final speed**.
 
-**🛠️ Technologies :** Python, Pandas, Matplotlib, Seaborn, Plotly, Jupyter
+**🛠️ Technologies:** Python, Pandas, Matplotlib, Seaborn, Plotly, Jupyter
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
@@ -223,16 +226,18 @@ Ce projet Python vise à analyser les performances des rameurs sur une distance 
 
 <hr>
 
-<h2 align="center">👩🏻‍💻 Mes projets dans le développement web</h2>
+
+<h2 align="center">👩🏻‍💻 My Web Development Projects</h2>
+
 <br>
 
-<h3>🔹 Projet : <strong>Création d'un Tutoriel HTML/CSS 👩🏻‍💻</strong></h3>
+<h3>🔹 Project: <strong>HTML/CSS Tutorial Creation 👩🏻‍💻</strong></h3>
 
-👉 Voir le site ici : <a href="https://lydianeghad.alwaysdata.net/duweb24/CSS/TP3/Template.html"> Site Tutoriel</a> 
+👉 View the site here: <a href="https://lydianeghad.alwaysdata.net/duweb24/CSS/TP3/Template.html"> Tutorial Website</a> 
 
-<p><strong>Description :</strong><br>
-Ce projet est un tutoriel interactif conçu pour enseigner les bases du développement front-end en HTML et CSS.</p>
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_tutoriel">Accéder à la branche du projet</a></p>
+<p><strong>Description:</strong><br>
+This project is an interactive tutorial designed to teach the basics of front-end development using HTML and CSS.</p>
+<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_tutoriel">Access the project branch</a></p>
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
@@ -240,13 +245,13 @@ Ce projet est un tutoriel interactif conçu pour enseigner les bases du dévelop
 
 <hr>
 
-<h3>🔹 Projet: <strong>Clinique Oscar - Prise de Rendez-vous Ostéopathie ⚕️</strong></h3>
+<h3>🔹 Project: <strong>Clinique Oscar - Osteopathy Appointment Booking ⚕️</strong></h3>
 
-👉 Voir le site ici : <a href="https://lydianeghad.alwaysdata.net/Clinique_Oscar/"> Site Clinique Oscar</a> 
+👉 View the site here: <a href="https://lydianeghad.alwaysdata.net/Clinique_Oscar/"> Clinique Oscar Website</a> 
 
-<p><strong>Description :</strong><br>
-Un site web de prise de rendez-vous pour une clinique d'ostéopathie.</p>
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_clinique_oscar">Accéder à la branche du projet</a></p>
+<p><strong>Description:</strong><br>
+A website for booking appointments at an osteopathy clinic.</p>
+<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_clinique_oscar">Access the project branch</a></p>
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
@@ -256,13 +261,13 @@ Un site web de prise de rendez-vous pour une clinique d'ostéopathie.</p>
 
 <hr>
 
-<h3>🔹 Projet : <strong>Carnet de Suivi d'Expérience de Conduite 🚗</strong></h3>
+<h3>🔹 Project: <strong>Driving Experience Tracking Log 🚗</strong></h3>
 
-👉 Voir le site ici : <a href="https://lydianeghad.alwaysdata.net/SPConduite/index.html"> SP Conduite</a>
+👉 View the site here: <a href="https://lydianeghad.alwaysdata.net/SPConduite/index.html"> SP Driving</a>
 
-<p><strong>Description :</strong><br>
-Ce projet permet aux utilisateurs de suivre leurs expériences de conduite en enregistrant des détails comme la météo, le trafic, et la distance parcourue.</p>
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_SP_conduite">Accéder à la branche du projet</a></p>
+<p><strong>Description:</strong><br>
+This project allows users to track their driving experience by recording details such as weather, traffic conditions, and distance driven.</p>
+<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_SP_conduite">Access the project branch</a></p>
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
