@@ -3,6 +3,60 @@
 <p>Welcome to my portfolio! Here, you will find a selection of my projects completed as part of my studies, as well as my personal experiments in web development and data analytics.
 Each project showcases my skills in these two areas, demonstrating my versatility and passion for coding and data analysis.</p>
 
+
+<h2 align="center">👩🏻‍💻 My Web Development Projects</h2>
+
+<br>
+
+<h3>🔹 Project : <strong>Clinique Oscar - Osteopathy Appointment Booking ⚕️</strong></h3>
+
+👉 View the site here: <a href="https://lydianeghad.alwaysdata.net/Clinique_Oscar/"> Clinique Oscar Website</a> 
+
+<p><strong>Description:</strong><br>
+A website for booking appointments at an osteopathy clinic.</p>
+<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_clinique_oscar">Access the project branch</a></p>
+<p align="center">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" width="60" height="60" />
+</p>
+
+<hr>
+<br>
+<h3>🔹 Project : <strong>Driving Experience Tracking Log 🚗</strong></h3>
+
+👉 View the site here: <a href="https://lydianeghad.alwaysdata.net/SPConduite/index.html"> SP Driving</a>
+
+<p><strong>Description :</strong><br>
+This project allows users to track their driving experience by recording details such as weather, traffic conditions, and distance driven.</p>
+<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_SP_conduite">Access the project branch</a></p>
+<p align="center">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" width="60" height="60" />
+  <img src="https://www.phpmyadmin.net/static/images/logo-og.png" alt="phpMyAdmin" width="60" height="60" />
+  <img src="https://img.icons8.com/fluency/344/database.png" alt="LocalStorage" width="60" height="60" />
+</p>
+<br>
+<h3>🔹 Project : <strong>HTML/CSS Tutorial Creation 👩🏻‍💻</strong></h3>
+
+👉 View the site here: <a href="https://lydianeghad.alwaysdata.net/duweb24/CSS/TP3/Template.html"> Tutorial Website</a> 
+
+<p><strong>Description:</strong><br>
+This project is an interactive tutorial designed to teach the basics of front-end development using HTML and CSS.</p>
+<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_tutoriel">Access the project branch</a></p>
+<p align="center">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
+</p>
+
+<hr>
+
+<br>
+
 <h2 align="center">📈 My Data Projects</h2>
 
 <br>
@@ -227,53 +281,4 @@ This Python project aims to analyze the performance of rowers over a 2000m dista
 <hr>
 
 
-<h2 align="center">👩🏻‍💻 My Web Development Projects</h2>
 
-<br>
-
-<h3>🔹 Project : <strong>HTML/CSS Tutorial Creation 👩🏻‍💻</strong></h3>
-
-👉 View the site here: <a href="https://lydianeghad.alwaysdata.net/duweb24/CSS/TP3/Template.html"> Tutorial Website</a> 
-
-<p><strong>Description:</strong><br>
-This project is an interactive tutorial designed to teach the basics of front-end development using HTML and CSS.</p>
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_tutoriel">Access the project branch</a></p>
-<p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
-</p>
-
-<hr>
-
-<h3>🔹 Project : <strong>Clinique Oscar - Osteopathy Appointment Booking ⚕️</strong></h3>
-
-👉 View the site here: <a href="https://lydianeghad.alwaysdata.net/Clinique_Oscar/"> Clinique Oscar Website</a> 
-
-<p><strong>Description:</strong><br>
-A website for booking appointments at an osteopathy clinic.</p>
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_clinique_oscar">Access the project branch</a></p>
-<p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" width="60" height="60" />
-</p>
-
-<hr>
-
-<h3>🔹 Project : <strong>Driving Experience Tracking Log 🚗</strong></h3>
-
-👉 View the site here: <a href="https://lydianeghad.alwaysdata.net/SPConduite/index.html"> SP Driving</a>
-
-<p><strong>Description :</strong><br>
-This project allows users to track their driving experience by recording details such as weather, traffic conditions, and distance driven.</p>
-<p><a href="https://github.com/Liily77/lydianeghad.github.io/tree/projet_SP_conduite">Access the project branch</a></p>
-<p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" width="60" height="60" />
-  <img src="https://www.phpmyadmin.net/static/images/logo-og.png" alt="phpMyAdmin" width="60" height="60" />
-  <img src="https://img.icons8.com/fluency/344/database.png" alt="LocalStorage" width="60" height="60" />
-</p>
