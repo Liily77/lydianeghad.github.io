@@ -8,6 +8,9 @@ Each project showcases my skills in these two areas, demonstrating my versatilit
 
 <br>
 
+
+<br>
+
 ### **🔹 Project : Power BI & Azure – Analysis of the Company Meublatex 🛋️📊**
 
 👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/Projet_PowerBI_Azure)
