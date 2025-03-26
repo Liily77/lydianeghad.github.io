@@ -25,7 +25,8 @@ Each project showcases my skills in these two areas, demonstrating my versatilit
 - **Deployment** : Hosting the app with AWS ECS and pushing images to ECR  
 
 🛠️ **Technologies :** Python, Scikit-learn, MLflow, Docker, GitHub Actions, NLTK, AWS (ECS & ECR), Git
-
+<br>
+<br>
 <p align="center">
   <img src="assets/mlflow.png" alt="MLflow Tracking" width="600"/>
 </p>
@@ -48,7 +49,11 @@ This project combines **Power BI** and **Azure Data Factory** to build a compreh
 - **Analysis** : DAX calculations for **revenue**, **margin**, **profits**, **key products**, and **customers**
 
 **🛠️ Technologies :** Azure Data Factory, Azure Data Lake, Power BI, SQL, DAX, Git
-
+<br>
+<br>
+<p align="center">
+  <img src="https://github.com/Liily77/lydianeghad.github.io/blob/Portfolio/assets/pbi.PNG" alt="ower bi" width="600"/>
+</p>
 <br>
 
 
@@ -97,11 +102,10 @@ This project builds upon an academic repository that we enriched by adding **Jav
 
 **🛠️ Technologies:** Neo4j, Java, Cypher, Python, Git, IntelliJ, Maven/Gradle
 
+<br>
+<br>
 <p align="center">
-  <img src="https://dist.neo4j.com/wp-content/uploads/20201006110518/neo4j-logo-1.svg" alt="Neo4j" width="100" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/intellij/intellij-original.svg" alt="IntelliJ" width="60" height="60" />
+  <img src="https://github.com/Liily77/lydianeghad.github.io/blob/Portfolio/assets/neoforj.png" alt="Graph Neo4j" width="600"/>
 </p>
 
 <br>
@@ -125,11 +129,10 @@ The analyses include data extraction, cleaning, transformation, and aggregation 
 
 **🛠️ Technologies:** Scala, Apache Spark, Spark SQL, SBT, ScalaTest, Log4j2
 
+<br>
+<br>
 <p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scala/scala-original.svg" alt="Scala" width="60" height="60" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Apache_Spark_logo.svg" alt="Apache Spark" width="120" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="SQL" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/json/json-original.svg" alt="JSON" width="60" height="60" />
+  <img src="https://github.com/Liily77/lydianeghad.github.io/blob/Portfolio/assets/framework.PNG" alt="Structure intelliJ" width="600"/>
 </p>
 
 <hr>
@@ -151,14 +154,11 @@ This project was carried out on **Databricks** using **Scala** and **PySpark** t
 
 **🛠️ Technologies :** Scala, PySpark, SQL, JSON, Databricks
 
+<br>
+<br>
 <p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scala/scala-original.svg" alt="Scala" width="60" height="60" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Apache_Spark_logo.svg" alt="PySpark" width="120" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="SQL" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/json/json-original.svg" alt="JSON" width="60" height="60" />
+  <img src="https://github.com/Liily77/lydianeghad.github.io/blob/Portfolio/assets/databricks.PNG" alt="Graph databricks" width="600"/>
 </p>
-
-
 
 <hr>
 
@@ -180,14 +180,11 @@ The goal is to classify reviews as **positive, negative, or neutral**, while exp
 
 **🛠️ Technologies:**
 
+<br>
+<br>
 <p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60"/>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg" alt="Scikit-learn" width="60" height="60"/>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Tensorflow_logo.svg" alt="TensorFlow" width="60" height="60"/>
-  <img src="https://seaborn.pydata.org/_images/logo-tall-lightbg.svg" alt="Seaborn" width="60" height="60"/>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg" alt="Flask" width="80" height="60"/>
+  <img src="https://github.com/Liily77/lydianeghad.github.io/blob/Portfolio/assets/ml.PNG" alt="Graph databricks" width="600"/>
 </p>
-
 
 <hr>
 
@@ -210,11 +207,11 @@ This Python project aims to explore and analyze Wi-Fi hotspot usage data in Pari
 
 **🛠️ Technologies :** Python, Pandas, Plotly, Streamlit
 
+<br>
+<br>
 <p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original-wordmark.svg" alt="Pandas" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/plotly/plotly-original.svg" alt="Plotly" width="60" height="60" />
-  <img src="https://streamlit.io/images/brand/streamlit-mark-light.svg" alt="Streamlit" width="120" height="60" />
+  <img src="https://github.com/Liily77/lydianeghad.github.io/blob/Portfolio/assets/hotspots.PNG" alt="Page streamlit" width="600"/>
+  <img src="https://github.com/Liily77/lydianeghad.github.io/blob/Portfolio/assets/graphhotspots.PNG" alt="Carte interactive ville paris connexion wifi streamlit" width="600"/>
 </p>
 
 <hr>
@@ -238,13 +235,10 @@ This Python project aims to analyze the performance of rowers over a 2000m dista
 
 **🛠️ Technologies :** Python, Pandas, Matplotlib, Seaborn, Plotly, Jupyter
 
+<br>
+<br>
 <p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original-wordmark.svg" alt="Pandas" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matplotlib/matplotlib-original.svg" alt="Matplotlib" width="60" height="60" />
-  <img src="https://seaborn.pydata.org/_images/logo-tall-lightbg.svg" alt="Seaborn" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/plotly/plotly-original.svg" alt="Plotly" width="60" height="60" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg" alt="Jupyter" width="60" height="60" />
+  <img src="https://github.com/Liily77/lydianeghad.github.io/blob/Portfolio/assets/rameurs.PNG" alt="graph participants rameurs" width="600"/>
 </p>
 
 <hr>
@@ -268,6 +262,11 @@ A website for booking appointments at an osteopathy clinic.</p>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" width="60" height="60" />
 </p>
 
+<br>
+<br>
+<p align="center">
+  <img src="https://github.com/Liily77/lydianeghad.github.io/blob/Portfolio/assets/oscar.PNG" alt="bannière site oscar" width="600"/>
+</p>
 <hr>
 <br>
 <h3>🔹 Project : <strong>Driving Experience Tracking Log 🚗</strong></h3>
@@ -286,6 +285,12 @@ This project allows users to track their driving experience by recording details
   <img src="https://www.phpmyadmin.net/static/images/logo-og.png" alt="phpMyAdmin" width="60" height="60" />
   <img src="https://img.icons8.com/fluency/344/database.png" alt="LocalStorage" width="60" height="60" />
 </p>
+
+<br>
+<br>
+<p align="center">
+  <img src="https://github.com/Liily77/lydianeghad.github.io/blob/Portfolio/assets/spconduite.PNG" alt="bannière site sp conduite" width="800"/>
+</p>
 <br>
 <h3>🔹 Project : <strong>HTML/CSS Tutorial Creation 👩🏻‍💻</strong></h3>
 
@@ -298,7 +303,11 @@ This project is an interactive tutorial designed to teach the basics of front-en
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="60" height="60" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="60" height="60" />
 </p>
-
+<br>
+<br>
+<p align="center">
+  <img src="https://github.com/Liily77/lydianeghad.github.io/blob/Portfolio/assets/tuto.PNG" alt="bannière site sp conduite" width="200"/>
+</p>
 <hr>
 
 <br>
