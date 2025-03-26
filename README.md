@@ -8,6 +8,27 @@ Each project showcases my skills in these two areas, demonstrating my versatilit
 
 <br>
 
+### 🔹 **Project : MLOps – Sentiment Analysis of Oscar-Nominated Films (2020–2024) 🎬🤖**  
+
+👉 [View the project here](https://github.com/PierrePssi/Projet_MLOPS)
+
+**Description** : This project applies machine learning and MLOps best practices to classify movie reviews (positive, negative, neutral) for Oscar-nominated films from 2020 to 2024. It simulates a production-ready deployment with full tracking, containerization, CI/CD, and cloud hosting.
+
+**Main Objectives** :
+
+- **Preprocessing** : Text cleaning, stopwords removal, lemmatization using NLTK  
+- **Vectorization** : Transformation of reviews with TF-IDF  
+- **Modeling** : Logistic regression with Scikit-learn  
+- **Tracking** : Logging models and metrics with MLflow  
+- **Automation** : CI/CD pipeline using GitHub Actions  
+- **Containerization** : Dockerizing the Streamlit app for portability  
+- **Deployment** : Hosting the app with AWS ECS and pushing images to ECR  
+
+🛠️ **Technologies :** Python, Scikit-learn, MLflow, Docker, GitHub Actions, NLTK, AWS (ECS & ECR), Git
+
+<p align="center">
+  <img src="assets/mlflow.png" alt="MLflow Tracking" width="600"/>
+</p>
 
 <br>
 
@@ -26,7 +47,7 @@ This project combines **Power BI** and **Azure Data Factory** to build a compreh
 - **Visualization** : Interactive multi-page **Power BI dashboard**
 - **Analysis** : DAX calculations for **revenue**, **margin**, **profits**, **key products**, and **customers**
 
-**🛠️ Technologies:** Azure Data Factory, Azure Data Lake, Power BI, SQL, DAX, Git
+**🛠️ Technologies :** Azure Data Factory, Azure Data Lake, Power BI, SQL, DAX, Git
 
 <br>
 
@@ -40,18 +61,16 @@ This project aims to automatically classify **traffic signs** from the **GTSRB d
 
 **Main Objectives:**
 
-- **Preprocessing:** resizing, normalization, image augmentation
-- **Modeling:** implementation of **simple and advanced CNN models**
-- **Optimization:** regularization, fine-tuning, EarlyStopping, LR Scheduler
-- **Evaluation:** accuracy, F1 score, confusion matrix
-- **Experimentation:** **Transfer Learning with EfficientNetB0**, Grad-CAM for interpretation
+- **Preprocessing :** resizing, normalization, image augmentation
+- **Modeling :** implementation of **simple and advanced CNN models**
+- **Optimization :** regularization, fine-tuning, EarlyStopping, LR Scheduler
+- **Evaluation :** accuracy, F1 score, confusion matrix
+- **Experimentation :** **Transfer Learning with EfficientNetB0**, Grad-CAM for interpretation
 
 **🛠️ Technologies:** Python, TensorFlow, Keras, CNN, EfficientNet, Grad-CAM
 
 <p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60" height="60" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Tensorflow_logo.svg" alt="TensorFlow" width="60" height="60" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Keras_logo.svg" alt="Keras" width="60" height="60" />
+  <img src="assets/traffic.jpg" alt="MLflow Tracking" width="600"/>
 </p>
 
 <br>
