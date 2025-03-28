@@ -1,12 +1,10 @@
 # ---------------------------- IMPORTS ---------------------------- #
 
-import os
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from chromadb import Client
-from chromadb.config import Settings
+import faiss
 
 # -------------------- STEP 1 = EMBEDDINGS ------------------------- #
 
@@ -17,28 +15,22 @@ class MiniLMProcessor:
     def get_embeddings(self, text: str) -> np.ndarray:
         return np.array(self.model.encode(text, normalize_embeddings=True))
 
-# -------------------- STEP 2 = DATABASE CREATION (CHROMADB) ---------------------------- #
+# -------------------- STEP 2 = DATABASE CREATION (FAISS) ---------------------------- #
 
-def setup_chroma_db():
-    persist_directory = "./chroma_db"
-    client = Client(Settings(persist_directory=persist_directory, anonymized_telemetry=False))
-    collection = client.get_or_create_collection(name="scientific_papers")
-    return collection
+def setup_faiss_index(dimension=384):
+    index = faiss.IndexFlatL2(dimension)
+    return index
 
 # ----------------------- STEP 3 = CHUNK INDEXING ---------------------- #
 
-def index_documents_in_chroma(collection, texts, embeddings):
-    for i, (text, embedding) in enumerate(zip(texts, embeddings)):
-        if isinstance(embedding, np.ndarray):
-            embedding = embedding.tolist()
-        if isinstance(embedding, list) and all(isinstance(i, (int, float)) for i in embedding):
-            collection.add(ids=[str(i)], documents=[text], embeddings=[embedding])
-        else:
-            print(f"❌ Invalid embedding format for chunk {i + 1}. Skipping...")
+def index_documents_in_faiss(index, texts, embeddings):
+    index.add(np.array(embeddings))
+    return index
 
 # ------------------------ STEP 4 = INFORMATION RETRIEVAL ---------------------- #
 
-def retrieve_relevant_chunks(collection, query, processor, k=3):
-    query_embedding = processor.get_embeddings(query).squeeze(0).tolist()
-    results = collection.query(query_embeddings=[query_embedding], n_results=k)
-    return results["documents"]
+def retrieve_relevant_chunks(index, query, texts, processor, k=3):
+    query_embedding = processor.get_embeddings(query).reshape(1, -1)
+    distances, indices = index.search(query_embedding, k)
+    return [texts[i] for i in indices[0]]
+
