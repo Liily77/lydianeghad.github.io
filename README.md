@@ -1,4 +1,4 @@
-# 📚 SmartReader Chat – Résumeur d'Articles Scientifiques
+# 📚 SmartReader Chat – Résumeur d'articles scientifiques
 
 💬 **SmartReader** est une application web basée sur Streamlit, qui permet de **poser des questions à un PDF scientifique**, et d'en **obtenir un résumé des points clés** grâce à l'IA.
 
