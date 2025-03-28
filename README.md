@@ -15,7 +15,7 @@
 - 📤 Upload de fichier PDF scientifique
 - ✂️ Découpage intelligent du texte en chunks (LangChain)
 - 🧠 Embedding rapide avec `MiniLM`
-- 🔍 Recherche de passages pertinents avec ChromaDB (RAG)
+- 🔍 Recherche de passages pertinents avec **FAISS** (RAG)
 - 🤖 Résumé généré avec Ollama (`mistral`, `phi`, `tinyllama`, etc.)
 - 🧾 Historique de conversation exportable en `.txt`
 - ⚡ Optimisé pour la rapidité (streaming, chunks courts)
