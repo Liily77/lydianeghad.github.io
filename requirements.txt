@@ -10,3 +10,5 @@ matplotlib
 wordcloud
 requests
 PyPDF2
+pypdf
+
