@@ -1,0 +1,3 @@
+#Cela forcera Streamlit à utiliser Python 3.10 au lieu de 3.12
+
+python-3.10
