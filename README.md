@@ -26,10 +26,7 @@ SmartReader is a web application built with **Streamlit** that allows users to i
 
 🛠️ **Technologies:** Streamlit, Python, LangChain, FAISS, ChromaDB, MiniLM (sentence-transformers), Ollama, Git
 
-<br>
-<p align="center">
-  <img src="assets/smartreader.png" alt="SmartReader Chat App" width="600"/>
-</p>
+
 <br>
 
 
@@ -53,9 +50,7 @@ SmartReader is a web application built with **Streamlit** that allows users to i
 <br>
 <br>
 
-<p align="center">
-  <img src="assets/mlflow.png" alt="MLflow Tracking" width="600"/>
-</p>
+
 
 <br>
 
