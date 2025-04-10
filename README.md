@@ -1,6 +1,6 @@
 # 📚 SmartReader Chat – Résumeur d'articles scientifiques
 
-💬 **SmartReader** est une application web basée sur Streamlit, qui permet de **poser des questions à un PDF scientifique**, et d'en **obtenir un résumé des points clés** grâce à l'IA.
+ **SmartReader** est une application web basée sur Streamlit, qui permet de **poser des questions à un PDF scientifique**, et d'en **obtenir un résumé des points clés** grâce à l'IA.
 
 ---
 
@@ -12,13 +12,13 @@
 
 ## ⚙️ Fonctionnalités
 
-- 📤 Upload de fichier PDF scientifique
-- ✂️ Découpage intelligent du texte en chunks (LangChain)
-- 🧠 Embedding rapide avec `MiniLM`
-- 🔍 Recherche de passages pertinents avec **FAISS** (RAG)
-- 🤖 Résumé généré avec Ollama (`mistral`, `phi`, `tinyllama`, etc.)
-- 🧾 Historique de conversation exportable en `.txt`
-- ⚡ Optimisé pour la rapidité (streaming, chunks courts)
+- Upload de fichier PDF scientifique
+- Découpage intelligent du texte en chunks (LangChain)
+- Embedding rapide avec `MiniLM`
+- Recherche de passages pertinents avec **FAISS** (RAG)
+- Résumé généré avec Ollama (`mistral`, `phi`, `tinyllama`, etc.)
+- Historique de conversation exportable en `.txt`
+- Optimisé pour la rapidité (streaming, chunks courts)
 
 ---
 
