@@ -7,6 +7,7 @@ Each project showcases my skills in these two areas, demonstrating my versatilit
 <h2 align="center">📈 My Data Projects</h2>
 
 <br>
+
 ### 🔹 **Project : SmartReader Chat – Résumeur d'articles scientifiques 📚💬**
 
 👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/smartreader-app)
