@@ -7,6 +7,29 @@ Each project showcases my skills in these two areas, demonstrating my versatilit
 <h2 align="center">📈 My Data Projects</h2>
 
 <br>
+### 🔹 **Project : SmartReader Chat – Résumeur d'articles scientifiques 📚💬**
+
+👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/smartreader-app)
+
+**Description :**  
+SmartReader est une application web basée sur **Streamlit** permettant d'interagir avec des articles scientifiques au format PDF. Elle repose sur une architecture RAG (Retrieval-Augmented Generation) pour résumer et extraire les points clés à partir du texte scientifique, avec des réponses générées par l’IA.
+
+**Main Objectives** :
+
+- **Extraction** : Téléversement et découpage intelligent du contenu PDF en *chunks*  
+- **Embedding** : Génération rapide de vecteurs avec **MiniLM**  
+- **Recherche** : Passage pertinent retrouvé avec **FAISS**  
+- **Résumé** : Généré à l’aide des modèles **Ollama** (Mistral, Phi, TinyLlama…)  
+- **Interaction** : Interface de chat avec historique exportable en .txt  
+- **Performance** : Optimisation du traitement pour garantir fluidité et rapidité
+
+🛠️ **Technologies :** Streamlit, Python, LangChain, FAISS, ChromaDB, MiniLM (sentence-transformers), Ollama, Git
+
+<br>
+<p align="center">
+  <img src="assets/smartreader.png" alt="SmartReader Chat App" width="600"/>
+</p>
+<br>
 
 ### 🔹 **Project : MLOps – Sentiment Analysis of Oscar-Nominated Films (2020–2024) 🎬🤖**  
 
@@ -27,6 +50,7 @@ Each project showcases my skills in these two areas, demonstrating my versatilit
 🛠️ **Technologies :** Python, Scikit-learn, MLflow, Docker, GitHub Actions, NLTK, AWS (ECS & ECR), Git
 <br>
 <br>
+
 <p align="center">
   <img src="assets/mlflow.png" alt="MLflow Tracking" width="600"/>
 </p>
