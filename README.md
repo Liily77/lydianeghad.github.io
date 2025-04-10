@@ -8,29 +8,30 @@ Each project showcases my skills in these two areas, demonstrating my versatilit
 
 <br>
 
-### 🔹 **Project : SmartReader Chat – Résumeur d'articles scientifiques 📚💬**
+### 🔹 **Project: SmartReader Chat – Scientific Paper Summarizer 📚💬**
 
 👉 [View the project here](https://github.com/Liily77/lydianeghad.github.io/tree/smartreader-app)
 
-**Description :**  
-SmartReader est une application web basée sur **Streamlit** permettant d'interagir avec des articles scientifiques au format PDF. Elle repose sur une architecture RAG (Retrieval-Augmented Generation) pour résumer et extraire les points clés à partir du texte scientifique, avec des réponses générées par l’IA.
+**Description:**  
+SmartReader is a web application built with **Streamlit** that allows users to interact with scientific PDFs. It leverages a RAG (Retrieval-Augmented Generation) architecture to extract and summarize key insights from academic papers, providing AI-generated contextual answers.
 
-**Main Objectives** :
+**Main Objectives:**
 
-- **Extraction** : Téléversement et découpage intelligent du contenu PDF en *chunks*  
-- **Embedding** : Génération rapide de vecteurs avec **MiniLM**  
-- **Recherche** : Passage pertinent retrouvé avec **FAISS**  
-- **Résumé** : Généré à l’aide des modèles **Ollama** (Mistral, Phi, TinyLlama…)  
-- **Interaction** : Interface de chat avec historique exportable en .txt  
-- **Performance** : Optimisation du traitement pour garantir fluidité et rapidité
+- **Extraction:** Upload and intelligently split PDF content into *chunks*  
+- **Embedding:** Fast vector generation with **MiniLM**  
+- **Retrieval:** Relevant passages retrieved using **FAISS**  
+- **Summarization:** Answers generated with **Ollama** models (Mistral, Phi, TinyLlama…)  
+- **Interaction:** Chat interface with exportable conversation history (.txt)  
+- **Performance:** Optimized for speed and fluid user experience
 
-🛠️ **Technologies :** Streamlit, Python, LangChain, FAISS, ChromaDB, MiniLM (sentence-transformers), Ollama, Git
+🛠️ **Technologies:** Streamlit, Python, LangChain, FAISS, ChromaDB, MiniLM (sentence-transformers), Ollama, Git
 
 <br>
 <p align="center">
   <img src="assets/smartreader.png" alt="SmartReader Chat App" width="600"/>
 </p>
 <br>
+
 
 ### 🔹 **Project : MLOps – Sentiment Analysis of Oscar-Nominated Films (2020–2024) 🎬🤖**  
 
