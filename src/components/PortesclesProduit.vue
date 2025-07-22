@@ -6,6 +6,7 @@
 
       <transition :name="transitionName">
         <img
+          v-if="images.length"
           :src="images[currentIndex]"
           :key="images[currentIndex]"
           :alt="produit.nom"
@@ -53,9 +54,8 @@ export default {
   },
   computed: {
     images() {
-      return this.produit.images?.map(img =>
-        img.startsWith('http') ? img : `http://localhost:3001${img}`
-      ) || [];
+      // Utilise directement les chemins relatifs renvoyés par le backend
+      return this.produit.images || [];
     },
     transitionName() {
       return this.direction === 'right' ? 'slide-right' : 'slide-left';
@@ -77,6 +77,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 /* === SLIDE TRANSITIONS === */

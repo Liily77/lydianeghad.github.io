@@ -6,7 +6,7 @@
 
       <transition :name="transitionName">
         <img
-          :src="imageCompleteUrl(produit.images[currentIndex])"
+          :src="produit.images[currentIndex]"
           :key="produit.images[currentIndex]"
           :alt="produit.nom"
           class="product-image"
@@ -26,12 +26,10 @@
         <router-link
           :to="{
             path: `/produit/${produit._id || produit.id}`,
-            query: { from: 'boucles' }  // ← adapte le nom de catégorie ici
+            query: { from: 'boucles' }
           }"
           class="add-to-cart"
-        >VOIR
-        </router-link>
-
+        >VOIR</router-link>
       </div>
     </div>
   </div>
@@ -58,9 +56,6 @@ export default {
     }
   },
   methods: {
-    imageCompleteUrl(path) {
-      return path.startsWith('http') ? path : `http://localhost:3001${path}`;
-    },
     nextImage() {
       if (this.currentIndex < this.produit.images.length - 1) {
         this.direction = 'right';

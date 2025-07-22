@@ -23,15 +23,14 @@
       <div class="cart-actions">
         <p class="product-price">{{ produit.prix.toFixed(2) }} €</p>
         <router-link
-        :to="{
-          path: `/produit/${produit._id || produit.id}`,
-          query: { from: 'bracelets' }  // ← adapte le nom de catégorie ici
-        }"
-        class="add-to-cart"
-      >
-        VOIR
-      </router-link>
-
+          :to="{
+            path: `/produit/${produit._id || produit.id}`,
+            query: { from: 'bracelets' }
+          }"
+          class="add-to-cart"
+        >
+          VOIR
+        </router-link>
       </div>
     </div>
   </div>
@@ -54,7 +53,8 @@ export default {
   },
   computed: {
     images() {
-      return this.produit.images.map(img => `http://localhost:3001${img}`);
+      // Les chemins sont relatifs : `/uploads/...`
+      return this.produit.images || [];
     },
     transitionName() {
       return this.direction === 'right' ? 'slide-right' : 'slide-left';

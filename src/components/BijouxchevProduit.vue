@@ -54,9 +54,7 @@ export default {
   },
   computed: {
     images() {
-      return this.produit.images?.map(img =>
-        img.startsWith('http') ? img : `http://localhost:3001${img}`
-      ) || [];
+      return this.produit.images;
     },
     transitionName() {
       return this.direction === 'right' ? 'slide-right' : 'slide-left';

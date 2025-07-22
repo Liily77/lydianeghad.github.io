@@ -47,13 +47,15 @@ export default {
   },
   computed: {
     totalPanier() {
-      return this.panier.reduce((total, item) => total + item.prix * item.quantite, 0).toFixed(2);
+      return this.panier
+        .reduce((total, item) => total + item.prix * item.quantite, 0)
+        .toFixed(2);
     }
   },
   methods: {
     getImageUrl(img) {
-      if (!img) return '';
-      return img.startsWith('http') ? img : `http://localhost:3001${img}`;
+      // On utilise directement le chemin relatif retourné par le backend
+      return img || '';
     },
     chargerPanier() {
       this.panier = getPanier();
@@ -71,7 +73,7 @@ export default {
       this.chargerPanier();
     },
     payer() {
-      alert("Paiement non encore disponible.");
+      alert('Paiement non encore disponible.');
     }
   },
   mounted() {
@@ -79,6 +81,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .panier-page {

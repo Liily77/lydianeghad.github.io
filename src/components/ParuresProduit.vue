@@ -5,6 +5,7 @@
       <button class="arrow left" @click="prevImage" v-if="currentIndex > 0">❮</button>
       <transition :name="transitionName">
         <img
+          v-if="images.length"
           :src="images[currentIndex]"
           :key="images[currentIndex]"
           :alt="produit.nom"
@@ -51,9 +52,8 @@ export default {
   },
   computed: {
     images() {
-      return this.produit.images?.map(img =>
-        img.startsWith('http') ? img : `http://localhost:3001${img}`
-      ) || [];
+      // Utilisation des chemins relatifs fournis par le backend
+      return this.produit.images || [];
     },
     transitionName() {
       return this.direction === 'right' ? 'slide-right' : 'slide-left';
@@ -77,8 +77,8 @@ export default {
 </script>
 
 
-  
-  <style scoped>
+
+<style scoped>
   .slide-right-enter-active, .slide-right-leave-active,
   .slide-left-enter-active, .slide-left-leave-active {
     transition: all 0.4s ease;

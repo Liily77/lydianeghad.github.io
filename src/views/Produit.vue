@@ -66,9 +66,7 @@ export default {
   },
   computed: {
     images() {
-      return this.produit?.images.map(img =>
-        img.startsWith('http') ? img : `http://localhost:3001${img}`
-      ) || [];
+      return this.produit?.images || [];
     },
     categorieURL() {
       const from = this.$route.query.from;
@@ -108,7 +106,7 @@ export default {
   async mounted() {
     const id = this.$route.params.id;
     try {
-      const res = await fetch(`http://localhost:3001/produits/${id}`);
+      const res = await fetch(`/produits/${id}`);
       const produit = await res.json();
       if (res.ok && produit && produit.nom) {
         this.produit = produit;

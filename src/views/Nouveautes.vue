@@ -47,7 +47,7 @@ export default {
     };
   },
   mounted() {
-    fetch('http://localhost:3001/produits')
+    fetch('/produits')
       .then(res => res.json())
       .then(data => {
         const derniers = data.slice().reverse().slice(0, 10);
@@ -60,9 +60,8 @@ export default {
   },
   methods: {
     getImageUrl(img) {
-      if (!img) return '';
-      return img.startsWith('http') ? img : `http://localhost:3001${img}`;
-    },
+      return img || '';
+  },
     nextImage(index) {
       const total = this.produits[index].images.length;
       this.currentIndexes[index] = (this.currentIndexes[index] + 1) % total;

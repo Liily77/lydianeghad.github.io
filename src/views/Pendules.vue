@@ -47,7 +47,7 @@ export default {
   },
   mounted() {
     window.scrollTo(0, 0);
-    fetch('http://localhost:3001/produits')
+    fetch('/produits')
       .then(res => res.json())
       .then(data => {
         this.produitsPendules = data.filter(p =>

@@ -41,15 +41,31 @@ export default {
     };
   },
   methods: {
-    envoyerMessage() {
-      alert('Merci pour votre message !');
-      this.form.nom = '';
-      this.form.email = '';
-      this.form.message = '';
+    async envoyerMessage() {
+      try {
+        const res = await fetch('/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.form)
+        });
+        const { success, message } = await res.json();
+        if (success) {
+          alert('✅ Message envoyé avec succès !');
+          this.form.nom = '';
+          this.form.email = '';
+          this.form.message = '';
+        } else {
+          throw new Error(message || 'Erreur inconnue');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('❌ Impossible d’envoyer le message. Réessayez plus tard.');
+      }
     }
   }
 };
 </script>
+
 
 <style scoped>
 .contact-page {

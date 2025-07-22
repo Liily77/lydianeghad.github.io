@@ -17,7 +17,7 @@
           >‹</button>
 
           <img
-            :src="getImageUrl(produit.images[currentIndexes[index] || 0])"
+            :src="produit.images[currentIndexes[index] || 0]"
             :alt="produit.nom"
           />
 
@@ -59,9 +59,6 @@ export default {
     }
   },
   methods: {
-    getImageUrl(img) {
-      return img?.startsWith('http') ? img : `http://localhost:3001${img}`;
-    },
     nextImage(index) {
       const total = this.resultats[index].images.length;
       this.currentIndexes[index] = (this.currentIndexes[index] + 1) % total;
@@ -78,7 +75,7 @@ export default {
       }
 
       try {
-        const reponse = await fetch(`http://localhost:3001/produits/recherche?q=${terme}`);
+        const reponse = await fetch(`/produits/recherche?q=${encodeURIComponent(terme)}`);
         const donnees = await reponse.json();
         this.resultats = donnees;
         this.currentIndexes = Object.fromEntries(donnees.map((_, i) => [i, 0]));
@@ -90,6 +87,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .recherche-page {

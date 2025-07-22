@@ -6,14 +6,15 @@
 
       <transition :name="transitionName">
         <img
-          :src="imageCompleteUrl(produit.images[currentIndex])"
-          :key="produit.images[currentIndex]"
+          v-if="images.length"
+          :src="images[currentIndex]"
+          :key="images[currentIndex]"
           :alt="produit.nom"
           class="product-image"
         />
       </transition>
 
-      <button class="arrow right" @click="nextImage" v-if="currentIndex < produit.images.length - 1">❯</button>
+      <button class="arrow right" @click="nextImage" v-if="currentIndex < images.length - 1">❯</button>
     </div>
 
     <!-- INFOS -->
@@ -23,15 +24,14 @@
       <div class="cart-actions">
         <p class="product-price">{{ produit.prix.toFixed(2) }} €</p>
         <router-link
-      :to="{
-        path: `/produit/${produit._id || produit.id}`,
-        query: { from: 'colliers' }  // ← adapte le nom de catégorie ici
-      }"
-      class="add-to-cart"
-    >
-      VOIR
-    </router-link>
-
+          :to="{
+            path: `/produit/${produit._id || produit.id}`,
+            query: { from: 'colliers' }
+          }"
+          class="add-to-cart"
+        >
+          VOIR
+        </router-link>
       </div>
     </div>
   </div>
@@ -49,28 +49,35 @@ export default {
   data() {
     return {
       currentIndex: 0,
-      transitionName: 'slide'
+      direction: 'right'
+    };
+  },
+  computed: {
+    images() {
+      // Utilisation des chemins relatifs renvoyés par le backend
+      return this.produit.images || [];
+    },
+    transitionName() {
+      return this.direction === 'right' ? 'slide-next' : 'slide-prev';
     }
   },
   methods: {
-    imageCompleteUrl(path) {
-      return path.startsWith('http') ? path : 'http://localhost:3001' + path;
-    },
     nextImage() {
-      if (this.currentIndex < this.produit.images.length - 1) {
-        this.transitionName = 'slide-next';
+      if (this.currentIndex < this.images.length - 1) {
+        this.direction = 'right';
         this.currentIndex++;
       }
     },
     prevImage() {
       if (this.currentIndex > 0) {
-        this.transitionName = 'slide-prev';
+        this.direction = 'left';
         this.currentIndex--;
       }
     }
   }
-}
+};
 </script>
+
 
 <style scoped>
 /* ANIMATION SLIDE */

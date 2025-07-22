@@ -6,6 +6,7 @@
 
       <transition :name="transitionName">
         <img
+          v-if="images.length"
           :src="images[currentIndex]"
           :key="images[currentIndex]"
           :alt="produit.nom"
@@ -22,7 +23,6 @@
       <p class="product-description">{{ produit.description }}</p>
       <div class="cart-actions">
         <p class="product-price">{{ produit.prix.toFixed(2) }} €</p>
-
         <!-- Lien vers la fiche produit avec query `from=malas` -->
         <router-link
           :to="{
@@ -55,9 +55,8 @@ export default {
   },
   computed: {
     images() {
-      return this.produit.images?.map(img =>
-        img.startsWith('http') ? img : `http://localhost:3001${img}`
-      ) || [];
+      // Utilisation des chemins relatifs envoyés par le backend
+      return this.produit.images || [];
     },
     transitionName() {
       return this.direction === 'right' ? 'slide-right' : 'slide-left';
@@ -80,7 +79,7 @@ export default {
 };
 </script>
 
-  
+
   <style scoped>
   /* Transitions */
   .slide-right-enter-active, .slide-right-leave-active,
