@@ -15,8 +15,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-// ❌ TEMPORAIREMENT DÉSACTIVÉ POUR DEBUG
-// app.use(express.static(path.resolve(__dirname, '../dist')));
+
+// 🔵 SERIVRE LES FICHIERS STATIQUES DU FRONT
+app.use(express.static(path.resolve(__dirname, '../dist')));
 
 // --- CONNEXION MONGODB ---
 mongoose.connect(process.env.MONGODB_URI)
@@ -48,15 +49,10 @@ const upload = multer({ storage });
 // ✅ ROUTE CONTACT : ENVOI DE MAIL
 app.post('/send-email', async (req, res) => {
   const { name, email, message } = req.body;
-
   const transporter = nodemailer.createTransport({
     service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    }
+    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
   });
-
   try {
     await transporter.sendMail({
       from: `"${name}" <${email}>`,
@@ -69,7 +65,6 @@ app.post('/send-email', async (req, res) => {
         <p><strong>Message :</strong><br>${message}</p>
       `
     });
-
     res.status(200).json({ success: true, message: 'Message envoyé avec succès' });
   } catch (error) {
     console.error('❌ Erreur envoi email :', error);
@@ -80,13 +75,7 @@ app.post('/send-email', async (req, res) => {
 // ✅ RECHERCHE PRODUIT
 app.get('/produits/recherche', async (req, res) => {
   try {
-    const query = req.query.q;
-    if (!query) return res.status(400).json({ message: 'Veuillez fournir un mot-clé' });
-
-    const produits = await Produit.find({
-      nom: { $regex: query, $options: 'i' }
-    });
-
+    const produits = await Produit.find({ nom: { $regex: req.query.q || '', $options: 'i' } });
     res.json(produits);
   } catch (err) {
     console.error('❌ Erreur recherche produit :', err);
@@ -97,9 +86,9 @@ app.get('/produits/recherche', async (req, res) => {
 // ✅ GET TOUS LES PRODUITS
 app.get('/produits', async (req, res) => {
   try {
-    const produits = await Produit.find();
-    res.json(produits);
+    res.json(await Produit.find());
   } catch (err) {
+    console.error('❌ Erreur chargement produits :', err);
     res.status(500).json({ message: 'Erreur chargement produits', erreur: err });
   }
 });
@@ -111,6 +100,7 @@ app.get('/produits/:id', async (req, res) => {
     if (!produit) return res.status(404).json({ message: 'Produit introuvable' });
     res.json(produit);
   } catch (err) {
+    console.error('❌ Erreur serveur :', err);
     res.status(500).json({ message: 'Erreur serveur', erreur: err });
   }
 });
@@ -118,20 +108,11 @@ app.get('/produits/:id', async (req, res) => {
 // ✅ POST : AJOUT PRODUIT
 app.post('/produits', upload.array('images'), async (req, res) => {
   try {
-    const { nom, description, prix, categorie } = req.body;
-    const images = req.files.map(file => `/uploads/${file.filename}`);
-
-    const produit = new Produit({
-      nom,
-      description,
-      prix: parseFloat(prix),
-      categorie,
-      images
-    });
-
-    const produitAjoute = await produit.save();
-    res.status(201).json({ message: '✅ Produit ajouté', produit: produitAjoute });
+    const images = req.files.map(f => `/uploads/${f.filename}`);
+    const produit = new Produit({ ...req.body, prix: parseFloat(req.body.prix), images });
+    res.status(201).json({ message: '✅ Produit ajouté', produit: await produit.save() });
   } catch (err) {
+    console.error('❌ Erreur ajout produit :', err);
     res.status(500).json({ message: 'Erreur ajout produit', erreur: err });
   }
 });
@@ -143,6 +124,7 @@ app.put('/produits/:id', async (req, res) => {
     if (!produit) return res.status(404).json({ message: 'Produit introuvable' });
     res.json({ message: '✅ Produit modifié', produit });
   } catch (err) {
+    console.error('❌ Erreur modification :', err);
     res.status(500).json({ message: 'Erreur modification', erreur: err });
   }
 });
@@ -154,16 +136,18 @@ app.delete('/produits/:id', async (req, res) => {
     if (!produit) return res.status(404).json({ message: 'Produit introuvable' });
     res.json({ message: '🗑 Produit supprimé' });
   } catch (err) {
+    console.error('❌ Erreur suppression :', err);
     res.status(500).json({ message: 'Erreur suppression', erreur: err });
   }
 });
 
-/* ---------------- TEST DE VIE DU BACKEND ---------------- */
+/* ---------------- CATCH-ALL POUR SERVIR LA SPA ---------------- */
 app.get('*', (req, res) => {
-  res.send('<h1>✅ API Arc En Ciel déployée avec succès</h1>');
+  res.sendFile(path.resolve(__dirname, '../dist/index.html'));
 });
 
 /* ---------------- LANCEMENT ---------------- */
 app.listen(PORT, () => {
   console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`);
 });
+
