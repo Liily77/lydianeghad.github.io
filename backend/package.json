@@ -1,14 +1,14 @@
 {
-  "name": "backend",
+  "name": "arc-en-ciel-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Serveur backend de la boutique Arc En Ciel",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["express", "mongodb", "ecommerce", "arc-en-ciel"],
+  "author": "Lydia",
+  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.1.0",
