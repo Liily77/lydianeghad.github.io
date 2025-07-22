@@ -9,12 +9,13 @@ const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 // --- MIDDLEWARES ---
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(__dirname, '../dist'))); // Serve Vue app
 
 // --- CONNEXION MONGODB ---
 mongoose.connect(process.env.MONGODB_URI)
@@ -41,7 +42,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-/* ---------------- ROUTES ---------------- */
+/* ---------------- ROUTES BACKEND ---------------- */
 
 // ✅ ROUTE CONTACT : ENVOI DE MAIL
 app.post('/send-email', async (req, res) => {
@@ -50,8 +51,8 @@ app.post('/send-email', async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.EMAIL_USER, // Ex: tonemail@gmail.com
-      pass: process.env.EMAIL_PASS  // Mot de passe d'application
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
     }
   });
 
@@ -79,9 +80,7 @@ app.post('/send-email', async (req, res) => {
 app.get('/produits/recherche', async (req, res) => {
   try {
     const query = req.query.q;
-    if (!query) {
-      return res.status(400).json({ message: 'Veuillez fournir un mot-clé' });
-    }
+    if (!query) return res.status(400).json({ message: 'Veuillez fournir un mot-clé' });
 
     const produits = await Produit.find({
       nom: { $regex: query, $options: 'i' }
@@ -158,7 +157,13 @@ app.delete('/produits/:id', async (req, res) => {
   }
 });
 
-/* ---------------- DÉMARRAGE ---------------- */
+/* ---------------- FRONTEND REDIRECTION ---------------- */
+// Si aucune route API ne correspond, renvoie index.html pour le SPA
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
+
+/* ---------------- LANCEMENT ---------------- */
 app.listen(PORT, () => {
   console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`);
 });
