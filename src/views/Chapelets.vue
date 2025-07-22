@@ -1,0 +1,145 @@
+<template>
+  <div class="chapelets-page">
+    <!-- TITRE SECTION -->
+    <div class="section-title">
+      <img src="/assets/images/titre-chapelets.jpg" alt="Nos Chapelets" />
+    </div>
+
+    <!-- RETOUR ACCUEIL -->
+    <div class="back-home">
+      <router-link to="/#categories" class="back-button">← Accueil</router-link>
+    </div>
+
+    <!-- FICHES PRODUITS -->
+    <div id="chapelets-cards" class="products-container">
+      <ChapeletProduit
+        v-for="produit in produitsChapelets"
+        :key="produit.id"
+        :produit="produit"
+      />
+    </div>
+
+    <!-- BANNIÈRE -->
+    <div class="banner">
+      <img src="/assets/images/banner-chapelets.jpg" alt="Bannière Chapelets" class="banner-img" />
+      <div class="banner-text">
+        <div class="banner-text-box">
+          <p>Découvrez nos chapelets artisanaux confectionnés avec soin.</p>
+          <p>Un symbole de paix, de prière et de spiritualité profonde.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import ChapeletProduit from '../components/ChapeletProduit.vue'
+
+export default {
+  name: 'Chapelets',
+  components: {
+    ChapeletProduit
+  },
+  data() {
+    return {
+      produitsChapelets: []
+    }
+  },
+  mounted() {
+    window.scrollTo(0, 0)
+    fetch('http://localhost:3001/produits')
+      .then(res => res.json())
+      .then(data => {
+        this.produitsChapelets = data.filter(p =>
+          p.categorie?.toLowerCase().includes('chapelet')
+        )
+      })
+      .catch(err => console.error('Erreur chargement chapelets :', err))
+  }
+}
+</script>
+
+<style scoped>
+.chapelets-page {
+  background-color: #f9f4f0;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* BOUTON ACCUEIL */
+.back-home {
+  margin-top: 2.5rem;
+  margin-left: 3rem;
+  margin-bottom: 2rem;
+}
+.back-button {
+  display: inline-block;
+  background-color: #f3e8f5;
+  color: #a074ae;
+  padding: 0.5rem 1rem;
+  font-family: 'Lucida Sans', sans-serif;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+.back-button:hover {
+  background-color: #e20e80;
+  color: #fff;
+}
+
+/* SECTION TITRE */
+.section-title {
+  text-align: center;
+  margin: 3rem 0 2rem;
+}
+.section-title img {
+  max-width: 800px;
+  width: 60%;
+}
+
+/* PRODUITS */
+.products-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 0 2rem;
+  gap: 1.5rem;
+}
+
+/* BANNIÈRE */
+.banner {
+  position: relative;
+  width: 100%;
+  height: 50vh;
+  overflow: hidden;
+  margin-top: 4rem;
+}
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.banner-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+}
+.banner-text-box {
+  background-color: rgba(245, 237, 224, 0.858);
+  font-family: 'Raleway', sans-serif;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  color: #333;
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+</style>
