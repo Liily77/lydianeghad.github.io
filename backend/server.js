@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.static(path.join(__dirname, '../dist'))); // Serve Vue app
+app.use(express.static(path.resolve(__dirname, '../dist'))); // Serve frontend static files
 
 // --- CONNEXION MONGODB ---
 mongoose.connect(process.env.MONGODB_URI)
@@ -157,10 +157,9 @@ app.delete('/produits/:id', async (req, res) => {
   }
 });
 
-/* ---------------- FRONTEND REDIRECTION ---------------- */
-// Si aucune route API ne correspond, renvoie index.html pour le SPA
+/* ---------------- REDIRECTION SPA POUR FRONTEND ---------------- */
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));
+  res.sendFile(path.resolve(__dirname, '../dist/index.html'));
 });
 
 /* ---------------- LANCEMENT ---------------- */
