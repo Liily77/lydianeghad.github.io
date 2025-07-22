@@ -7,12 +7,22 @@
       <label>Filtrer par catégorie :
         <select v-model="filtreCategorie">
           <option value="">Toutes</option>
-          <option v-for="cat in categoriesDisponibles" :key="cat" :value="cat">{{ cat }}</option>
+          <option
+            v-for="cat in categoriesDisponibles"
+            :key="cat"
+            :value="cat"
+          >
+            {{ cat }}
+          </option>
         </select>
       </label>
 
       <label>Recherche :
-        <input type="text" v-model="rechercheTexte" placeholder="Nom ou description" />
+        <input
+          type="text"
+          v-model="rechercheTexte"
+          placeholder="Nom ou description"
+        />
       </label>
     </div>
 
@@ -36,16 +46,30 @@
         <label>Catégorie :
           <select v-model="categorieChoisie" required>
             <option disabled value="">-- Choisir une catégorie --</option>
-            <option v-for="cat in categoriesDisponibles" :key="cat" :value="cat">{{ cat }}</option>
+            <option
+              v-for="cat in categoriesDisponibles"
+              :key="cat"
+              :value="cat"
+            >
+              {{ cat }}
+            </option>
             <option value="autre">Autre (à préciser)</option>
           </select>
         </label>
 
         <label v-if="categorieChoisie === 'autre'">Nouvelle catégorie :
-          <input type="text" v-model="nouvelleCategorie" placeholder="ex: pendules" required />
+          <input
+            type="text"
+            v-model="nouvelleCategorie"
+            placeholder="ex: pendules"
+            required
+          />
         </label>
 
-        <label v-for="(file, index) in fichiersImages" :key="index">
+        <label
+          v-for="(file, index) in fichiersImages"
+          :key="index"
+        >
           Image {{ index + 1 }} :
           <input
             type="file"
@@ -55,13 +79,19 @@
           />
         </label>
 
-        <button type="submit" class="ajouter-btn">Ajouter le produit</button>
+        <button type="submit" class="ajouter-btn">
+          Ajouter le produit
+        </button>
       </form>
 
       <!-- TABLEAU -->
       <div class="tableau-produits" v-if="produitsFiltres.length">
         <h2>📦 Produits filtrés ({{ produitsFiltres.length }})</h2>
-        <div v-for="produit in produitsFiltres" :key="produit._id || produit.id" class="produit-item">
+        <div
+          v-for="produit in produitsFiltres"
+          :key="produit._id || produit.id"
+          class="produit-item"
+        >
           <input v-model="produit.nom" />
           <input v-model="produit.description" />
           <input type="number" v-model.number="produit.prix" />
@@ -71,14 +101,16 @@
             <img
               v-for="(img, i) in produit.images"
               :key="i"
-              :src="img.startsWith('http') ? img : 'http://localhost:3001' + img"
+              :src="img" 
               alt="Image produit"
             />
           </div>
 
           <div class="btn-droite">
             <button @click="modifierProduit(produit)">💾 Modifier</button>
-            <button @click="supprimerProduit(produit._id || produit.id)">🗑 Supprimer</button>
+            <button @click="supprimerProduit(produit._id || produit.id)">
+              🗑 Supprimer
+            </button>
           </div>
         </div>
       </div>
@@ -99,21 +131,37 @@ export default {
       filtreCategorie: '',
       rechercheTexte: '',
       categoriesFixes: [
-        'bague', 'collier', 'bracelet', 'chapelet', 'boucles doreilles',
-        'bijoux de cheville', 'malas', 'parures', 'portecles', 'cartesdiv', 'pendule'
+        'bague',
+        'collier',
+        'bracelet',
+        'chapelet',
+        'boucles doreilles',
+        'bijoux de cheville',
+        'malas',
+        'parures',
+        'portecles',
+        'cartesdiv',
+        'pendule'
       ]
     };
   },
   computed: {
     produitsFiltres() {
       return this.produits.filter(p => {
-        const matchCat = !this.filtreCategorie || p.categorie?.toLowerCase() === this.filtreCategorie.toLowerCase();
+        const matchCat =
+          !this.filtreCategorie ||
+          p.categorie?.toLowerCase() === this.filtreCategorie.toLowerCase();
         const texte = this.rechercheTexte.toLowerCase();
-        return p.nom.toLowerCase().includes(texte) || p.description.toLowerCase().includes(texte);
+        return (
+          p.nom.toLowerCase().includes(texte) ||
+          p.description.toLowerCase().includes(texte)
+        );
       });
     },
     categoriesDisponibles() {
-      const dynCats = [...new Set(this.produits.map(p => p.categorie?.toLowerCase()))].filter(Boolean);
+      const dynCats = [
+        ...new Set(this.produits.map(p => p.categorie?.toLowerCase()))
+      ].filter(Boolean);
       return dynCats.length ? dynCats : this.categoriesFixes;
     }
   },
@@ -126,7 +174,7 @@ export default {
     },
     async chargerProduits() {
       try {
-        const res = await fetch('http://localhost:3001/produits');
+        const res = await fetch('/produits');
         this.produits = await res.json();
       } catch (err) {
         console.error('❌ Erreur chargement produits :', err);
@@ -134,9 +182,10 @@ export default {
     },
     async ajouterProduit() {
       const formData = new FormData();
-      const categorieFinale = this.categorieChoisie === 'autre'
-        ? this.nouvelleCategorie.toLowerCase()
-        : this.categorieChoisie.toLowerCase();
+      const categorieFinale =
+        this.categorieChoisie === 'autre'
+          ? this.nouvelleCategorie.toLowerCase()
+          : this.categorieChoisie.toLowerCase();
 
       formData.append('nom', this.nouveauProduit.nom);
       formData.append('description', this.nouveauProduit.description);
@@ -148,7 +197,7 @@ export default {
       });
 
       try {
-        const res = await fetch('http://localhost:3001/produits', {
+        const res = await fetch('/produits', {
           method: 'POST',
           body: formData
         });
@@ -170,7 +219,6 @@ export default {
       this.categorieChoisie = '';
       this.nouvelleCategorie = '';
       this.fichiersImages = [null, null, null, null, null];
-
       for (let i = 0; i < 5; i++) {
         const ref = this.$refs['fichierImage' + i];
         if (ref && ref.length) ref[0].value = '';
@@ -179,9 +227,11 @@ export default {
     async supprimerProduit(id) {
       if (!confirm('❓ Supprimer ce produit ?')) return;
       try {
-        const res = await fetch(`http://localhost:3001/produits/${id}`, { method: 'DELETE' });
+        const res = await fetch(`/produits/${id}`, { method: 'DELETE' });
         if (res.ok) {
-          this.produits = this.produits.filter(p => (p._id || p.id) !== id);
+          this.produits = this.produits.filter(
+            p => (p._id || p.id) !== id
+          );
         }
       } catch (err) {
         alert('❌ Erreur suppression');
@@ -191,7 +241,7 @@ export default {
     async modifierProduit(produit) {
       const id = produit._id || produit.id;
       try {
-        const res = await fetch(`http://localhost:3001/produits/${id}`, {
+        const res = await fetch(`/produits/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(produit)
@@ -207,7 +257,6 @@ export default {
   }
 };
 </script>
-
 
 
 <style scoped>
