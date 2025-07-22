@@ -111,11 +111,11 @@ export default {
   gap: 1.5rem;
 }
 
+/* Carte produit */
 .panier-item {
   display: flex;
-  flex-direction: row;
   gap: 1.5rem;
-  background-color: #f9f4f0;
+  background-color: #f6f2ee;
   padding: 1rem;
   border-radius: 14px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -178,9 +178,9 @@ export default {
 
 .retirer-btn {
   background-color: #fdd;
-  color: #000;
+  color: red;
   transition: background-color 0.3s ease, color 0.3s ease;
-  margin-left: 2rem;
+  margin-left: auto;
 }
 
 .retirer-btn:hover {
@@ -188,13 +188,17 @@ export default {
   color: white !important;
 }
 
+/* Footer panier – même style que les cartes */
 .panier-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 2rem;
+  background-color: #f9f4f0;
+  padding: 1rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   width: 70%;
-  margin: 0 auto;
+  margin: 1.5rem auto 0;
 }
 
 .panier-footer h2 {
@@ -205,7 +209,7 @@ export default {
 
 .payer-btn {
   padding: 0.6rem 1.5rem;
-  background-color: #8c6da2;
+  background-color: #e21583b6;
   color: white;
   border: none;
   border-radius: 10px;
@@ -226,4 +230,3 @@ export default {
   padding: 3rem 1rem;
 }
 </style>
-

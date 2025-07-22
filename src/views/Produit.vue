@@ -9,7 +9,6 @@
       </router-link>
     </div>
 
-    <!-- ID ajouté ici pour scroll automatique -->
     <div class="fiche-produit" id="fiche">
       <div class="fiche-image">
         <div class="carousel">
@@ -36,9 +35,14 @@
             <span>{{ quantity }}</span>
             <button @click="increaseQuantity">+</button>
           </div>
-          <button class="add-to-cart" @click="ajouterProduitAuPanier">
-            Ajouter au panier
-          </button>
+          <div class="buttons-group">
+            <button class="add-to-cart" @click="ajouterProduitAuPanier">
+              Ajouter au panier
+            </button>
+            <router-link to="/panier" class="view-cart">
+              Voir mon panier
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -110,13 +114,9 @@ export default {
       const produit = await res.json();
       if (res.ok && produit && produit.nom) {
         this.produit = produit;
-
-        // Scroll vers #fiche après chargement du DOM
         this.$nextTick(() => {
           const el = document.getElementById('fiche');
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth' });
-          }
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
         });
       }
     } catch (error) {
@@ -125,7 +125,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 .produit-page {
@@ -148,6 +147,7 @@ export default {
   text-decoration: none;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
+  font-family: 'Raleway', sans-serif;
 }
 .back-button:hover {
   background-color: #e20e80;
@@ -194,22 +194,24 @@ export default {
   justify-content: center;
 }
 .fiche-details h2 {
-  margin: 0 0 0.8rem; /* ↑ Titre un peu plus haut */
+  margin: 0 0 0.8rem;
   font-size: 1.3rem;
 }
 .fiche-details p {
   margin: 0.3rem 0;
   font-size: 0.95rem;
-  line-height: 1.6; /* ↑ Espace entre les lignes */
+  line-height: 1.6;
 }
 
 /* Actions */
 .actions-row {
   display: flex;
-  justify-content: space-between; /* ↑ Bouton à droite */
+  justify-content: space-between;
   align-items: center;
   margin-top: 4rem;
 }
+
+/* Sélecteur de quantité */
 .quantity-selector {
   display: flex;
   align-items: center;
@@ -223,23 +225,59 @@ export default {
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
+  font-family: 'Raleway', sans-serif;
 }
 .quantity-selector button:hover {
   background: #e8c4bf;
 }
-.add-to-cart {
-  background-color: #98babb;
-  color: white;
-  border: none;
-  padding: 0.5rem 1.1rem;
-  border-radius: 10px;
+
+/* Groupe de boutons */
+.buttons-group {
+  display: flex;
+  flex-direction: column;  /* passe en row si tu préfères côte à côte */
+  gap: 0.5rem;
+}
+
+/* Styles communs aux deux boutons */
+.add-to-cart,
+.view-cart {
+  width: 10rem;             /* largeur réduite */
+  padding: 0.6rem 0;        /* padding vertical+horizontal equalisé */
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.9rem;        /* taille unifiée */
   font-weight: 600;
-  font-size: 0.95rem;
+  text-align: center;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
   transition: background 0.3s ease;
+  text-decoration: none;
+  display: block;
+  margin-left: auto;        /* pour aligner à droite */
+}
+
+/* Bouton Ajouter au panier */
+.add-to-cart {
+  background-color: #f3e8f5;
+  color: #a074ae;
+
 }
 .add-to-cart:hover {
-  background-color: #8c6da2;
+
+  background-color:  #8c6da2;
+  color: white;
+
+}
+
+/* Bouton Voir mon panier */
+.view-cart {
+  background-color: #98babb;
+  color:whitesmoke;
+}
+  
+.view-cart:hover {
+  background-color: #719394;
+  color: white;
 }
 
 /* Flèches carrousel */

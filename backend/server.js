@@ -1,3 +1,5 @@
+// server.js
+
 // --- IMPORTATIONS ---
 require('dotenv').config();
 const express = require('express');
@@ -9,14 +11,15 @@ const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+// ← On passe le port par défaut de 3000 à 3001
+const PORT = process.env.PORT || 3001;
 
 // --- MIDDLEWARES ---
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// 🔵 SERIVRE LES FICHIERS STATIQUES DU FRONT
+// 🔵 SERVIR LES FICHIERS STATIQUES DU FRONT
 app.use(express.static(path.resolve(__dirname, '../dist')));
 
 // --- CONNEXION MONGODB ---
