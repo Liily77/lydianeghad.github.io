@@ -15,7 +15,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.static(path.resolve(__dirname, '../dist'))); // Serve frontend static files
+// ❌ TEMPORAIREMENT DÉSACTIVÉ POUR DEBUG
+// app.use(express.static(path.resolve(__dirname, '../dist')));
 
 // --- CONNEXION MONGODB ---
 mongoose.connect(process.env.MONGODB_URI)
@@ -157,9 +158,9 @@ app.delete('/produits/:id', async (req, res) => {
   }
 });
 
-/* ---------------- REDIRECTION SPA POUR FRONTEND ---------------- */
+/* ---------------- TEST DE VIE DU BACKEND ---------------- */
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../dist/index.html'));
+  res.send('<h1>✅ API Arc En Ciel déployée avec succès</h1>');
 });
 
 /* ---------------- LANCEMENT ---------------- */
