@@ -12,6 +12,12 @@
           :alt="produit.nom"
           class="product-image"
         />
+        <img
+          v-else
+          src="/assets/images/image-placeholder.png"
+          alt="Image manquante"
+          class="product-image"
+        />
       </transition>
 
       <button class="arrow right" @click="nextImage" v-if="currentIndex < images.length - 1">❯</button>
@@ -54,7 +60,6 @@ export default {
   },
   computed: {
     images() {
-      // Utilise directement les chemins relatifs renvoyés par le backend
       return this.produit.images || [];
     },
     transitionName() {
@@ -77,6 +82,7 @@ export default {
   }
 };
 </script>
+
 
 
 <style scoped>

@@ -1,15 +1,12 @@
 <template>
-  <!-- TITRE SECTION -->
-  <div class="section-title">
-    <img src="/assets/images/titre-parures.jpg" alt="Nos Parures" />
-  </div>
+  <div class="parures-page">
+    <!-- TITRE SECTION -->
+    <div class="section-title">
+      <img src="/assets/images/titre-parures.jpg" alt="Nos Parures" />
+    </div>
 
-  <div class="home">
-    <!-- RETOUR ACCUEIL -->
     <div class="back-home">
-      <router-link to="/#categories" class="back-button">
-        ← Accueil
-      </router-link>
+      <router-link to="/#categories" class="back-button">← Accueil</router-link>
     </div>
 
     <!-- FICHES PRODUITS -->
@@ -20,15 +17,15 @@
         :produit="produit"
       />
     </div>
-  </div>
 
-  <!-- BANNIÈRE EN BAS -->
-  <div class="banner">
-    <img src="/assets/images/banner-parures.jpg" alt="Bannière Parures" class="banner-img" />
-    <div class="banner-text">
-      <div class="banner-text-box">
-        <p>Découvrez nos ensembles de parures harmonieux et raffinés.</p>
-        <p>Chaque pièce est pensée pour sublimer votre style et votre énergie.</p>
+    <!-- BANNIÈRE EN BAS -->
+    <div class="banner">
+      <img src="/assets/images/banner-parures.jpg" alt="Bannière Parures" class="banner-img" />
+      <div class="banner-text">
+        <div class="banner-text-box">
+          <p>Découvrez nos ensembles de parures harmonieux et raffinés.</p>
+          <p>Chaque pièce est pensée pour sublimer votre style et votre énergie.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -48,18 +45,19 @@ export default {
     };
   },
   mounted() {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
     fetch('/produits')
       .then(res => res.json())
       .then(data => {
         this.produitsParures = data.filter(p =>
           p.categorie?.toLowerCase().trim() === 'parures'
-        )
+        );
       })
-      .catch(err => console.error('Erreur chargement parures :', err))
+      .catch(err => console.error('Erreur chargement parures :', err));
   }
 }
 </script>
+
 
 
 <style scoped>

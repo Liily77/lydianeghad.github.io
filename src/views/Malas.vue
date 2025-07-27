@@ -16,6 +16,7 @@
         v-for="produit in produitsMalas"
         :key="produit._id || produit.id"
         :produit="produit"
+        :getImageUrl="getImageUrl"
       />
     </div>
 
@@ -42,6 +43,16 @@ export default {
     return {
       produitsMalas: []
     };
+  },
+  methods: {
+    getImageUrl(img) {
+      if (!img) return '';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      if (img.startsWith('/uploads')) {
+        return backendUrl + img;
+      }
+      return img;
+    }
   },
   mounted() {
     window.scrollTo(0, 0);

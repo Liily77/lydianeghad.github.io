@@ -43,6 +43,10 @@ export default {
     produit: {
       type: Object,
       required: true
+    },
+    getImageUrl: {
+      type: Function,
+      required: true
     }
   },
   data() {
@@ -53,8 +57,12 @@ export default {
   },
   computed: {
     images() {
-      // Les chemins sont relatifs : `/uploads/...`
-      return this.produit.images || [];
+      if (!this.produit.images || this.produit.images.length === 0) {
+        // Image de secours si aucune image dispo
+        return [this.getImageUrl('/assets/images/image-placeholder.png')];
+      }
+      // Ajoute le préfixe complet à chaque image
+      return this.produit.images.map(img => this.getImageUrl(img));
     },
     transitionName() {
       return this.direction === 'right' ? 'slide-right' : 'slide-left';
@@ -76,6 +84,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 /* Transitions carrousel */

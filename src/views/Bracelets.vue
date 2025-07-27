@@ -1,4 +1,4 @@
-<template>
+<template> 
   <div class="bracelets-page">
     <!-- TITRE SECTION -->
     <div class="section-title">
@@ -14,8 +14,9 @@
     <div id="bracelets-cards" class="products-container">
       <BraceletProduit
         v-for="produit in produitsBracelets"
-        :key="produit.id"
+        :key="produit._id || produit.id"
         :produit="produit"
+        :getImageUrl="getImageUrl"
       />
     </div>
 
@@ -45,17 +46,28 @@ export default {
       produitsBracelets: []
     }
   },
+  methods: {
+    getImageUrl(img) {
+      if (!img) return '';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      if (img.startsWith('/uploads')) {
+        return backendUrl + img;
+      }
+      return img;
+    }
+  },
   mounted() {
     window.scrollTo(0, 0)
     fetch('/produits')
       .then(res => res.json())
       .then(data => {
-        this.produitsBracelets = data.filter(p => p.categorie.toLowerCase() === 'bracelet')
+        this.produitsBracelets = data.filter(p => p.categorie?.toLowerCase() === 'bracelet');
       })
       .catch(err => console.error('Erreur chargement bracelets :', err))
   }
 }
 </script>
+
 
 <style scoped>
 .bracelets-page {

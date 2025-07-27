@@ -14,8 +14,9 @@
     <div id="boucles-cards" class="products-container">
       <BouclesProduit
         v-for="produit in produitsBoucles"
-        :key="produit.id"
+        :key="produit._id || produit.id"
         :produit="produit"
+        :getImageUrl="getImageUrl"
       />
     </div>
 
@@ -45,17 +46,28 @@ export default {
       produitsBoucles: []
     }
   },
+  methods: {
+    getImageUrl(img) {
+      if (!img) return '';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      if (img.startsWith('/uploads')) {
+        return backendUrl + img;
+      }
+      return img;
+    }
+  },
   mounted() {
     window.scrollTo(0, 0)
     fetch('/produits')
       .then(res => res.json())
       .then(data => {
-        this.produitsBoucles = data.filter(p => p.categorie.toLowerCase().includes('boucles'))
+        this.produitsBoucles = data.filter(p => p.categorie?.toLowerCase().includes('boucles'));
       })
       .catch(err => console.error('Erreur chargement boucles :', err))
   }
 }
 </script>
+
 
 
 <style scoped>

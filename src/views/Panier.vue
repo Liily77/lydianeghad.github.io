@@ -1,4 +1,4 @@
-<template>
+<template> 
   <div class="panier-page">
     <div class="panier-header">
       <img src="/assets/images/logo_titre_panier.png" alt="Mon panier" class="logo-panier" />
@@ -54,8 +54,13 @@ export default {
   },
   methods: {
     getImageUrl(img) {
-      // On utilise directement le chemin relatif retourné par le backend
-      return img || '';
+      if (!img) return '';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      // Si l'image est un chemin relatif commençant par /uploads, on préfixe le backend
+      if (img.startsWith('/uploads')) {
+        return backendUrl + img;
+      }
+      return img;
     },
     chargerPanier() {
       this.panier = getPanier();
@@ -81,6 +86,7 @@ export default {
   }
 };
 </script>
+
 
 
 <style scoped>

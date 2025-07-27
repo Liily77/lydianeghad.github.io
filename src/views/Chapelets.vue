@@ -14,8 +14,9 @@
     <div id="chapelets-cards" class="products-container">
       <ChapeletProduit
         v-for="produit in produitsChapelets"
-        :key="produit.id"
+        :key="produit._id || produit.id"
         :produit="produit"
+        :getImageUrl="getImageUrl"
       />
     </div>
 
@@ -45,6 +46,16 @@ export default {
       produitsChapelets: []
     }
   },
+  methods: {
+    getImageUrl(img) {
+      if (!img) return '';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      if (img.startsWith('/uploads')) {
+        return backendUrl + img;
+      }
+      return img;
+    }
+  },
   mounted() {
     window.scrollTo(0, 0)
     fetch('/produits')
@@ -58,6 +69,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .chapelets-page {

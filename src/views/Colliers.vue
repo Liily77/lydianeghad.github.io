@@ -1,4 +1,3 @@
-<!-- Colliers.vue corrigé -->
 <template>
   <div class="colliers-page">
     <!-- TITRE -->
@@ -15,8 +14,9 @@
     <div id="colliers-cards" class="products-container">
       <CollierProduit
         v-for="produit in produitsColliers"
-        :key="produit.id"
+        :key="produit._id || produit.id"
         :produit="produit"
+        :getImageUrl="getImageUrl"
       />
     </div>
 
@@ -46,6 +46,16 @@ export default {
       produitsColliers: []
     }
   },
+  methods: {
+    getImageUrl(img) {
+      if (!img) return '';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      if (img.startsWith('/uploads')) {
+        return backendUrl + img;
+      }
+      return img;
+    }
+  },
   mounted() {
     window.scrollTo(0, 0)
     fetch('/produits')
@@ -57,6 +67,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .colliers-page {

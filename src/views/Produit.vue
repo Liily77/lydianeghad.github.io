@@ -15,13 +15,13 @@
           <button class="arrow left" @click="prevImage" v-if="currentIndex > 0">❮</button>
           <transition :name="transitionName">
             <img
-              :src="images[currentIndex]"
-              :key="images[currentIndex]"
+              :src="prefixedImages[currentIndex]"
+              :key="prefixedImages[currentIndex]"
               :alt="produit.nom"
               class="product-image"
             />
           </transition>
-          <button class="arrow right" @click="nextImage" v-if="currentIndex < images.length - 1">❯</button>
+          <button class="arrow right" @click="nextImage" v-if="currentIndex < prefixedImages.length - 1">❯</button>
         </div>
       </div>
 
@@ -71,12 +71,19 @@ export default {
       quantity: 1,
       currentIndex: 0,
       transitionName: 'slide-right',
-      showToast: false,  // <-- ajout du toast
+      showToast: false,
     };
   },
   computed: {
-    images() {
-      return this.produit?.images || [];
+    // Ajoute le préfixe backend sur chaque image si nécessaire
+    prefixedImages() {
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      return (this.produit?.images || []).map(img => {
+        if (img.startsWith('/uploads')) {
+          return backendUrl + img;
+        }
+        return img;
+      });
     },
     categorieURL() {
       const from = this.$route.query.from;
@@ -96,7 +103,7 @@ export default {
     },
     nextImage() {
       this.transitionName = 'slide-right';
-      if (this.currentIndex < this.images.length - 1) this.currentIndex++;
+      if (this.currentIndex < this.prefixedImages.length - 1) this.currentIndex++;
     },
     prevImage() {
       this.transitionName = 'slide-left';
@@ -110,9 +117,9 @@ export default {
     },
     ajouterProduitAuPanier() {
       ajouterAuPanier(this.produit, this.quantity);
-      this.showToast = true;           // affiche le toast
+      this.showToast = true;
       setTimeout(() => {
-        this.showToast = false;        // cache le toast après 2.5s
+        this.showToast = false;
       }, 2500);
     }
   },
@@ -134,6 +141,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .produit-page {
@@ -312,11 +320,11 @@ export default {
 
 .toast-message {
   position: fixed;
-  bottom: 10px;
+  bottom: 60px;
   left: 50%;
   transform: translateX(-50%);
   background: #e0cecc;
-  color: black;
+  color: rgb(7, 86, 45);
   padding: 0.8rem 1.5rem;
   border-radius: 5px;
   box-shadow: 0 3px 8px rgba(0,0,0,0.3);
@@ -401,7 +409,7 @@ export default {
   }
 
   .toast-message {
-    bottom: 55px; 
+    bottom: 80px; 
   }
 }
 

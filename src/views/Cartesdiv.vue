@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="cartesdiv-page">
     <!-- TITRE SECTION -->
     <div class="section-title">
       <img src="/assets/images/titre-cartesdiv.jpg" alt="Nos Cartes Divinatoires" />
@@ -16,6 +16,7 @@
         v-for="produit in produitsCartes"
         :key="produit._id || produit.id"
         :produit="produit"
+        :getImageUrl="getImageUrl"
       />
     </div>
 
@@ -45,6 +46,16 @@ export default {
       produitsCartes: []
     };
   },
+  methods: {
+    getImageUrl(img) {
+      if (!img) return '';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      if (img.startsWith('/uploads')) {
+        return backendUrl + img;
+      }
+      return img;
+    }
+  },
   mounted() {
     window.scrollTo(0, 0)
     fetch('/produits')
@@ -52,12 +63,13 @@ export default {
       .then(data => {
         this.produitsCartes = data.filter(p =>
           p.categorie?.toLowerCase().trim() === 'cartesdiv'
-        )
+        );
       })
-      .catch(err => console.error('Erreur chargement cartes divinatoires :', err))
+      .catch(err => console.error('Erreur chargement cartes divinatoires :', err));
   }
 }
 </script>
+
 
 
 <style scoped>

@@ -16,7 +16,7 @@
         v-for="produit in produitsBagues"
         :key="produit._id"
         :produit="produit"
-      />
+        :getImageUrl="getImageUrl"/>
     </div>
 
     <!-- BANNIÈRE -->
@@ -45,6 +45,13 @@ export default {
       produitsBagues: []
     };
   },
+  methods: {
+    getImageUrl(img) {
+      if (!img) return '';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      return img.startsWith('/uploads') ? backendUrl + img : img;
+    }
+  },
   mounted() {
     window.scrollTo(0, 0);
     fetch('/produits')
@@ -56,6 +63,7 @@ export default {
   }
 };
 </script>
+
 
 
 

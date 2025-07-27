@@ -23,16 +23,15 @@
       <div class="cart-actions">
         <p class="product-price">{{ produit.prix.toFixed(2) }} €</p>
         <router-link
-        :to="{
-          path: `/produit/${produit._id || produit.id}`,
-          query: { from: 'bagues' }  
-        }"
-        class="add-to-cart"
-      >
-        VOIR
-      </router-link>
-
-    </div>
+          :to="{
+            path: `/produit/${produit._id || produit.id}`,
+            query: { from: 'bagues' }
+          }"
+          class="add-to-cart"
+        >
+          VOIR
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -44,6 +43,10 @@ export default {
     produit: {
       type: Object,
       required: true
+    },
+    getImageUrl: {
+      type: Function,
+      required: true
     }
   },
   data() {
@@ -54,7 +57,12 @@ export default {
   },
   computed: {
     images() {
-      return this.produit.images;
+      if (!this.produit.images || this.produit.images.length === 0) {
+        // Retourne une image par défaut si aucune image dispo
+        return [this.getImageUrl('/assets/images/image-placeholder.png')];
+      }
+      // Applique la fonction getImageUrl à chaque image
+      return this.produit.images.map(img => this.getImageUrl(img));
     },
     transitionName() {
       return this.direction === 'right' ? 'slide-right' : 'slide-left';
@@ -76,6 +84,7 @@ export default {
   }
 };
 </script>
+
 
 
 

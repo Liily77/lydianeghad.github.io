@@ -16,6 +16,7 @@
         v-for="produit in produitsBijouxchev"
         :key="produit._id || produit.id"
         :produit="produit"
+        :getImageUrl="getImageUrl"
       />
     </div>
 
@@ -45,8 +46,18 @@ export default {
       produitsBijouxchev: []
     }
   },
+  methods: {
+    getImageUrl(img) {
+      if (!img) return '';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      if (img.startsWith('/uploads')) {
+        return backendUrl + img;
+      }
+      return img;
+    }
+  },
   mounted() {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
     fetch('/produits')
       .then(res => res.json())
       .then(data => {
@@ -54,10 +65,11 @@ export default {
           p.categorie?.toLowerCase() === 'bijoux de cheville'
         )
       })
-      .catch(err => console.error('Erreur chargement bijoux de cheville :', err))
+      .catch(err => console.error('Erreur chargement bijoux de cheville :', err));
   }
 }
 </script>
+
 
 
 <style scoped>

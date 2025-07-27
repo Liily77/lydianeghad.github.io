@@ -6,24 +6,52 @@
     </div>
 
     <div class="contact-form">
-      <form @submit.prevent="envoyerMessage">
+      <form @submit.prevent="envoyerMessage" novalidate>
         <div class="form-group">
           <label for="nom">Nom</label>
-          <input type="text" id="nom" v-model="form.nom" required />
+          <input
+            type="text"
+            id="nom"
+            v-model.trim="form.nom"
+            :class="{ invalid: errors.nom }"
+            required
+          />
+          <span v-if="errors.nom" class="error-msg">{{ errors.nom }}</span>
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" v-model="form.email" required />
+          <input
+            type="email"
+            id="email"
+            v-model.trim="form.email"
+            :class="{ invalid: errors.email }"
+            required
+          />
+          <span v-if="errors.email" class="error-msg">{{ errors.email }}</span>
         </div>
 
         <div class="form-group">
           <label for="message">Message</label>
-          <textarea id="message" v-model="form.message" required></textarea>
+          <textarea
+            id="message"
+            v-model.trim="form.message"
+            :class="{ invalid: errors.message }"
+            required
+            rows="5"
+          ></textarea>
+          <span v-if="errors.message" class="error-msg">{{ errors.message }}</span>
         </div>
 
-        <button type="submit">Envoyer</button>
+        <button type="submit" :disabled="sending">
+          {{ sending ? 'Envoi en cours...' : 'Envoyer' }}
+        </button>
       </form>
+
+      <!-- Message toast -->
+      <div v-if="toastMessage" :class="['toast', toastSuccess ? 'success' : 'error']">
+        {{ toastMessage }}
+      </div>
     </div>
   </div>
 </template>
@@ -37,11 +65,45 @@ export default {
         nom: '',
         email: '',
         message: ''
-      }
+      },
+      errors: {},
+      sending: false,
+      toastMessage: '',
+      toastSuccess: false,
     };
   },
   methods: {
+    validateForm() {
+      this.errors = {};
+
+      if (!this.form.nom) {
+        this.errors.nom = 'Le nom est obligatoire.';
+      }
+      if (!this.form.email) {
+        this.errors.email = 'L’email est obligatoire.';
+      } else if (!this.isValidEmail(this.form.email)) {
+        this.errors.email = 'Format d’email invalide.';
+      }
+      if (!this.form.message) {
+        this.errors.message = 'Le message est obligatoire.';
+      } else if (this.form.message.length < 10) {
+        this.errors.message = 'Le message doit contenir au moins 10 caractères.';
+      }
+
+      return Object.keys(this.errors).length === 0;
+    },
+    isValidEmail(email) {
+      // Simple regex email validation
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    },
     async envoyerMessage() {
+      if (!this.validateForm()) {
+        return;
+      }
+
+      this.sending = true;
+      this.toastMessage = '';
       try {
         const res = await fetch('/send-email', {
           method: 'POST',
@@ -50,29 +112,36 @@ export default {
         });
         const { success, message } = await res.json();
         if (success) {
-          alert('✅ Message envoyé avec succès !');
+          this.toastMessage = '✅ Message envoyé avec succès !';
+          this.toastSuccess = true;
           this.form.nom = '';
           this.form.email = '';
           this.form.message = '';
         } else {
-          throw new Error(message || 'Erreur inconnue');
+          this.toastMessage = message || 'Erreur inconnue lors de l’envoi.';
+          this.toastSuccess = false;
         }
       } catch (err) {
         console.error(err);
-        alert('❌ Impossible d’envoyer le message. Réessayez plus tard.');
+        this.toastMessage = '❌ Impossible d’envoyer le message. Réessayez plus tard.';
+        this.toastSuccess = false;
+      } finally {
+        this.sending = false;
+        setTimeout(() => {
+          this.toastMessage = '';
+        }, 4000);
       }
     }
   }
 };
 </script>
 
-
 <style scoped>
 .contact-page {
   font-family: 'Raleway', sans-serif;
   background-color: #f9f4f0;
   min-height: 100vh;
-  padding-top: 2rem; 
+  padding-top: 2rem;
 }
 
 .contact-header {
@@ -92,7 +161,7 @@ export default {
 }
 
 .contact-form {
-  background-color: #fff; 
+  background-color: #fff;
   padding: 2.5rem;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -126,6 +195,18 @@ form textarea {
   font-size: 1rem;
   font-family: 'Raleway', sans-serif;
   background-color: #fdfdfd;
+  transition: border-color 0.3s ease;
+}
+
+form input.invalid,
+form textarea.invalid {
+  border-color: #e20e7f;
+}
+
+.error-msg {
+  color: #e20e7f;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
 }
 
 form textarea {
@@ -134,7 +215,7 @@ form textarea {
 }
 
 form button {
-  align-self: flex-end; 
+  align-self: flex-end;
   background-color: #edc6c1;
   color: #000;
   padding: 0.7rem 1.5rem;
@@ -146,28 +227,53 @@ form button {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-form button:hover {
+form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+form button:hover:enabled {
   background-color: #e20e7f;
   color: #fff;
+}
+
+/* Toast message */
+.toast {
+  margin-top: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: center;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  user-select: none;
+  transition: opacity 0.3s ease;
+}
+
+.toast.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.toast.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
 }
 
 /* ================= */
 /* Styles MOBILE ONLY */
 /* ================= */
 
-
-/* ================= */
-/* Styles MOBILE ONLY */
-/* ================= */
-
 @media (max-width: 768px) {
-
   .contact-page {
-    padding-top: clamp(2rem, 5vw, 3rem); /* ✅ plus d’espace avec la navbar */
+    padding-top: clamp(2rem, 5vw, 3rem);
   }
 
   .contact-header {
-    margin-top: clamp(1rem, 4vw, 2rem);  /* ✅ ajoute un espace supplémentaire */
+    margin-top: clamp(1rem, 4vw, 2rem);
     margin-bottom: clamp(1.2rem, 3.5vw, 2rem);
     padding: 0 clamp(0.5rem, 3vw, 1rem);
   }
@@ -187,7 +293,7 @@ form button:hover {
   }
 
   .contact-form {
-    width: 85%; 
+    width: 85%;
     padding: clamp(0.8rem, 3vw, 1.5rem);
     margin: 0 auto clamp(1.5rem, 5vw, 2.5rem);
     border-radius: clamp(8px, 2vw, 12px);

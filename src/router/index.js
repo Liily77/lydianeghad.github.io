@@ -19,7 +19,7 @@ import Produit from '../views/Produit.vue'
 import Admin from '../views/Admin.vue'
 import Nouveautes from '../views/Nouveautes.vue'
 import Rechercher from '../components/Rechercher.vue'
-import Contact from '../views/Contact.vue' // ✅ Ajout de l'import
+import Contact from '../views/Contact.vue' // 
 
 // Routes
 const routes = [

@@ -1,4 +1,4 @@
-<template>
+<template> 
   <div class="product-card">
     <!-- CARROUSEL -->
     <div class="carousel">
@@ -9,6 +9,12 @@
           :src="images[currentIndex]"
           :key="images[currentIndex]"
           :alt="produit.nom"
+          class="product-image"
+        />
+        <img
+          v-else
+          src="/assets/images/image-placeholder.png"
+          alt="Image manquante"
           class="product-image"
         />
       </transition>
@@ -52,7 +58,6 @@ export default {
   },
   computed: {
     images() {
-      // Utilisation des chemins relatifs fournis par le backend
       return this.produit.images || [];
     },
     transitionName() {

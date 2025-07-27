@@ -3,24 +3,31 @@
     <h1>⭐ Nos nouveautés ⭐</h1>
 
     <div v-if="produits.length" class="grille-produits">
-      <div v-for="(produit, index) in produits" :key="produit._id || produit.id" class="carte-produit">
+      <div
+        v-for="(produit, index) in produits"
+        :key="produit._id || produit.id"
+        class="carte-produit"
+      >
         <!-- SLIDE D’IMAGES -->
         <div class="slider-container">
           <button
             v-if="produit.images.length > 1"
             class="arrow left"
             @click="prevImage(index)"
+            aria-label="Image précédente"
           >‹</button>
 
           <img
             :src="getImageUrl(produit.images[currentIndexes[index] || 0])"
             :alt="produit.nom"
+            loading="lazy"
           />
 
           <button
             v-if="produit.images.length > 1"
             class="arrow right"
             @click="nextImage(index)"
+            aria-label="Image suivante"
           >›</button>
         </div>
 
@@ -60,8 +67,14 @@ export default {
   },
   methods: {
     getImageUrl(img) {
-      return img || '';
-  },
+      if (!img) return '';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      // Si l’image est une URL relative (commence par /uploads), on préfixe par l’URL backend
+      if (img.startsWith('/uploads')) {
+        return backendUrl + img;
+      }
+      return img;
+    },
     nextImage(index) {
       const total = this.produits[index].images.length;
       this.currentIndexes[index] = (this.currentIndexes[index] + 1) % total;
@@ -75,6 +88,8 @@ export default {
 </script>
 
 <style scoped>
+/* Ton style actuel, très bien */
+
 .nouveautes-page {
   padding: 2rem;
   font-family: 'Raleway', sans-serif;
@@ -119,7 +134,6 @@ h1 {
   border-radius: 10px;
 }
 
-/* Flèches */
 .arrow {
   position: absolute;
   top: 50%;
@@ -165,17 +179,12 @@ h1 {
   color: #777;
 }
 
-/* ================= */
-/* Styles MOBILE ONLY */
-/* ================= */
-
+/* MOBILE */
 @media (max-width: 768px) {
-  
   .nouveautes-page {
     padding: clamp(0.5rem, 3vw, 1rem);
   }
 
-  
   h1 {
     font-size: clamp(1rem, 4.5vw, 1.5rem);
     margin-bottom: clamp(1rem, 3vw, 1.5rem);
@@ -189,7 +198,7 @@ h1 {
   .carte-produit {
     padding: clamp(0.5rem, 2vw, 1rem);
     border-radius: clamp(8px, 2vw, 12px);
-    font-size: clamp(0.7rem, 2.2vw, 0.85rem); 
+    font-size: clamp(0.7rem, 2.2vw, 0.85rem);
   }
 
   .slider-container {
@@ -214,11 +223,9 @@ h1 {
   }
 
   .voir-btn {
-    font-size: clamp(0.7rem, 1.8vw, 0.85rem); 
+    font-size: clamp(0.7rem, 1.8vw, 0.85rem);
     padding: clamp(0.3rem, 2vw, 0.5rem) clamp(0.5rem, 2.5vw, 0.8rem);
     border-radius: clamp(5px, 1.5vw, 8px);
   }
 }
-
-
 </style>

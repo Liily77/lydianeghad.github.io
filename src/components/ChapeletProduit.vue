@@ -12,6 +12,12 @@
           :alt="produit.nom"
           class="product-image"
         />
+        <img
+          v-else
+          src="/assets/images/image-placeholder.png"
+          alt="Image manquante"
+          class="product-image"
+        />
       </transition>
 
       <button class="arrow right" @click="nextImage" v-if="currentIndex < images.length - 1">❯</button>
@@ -44,6 +50,11 @@ export default {
     produit: {
       type: Object,
       required: true
+    },
+    getImageUrl: {  // optionnel, si tu veux générer URL complète depuis parent
+      type: Function,
+      required: false,
+      default: (img) => img
     }
   },
   data() {
@@ -54,8 +65,10 @@ export default {
   },
   computed: {
     images() {
-      // Utilisation des chemins relatifs fournis par le backend
-      return this.produit.images || [];
+      if (!this.produit.images || this.produit.images.length === 0) {
+        return [];
+      }
+      return this.produit.images.map(img => this.getImageUrl(img));
     },
     transitionName() {
       return this.direction === 'right' ? 'slide-right' : 'slide-left';
@@ -77,6 +90,7 @@ export default {
   }
 };
 </script>
+
 
 
 <style scoped>

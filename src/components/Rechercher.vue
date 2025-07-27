@@ -75,18 +75,23 @@ export default {
       }
 
       try {
-        const reponse = await fetch(`/produits/recherche?q=${encodeURIComponent(terme)}`);
+        const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+        const reponse = await fetch(
+          `${backendUrl}/produits/recherche?q=${encodeURIComponent(terme)}`
+        );
         const donnees = await reponse.json();
         this.resultats = donnees;
         this.currentIndexes = Object.fromEntries(donnees.map((_, i) => [i, 0]));
       } catch (error) {
-        console.error("Erreur lors de la recherche :", error);
+        console.error('Erreur lors de la recherche :', error);
         this.resultats = [];
       }
     }
   }
 };
 </script>
+
+
 
 
 <style scoped>

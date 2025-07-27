@@ -1,8 +1,15 @@
 <template>
   <header>
     <div class="logo-area">
-      <img src="/assets/images/logo-gif.gif" alt="Logo Arc En Ciel" />
+      <!-- Icône Admin, hors de tout groupe -->
+      <router-link to="/admin" class="admin-icon" aria-label="Espace Admin">
+        <img :src="logoLogin" alt="Admin" />
+      </router-link>
 
+      <!-- Logo principal centré -->
+      <img :src="logoGif" alt="Logo Arc En Ciel" />
+
+      <!-- Recherche + Panier -->
       <div class="icon-group">
         <transition name="fade">
           <div class="search-inline" v-if="showSearch">
@@ -11,14 +18,16 @@
               type="text"
               v-model="termeRecherche"
               placeholder="Rechercher un produit..."
-              @input="miseAJourRecherche"
+              @input="debouncedRecherche"
             />
           </div>
         </transition>
 
         <router-link to="/panier" class="cart-icon" aria-label="Panier">
-          <img src="@/assets/images/logo_panier.png" alt="Panier" />
-          <span class="cart-badge" v-if="totalArticles > 0">{{ totalArticles }}</span>
+          <img :src="logoPanier" alt="Panier" />
+          <span class="cart-badge" v-if="totalArticles > 0">
+            {{ totalArticles }}
+          </span>
         </router-link>
       </div>
     </div>
@@ -36,13 +45,21 @@
 
 <script>
 import { getTotalQuantite } from '@/utils/panier.js';
+import logoGif from '@/assets/images/logo-gif.gif';
+import logoPanier from '@/assets/images/logo_panier.png';
+import logoLogin from '@/assets/images/logo-login.png';
+
 export default {
   name: 'Navbar',
   data() {
     return {
       totalArticles: 0,
       showSearch: true,
-      termeRecherche: ''
+      termeRecherche: '',
+      debounceTimeout: null,
+      logoGif,
+      logoPanier,
+      logoLogin
     };
   },
   mounted() {
@@ -51,15 +68,19 @@ export default {
   },
   beforeUnmount() {
     window.removeEventListener('maj-panier', this.updateQuantite);
+    if (this.debounceTimeout) clearTimeout(this.debounceTimeout);
   },
   methods: {
     updateQuantite() {
       this.totalArticles = getTotalQuantite();
     },
-    miseAJourRecherche() {
-      if (this.termeRecherche.trim()) {
-        this.$router.push({ path: '/recherche', query: { q: this.termeRecherche } });
-      }
+    debouncedRecherche() {
+      if (this.debounceTimeout) clearTimeout(this.debounceTimeout);
+      this.debounceTimeout = setTimeout(() => {
+        if (this.termeRecherche.trim()) {
+          this.$router.push({ path: '/recherche', query: { q: this.termeRecherche.trim() } });
+        }
+      }, 300); // délai 300ms pour limiter les appels
     }
   }
 };
@@ -74,6 +95,28 @@ header {
 }
 
 /* Logo + fond rose */
+
+.logo-area {
+  position: relative;
+}
+
+/* Icône Admin */
+
+.admin-icon {
+  position: absolute;
+  top: 30%;                  
+  left: 2rem;                
+  transform: translateY(-50%); 
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  z-index: 10;
+}
+.admin-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 .logo-area {
   background-color: #f1dad7;
   text-align: center;
@@ -247,6 +290,19 @@ header {
     border-radius: 50%;
     background: #000;
     color: #fff;
+  }
+  .admin-icon {
+    position: absolute;
+    top: 5.9rem;   /* ajuste la hauteur si besoin */
+    left: 1rem;    /* décale vers la gauche */
+    width: clamp(40px, 8vw, 50px);
+    height: clamp(40px, 8vw, 50px);
+    z-index: 10;
+  }
+  .admin-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 }
 

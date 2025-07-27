@@ -1,8 +1,8 @@
 <template>
-  <div class="portecles-page">
+  <div class="pendules-page">
     <!-- TITRE SECTION -->
     <div class="section-title">
-      <img src="/assets/images/titre-portecles.jpg" alt="Nos Porte-clés" />
+      <img src="/assets/images/titre-pendules.jpg" alt="Nos Pendules" />
     </div>
 
     <!-- RETOUR ACCUEIL -->
@@ -11,21 +11,21 @@
     </div>
 
     <!-- FICHES PRODUITS -->
-    <div id="portecles-cards" class="products-container">
-      <PortesclesProduit
-        v-for="produit in produitsPortecles"
-        :key="produit.id"
+    <div id="pendules-cards" class="products-container">
+      <PendulesProduit
+        v-for="produit in produitsPendules"
+        :key="produit._id || produit.id"
         :produit="produit"
       />
     </div>
 
     <!-- BANNIÈRE -->
     <div class="banner">
-      <img src="/assets/images/banner-portecles.jpg" alt="Bannière Porte-clés" class="banner-img" />
+      <img src="/assets/images/banner-pendules.jpg" alt="Bannière Pendules" class="banner-img" />
       <div class="banner-text">
         <div class="banner-text-box">
-          <p>Ajoutez une touche spirituelle et artisanale à vos clés.</p>
-          <p>Nos porte-clés uniques allient esthétisme et symbolisme.</p>
+          <p>Plongez dans l’art divinatoire avec nos pendules artisanaux.</p>
+          <p>Un outil de précision et d’harmonie pour vos ressentis.</p>
         </div>
       </div>
     </div>
@@ -33,31 +33,32 @@
 </template>
 
 <script>
-import PortesclesProduit from '../components/PortesclesProduit.vue'
+import PendulesProduit from '../components/PendulesProduit.vue'
 
 export default {
-  name: 'Portecles',
+  name: 'Pendules',
   components: {
-    PortesclesProduit
+    PendulesProduit
   },
   data() {
     return {
-      produitsPortecles: []
-    }
+      produitsPendules: []
+    };
   },
   mounted() {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
     fetch('/produits')
       .then(res => res.json())
       .then(data => {
-        this.produitsPortecles = data.filter(p =>
-          p.categorie?.toLowerCase().includes('porte-clé') || p.categorie?.toLowerCase().includes('portecles')
-        )
+        this.produitsPendules = data.filter(p =>
+          p.categorie?.toLowerCase().trim() === 'pendules'
+        );
       })
-      .catch(err => console.error('Erreur chargement porte-clés :', err))
+      .catch(err => console.error('Erreur chargement pendules :', err));
   }
-}
+};
 </script>
+
 
 <style scoped>
 .home {

@@ -1,6 +1,3 @@
-// server.js
-
-// --- IMPORTATIONS ---
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -9,25 +6,50 @@ const path = require('path');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
+const morgan = require('morgan');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const xssClean = require('xss-clean');
+const hpp = require('hpp');
+const jwt = require('jsonwebtoken');
 
 const app = express();
-// ← On passe le port par défaut de 3000 à 3001
 const PORT = process.env.PORT || 3001;
 
-// --- MIDDLEWARES ---
-app.use(cors());
+// ─── MIDDLEWARES DE SÉCURITÉ ───────────────────────────────────────────────────
+app.use(helmet());
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: "Trop de requêtes venant de cette IP, réessayez plus tard."
+}));
+app.use(xssClean());
+app.use(hpp());
+app.use(morgan('combined'));
+
+// CORS whitelist
+const whitelist = [process.env.FRONTEND_URL || 'http://localhost:5173'];
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);
+    return whitelist.includes(origin)
+      ? callback(null, true)
+      : callback(new Error('Not allowed by CORS'));
+  }
+}));
+
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// 🔵 SERVIR LES FICHIERS STATIQUES DU FRONT
 app.use(express.static(path.resolve(__dirname, '../dist')));
 
-// --- CONNEXION MONGODB ---
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('✅ Connexion MongoDB réussie !'))
-  .catch(err => console.error('❌ Erreur de connexion MongoDB :', err));
+// ─── CONNEXION MONGODB ────────────────────────────────────────────────────────
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true, useUnifiedTopology: true
+})
+.then(() => console.log('✅ MongoDB connectée !'))
+.catch(err => console.error('❌ Erreur MongoDB :', err));
 
-// --- SCHÉMA PRODUIT ---
+// ─── SCHÉMA & MODELE PRODUIT ─────────────────────────────────────────────────
 const produitSchema = new mongoose.Schema({
   nom: String,
   description: String,
@@ -37,21 +59,60 @@ const produitSchema = new mongoose.Schema({
 });
 const Produit = mongoose.model('Produit', produitSchema);
 
-// --- GESTION UPLOAD (MULTER) ---
+// ─── MULTER (upload images) ──────────────────────────────────────────────────
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadDir),
-  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+  destination: (_, __, cb) => cb(null, uploadDir),
+  filename: (_, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 });
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter(req, file, cb) {
+    if (/image\/(jpeg|png|gif)/.test(file.mimetype)) cb(null, true);
+    else cb(new Error('Seules JPEG/PNG/GIF acceptées'));
+  }
+});
 
-/* ---------------- ROUTES BACKEND ---------------- */
+async function supprimerFichier(filePath) {
+  try { await fs.promises.unlink(filePath); }
+  catch (e) { console.error('Erreur suppression', filePath, e); }
+}
 
-// ✅ ROUTE CONTACT : ENVOI DE MAIL
+// ─── AUTHENTIFICATION JWT ────────────────────────────────────────────────────
+function authMiddleware(req, res, next) {
+  const header = req.headers.authorization;
+  if (!header) return res.status(401).json({ message: 'Auth manquante' });
+  const token = header.split(' ')[1];
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } catch {
+    res.status(401).json({ message: 'Token invalide' });
+  }
+}
+
+// Login admin → renvoie JWT
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  if (
+    username === process.env.ADMIN_USER &&
+    password === process.env.ADMIN_PASS
+  ) {
+    const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: '2h' });
+    return res.json({ token });
+  }
+  res.status(401).json({ message: 'Identifiants invalides' });
+});
+
+// ─── ROUTES PUBLIQUES ────────────────────────────────────────────────────────
 app.post('/send-email', async (req, res) => {
   const { name, email, message } = req.body;
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    return res.status(500).json({ message: 'Email non config.' });
+  }
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
@@ -59,98 +120,70 @@ app.post('/send-email', async (req, res) => {
   try {
     await transporter.sendMail({
       from: `"${name}" <${email}>`,
-      to: 'arcenciel.nadege@gmail.com',
-      subject: '📩 Nouveau message depuis le site Arc En Ciel',
-      html: `
-        <h3>Vous avez reçu un message :</h3>
-        <p><strong>Nom :</strong> ${name}</p>
-        <p><strong>Email :</strong> ${email}</p>
-        <p><strong>Message :</strong><br>${message}</p>
-      `
+      to: process.env.EMAIL_TO,
+      subject: '📩 Nouveau message',
+      html: `<p><strong>Nom:</strong>${name}</p>
+             <p><strong>Email:</strong>${email}</p>
+             <p>${message}</p>`
     });
-    res.status(200).json({ success: true, message: 'Message envoyé avec succès' });
-  } catch (error) {
-    console.error('❌ Erreur envoi email :', error);
-    res.status(500).json({ success: false, message: 'Erreur lors de l’envoi du message' });
+    res.json({ success: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false });
   }
 });
 
-// ✅ RECHERCHE PRODUIT
 app.get('/produits/recherche', async (req, res) => {
-  try {
-    const produits = await Produit.find({ nom: { $regex: req.query.q || '', $options: 'i' } });
-    res.json(produits);
-  } catch (err) {
-    console.error('❌ Erreur recherche produit :', err);
-    res.status(500).json({ message: 'Erreur recherche', erreur: err });
-  }
+  const q = req.query.q || '';
+  const produits = await Produit.find({ nom: { $regex: q, $options: 'i' } });
+  res.json(produits);
 });
 
-// ✅ GET TOUS LES PRODUITS
-app.get('/produits', async (req, res) => {
-  try {
-    res.json(await Produit.find());
-  } catch (err) {
-    console.error('❌ Erreur chargement produits :', err);
-    res.status(500).json({ message: 'Erreur chargement produits', erreur: err });
-  }
+app.get('/produits', async (_, res) => {
+  res.json(await Produit.find());
 });
 
-// ✅ GET PRODUIT PAR ID
 app.get('/produits/:id', async (req, res) => {
-  try {
-    const produit = await Produit.findById(req.params.id);
-    if (!produit) return res.status(404).json({ message: 'Produit introuvable' });
-    res.json(produit);
-  } catch (err) {
-    console.error('❌ Erreur serveur :', err);
-    res.status(500).json({ message: 'Erreur serveur', erreur: err });
-  }
+  const p = await Produit.findById(req.params.id);
+  if (!p) return res.status(404).json({ message: 'Introuvable' });
+  res.json(p);
 });
 
-// ✅ POST : AJOUT PRODUIT
-app.post('/produits', upload.array('images'), async (req, res) => {
-  try {
-    const images = req.files.map(f => `/uploads/${f.filename}`);
-    const produit = new Produit({ ...req.body, prix: parseFloat(req.body.prix), images });
-    res.status(201).json({ message: '✅ Produit ajouté', produit: await produit.save() });
-  } catch (err) {
-    console.error('❌ Erreur ajout produit :', err);
-    res.status(500).json({ message: 'Erreur ajout produit', erreur: err });
-  }
+// ─── ROUTES PROTÉGÉES ───────────────────────────────────────────────────────
+app.post('/produits', authMiddleware, upload.array('images'), async (req, res) => {
+  const images = req.files.map(f => `/uploads/${f.filename}`);
+  const prod = new Produit({ ...req.body, prix: parseFloat(req.body.prix), images });
+  await prod.save();
+  res.status(201).json(prod);
 });
 
-// ✅ PUT : MODIFIER PRODUIT
-app.put('/produits/:id', async (req, res) => {
-  try {
-    const produit = await Produit.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!produit) return res.status(404).json({ message: 'Produit introuvable' });
-    res.json({ message: '✅ Produit modifié', produit });
-  } catch (err) {
-    console.error('❌ Erreur modification :', err);
-    res.status(500).json({ message: 'Erreur modification', erreur: err });
+app.put('/produits/:id', authMiddleware, upload.array('images'), async (req, res) => {
+  const prod = await Produit.findById(req.params.id);
+  if (!prod) return res.status(404).json({ message: 'Introuvable' });
+  if (req.files.length) {
+    for (let img of prod.images) await supprimerFichier(path.join(__dirname, img));
+    prod.images = req.files.map(f => `/uploads/${f.filename}`);
   }
+  Object.assign(prod, {
+    nom: req.body.nom,
+    description: req.body.description,
+    prix: parseFloat(req.body.prix),
+    categorie: req.body.categorie
+  });
+  await prod.save();
+  res.json(prod);
 });
 
-// ✅ DELETE : SUPPRIMER PRODUIT
-app.delete('/produits/:id', async (req, res) => {
-  try {
-    const produit = await Produit.findByIdAndDelete(req.params.id);
-    if (!produit) return res.status(404).json({ message: 'Produit introuvable' });
-    res.json({ message: '🗑 Produit supprimé' });
-  } catch (err) {
-    console.error('❌ Erreur suppression :', err);
-    res.status(500).json({ message: 'Erreur suppression', erreur: err });
-  }
+app.delete('/produits/:id', authMiddleware, async (req, res) => {
+  const prod = await Produit.findByIdAndDelete(req.params.id);
+  if (!prod) return res.status(404).json({ message: 'Introuvable' });
+  for (let img of prod.images) await supprimerFichier(path.join(__dirname, img));
+  res.json({ message: 'Supprimé' });
 });
 
-/* ---------------- CATCH-ALL POUR SERVIR LA SPA ---------------- */
-app.get('*', (req, res) => {
+// Catch‑all pour SPA
+app.get('*', (_, res) => {
   res.sendFile(path.resolve(__dirname, '../dist/index.html'));
 });
 
-/* ---------------- LANCEMENT ---------------- */
-app.listen(PORT, () => {
-  console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`);
-});
-
+app.listen(PORT, () => console.log(`🚀 Serveur sur port ${PORT}`));

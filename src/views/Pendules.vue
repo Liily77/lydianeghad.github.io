@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="pendules-page">
     <!-- TITRE SECTION -->
     <div class="section-title">
       <img src="/assets/images/titre-pendules.jpg" alt="Nos Pendules" />
@@ -11,7 +11,7 @@
     </div>
 
     <!-- FICHES PRODUITS -->
-    <div id="pendule-cards" class="products-container">
+    <div id="pendules-cards" class="products-container">
       <PendulesProduit
         v-for="produit in produitsPendules"
         :key="produit._id || produit.id"
@@ -58,6 +58,7 @@ export default {
   }
 };
 </script>
+
 
 
 <style scoped>

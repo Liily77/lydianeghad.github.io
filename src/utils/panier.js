@@ -1,3 +1,5 @@
+// src/utils/panier.js
+
 const PANIER_KEY = 'mon_panier_arc_en_ciel';
 
 export function getPanier() {

@@ -6,14 +6,14 @@
 
       <transition :name="transitionName">
         <img
-          :src="produit.images[currentIndex]"
-          :key="produit.images[currentIndex]"
+          :src="images[currentIndex]"
+          :key="images[currentIndex]"
           :alt="produit.nom"
           class="product-image"
         />
       </transition>
 
-      <button class="arrow right" @click="nextImage" v-if="currentIndex < produit.images.length - 1">❯</button>
+      <button class="arrow right" @click="nextImage" v-if="currentIndex < images.length - 1">❯</button>
     </div>
 
     <!-- Infos produit -->
@@ -22,7 +22,6 @@
       <p class="product-description">{{ produit.description }}</p>
       <div class="cart-actions">
         <p class="product-price">{{ produit.prix.toFixed(2) }} €</p>
-        <!-- ✅ Ajout de la catégorie dans l’URL avec `?from=boucles` -->
         <router-link
           :to="{
             path: `/produit/${produit._id || produit.id}`,
@@ -42,6 +41,10 @@ export default {
     produit: {
       type: Object,
       required: true
+    },
+    getImageUrl: {
+      type: Function,
+      required: true
     }
   },
   data() {
@@ -51,13 +54,21 @@ export default {
     };
   },
   computed: {
+    images() {
+      // Transforme chaque image pour avoir l'URL complète via getImageUrl
+      if (!this.produit.images || this.produit.images.length === 0) {
+        // Image de fallback
+        return [this.getImageUrl('/assets/images/image-placeholder.png')];
+      }
+      return this.produit.images.map(img => this.getImageUrl(img));
+    },
     transitionName() {
       return this.direction === 'right' ? 'slide-right' : 'slide-left';
     }
   },
   methods: {
     nextImage() {
-      if (this.currentIndex < this.produit.images.length - 1) {
+      if (this.currentIndex < this.images.length - 1) {
         this.direction = 'right';
         this.currentIndex++;
       }
@@ -71,6 +82,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 /* SLIDE */

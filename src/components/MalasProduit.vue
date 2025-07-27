@@ -12,6 +12,12 @@
           :alt="produit.nom"
           class="product-image"
         />
+        <img
+          v-else
+          src="/assets/images/image-placeholder.png"
+          alt="Image manquante"
+          class="product-image"
+        />
       </transition>
 
       <button class="arrow right" @click="nextImage" v-if="currentIndex < images.length - 1">❯</button>
@@ -23,7 +29,6 @@
       <p class="product-description">{{ produit.description }}</p>
       <div class="cart-actions">
         <p class="product-price">{{ produit.prix.toFixed(2) }} €</p>
-        <!-- Lien vers la fiche produit avec query `from=malas` -->
         <router-link
           :to="{
             path: `/produit/${produit._id || produit.id}`,
@@ -55,7 +60,6 @@ export default {
   },
   computed: {
     images() {
-      // Utilisation des chemins relatifs envoyés par le backend
       return this.produit.images || [];
     },
     transitionName() {
@@ -78,6 +82,7 @@ export default {
   }
 };
 </script>
+
 
 
   <style scoped>
