@@ -46,6 +46,11 @@
         </div>
       </div>
     </div>
+
+    <!-- Toast notification -->
+    <div v-if="showToast" class="toast-message">
+      ✅ Produit ajouté au panier !
+    </div>
   </div>
 
   <div v-else class="produit-page">
@@ -65,7 +70,8 @@ export default {
       produit: null,
       quantity: 1,
       currentIndex: 0,
-      transitionName: 'slide-right'
+      transitionName: 'slide-right',
+      showToast: false,  // <-- ajout du toast
     };
   },
   computed: {
@@ -104,7 +110,10 @@ export default {
     },
     ajouterProduitAuPanier() {
       ajouterAuPanier(this.produit, this.quantity);
-      alert('✅ Produit ajouté au panier !');
+      this.showToast = true;           // affiche le toast
+      setTimeout(() => {
+        this.showToast = false;        // cache le toast après 2.5s
+      }, 2500);
     }
   },
   async mounted() {
@@ -231,20 +240,19 @@ export default {
   background: #e8c4bf;
 }
 
-/* Groupe de boutons */
+
 .buttons-group {
   display: flex;
-  flex-direction: column;  /* passe en row si tu préfères côte à côte */
+  flex-direction: column;  
   gap: 0.5rem;
 }
 
-/* Styles communs aux deux boutons */
 .add-to-cart,
 .view-cart {
-  width: 10rem;             /* largeur réduite */
-  padding: 0.6rem 0;        /* padding vertical+horizontal equalisé */
+  width: 10rem;             
+  padding: 0.6rem 0;        
   font-family: 'Raleway', sans-serif;
-  font-size: 0.9rem;        /* taille unifiée */
+  font-size: 0.9rem;        
   font-weight: 600;
   text-align: center;
   border: none;
@@ -253,10 +261,10 @@ export default {
   transition: background 0.3s ease;
   text-decoration: none;
   display: block;
-  margin-left: auto;        /* pour aligner à droite */
+  margin-left: auto;      
 }
 
-/* Bouton Ajouter au panier */
+
 .add-to-cart {
   background-color: #f3e8f5;
   color: #a074ae;
@@ -269,7 +277,7 @@ export default {
 
 }
 
-/* Bouton Voir mon panier */
+
 .view-cart {
   background-color: #98babb;
   color:whitesmoke;
@@ -280,7 +288,7 @@ export default {
   color: white;
 }
 
-/* Flèches carrousel */
+
 .arrow {
   position: absolute;
   top: 50%;
@@ -302,20 +310,100 @@ export default {
   right: 10px;
 }
 
-/* Responsive */
+.toast-message {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #e0cecc;
+  color: black;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+  font-weight: bold;
+  z-index: 9999;
+  white-space: nowrap;
+  animation: fadeinout 2.5s ease forwards;
+}
+
+@keyframes fadeinout {
+  0% {opacity: 0;}
+  10% {opacity: 1;}
+  90% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+
+
 @media (max-width: 768px) {
+  
   .fiche-produit {
     flex-direction: column;
     height: auto;
     max-width: 100%;
+    margin-bottom: 1.5rem;
+    transform: scale(0.9);
+    transform-origin: top center;
+    margin: 1rem auto 1.5rem;
   }
+
   .fiche-image {
-    height: 280px;
+    height: 240px;
   }
+
+  .back-home {
+    margin-top: 0.8rem;
+    margin-bottom: 4rem;
+  }
+
+  .back-button {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: 6px;
+  }
+
   .actions-row {
-    flex-direction: column;
-    align-items: flex-start;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     gap: 1rem;
+    margin-top: 1rem;
+  }
+
+
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .buttons-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 140px;       
+    margin-left: auto;  
+  }
+
+  .add-to-cart,
+  .view-cart {
+    width: 100%;       
+    white-space: nowrap;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    text-align: center;
+    box-sizing: border-box; 
+  }
+
+  .fiche-details p:last-of-type {
+    margin-bottom: 0.5rem;
+  }
+
+  .toast-message {
+    bottom: 55px; 
   }
 }
+
+
 </style>

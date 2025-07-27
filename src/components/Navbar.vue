@@ -1,12 +1,9 @@
 <template>
   <header>
-    <!-- Logo principal -->
     <div class="logo-area">
       <img src="/assets/images/logo-gif.gif" alt="Logo Arc En Ciel" />
 
-      <!-- Groupe des icônes + barre de recherche -->
       <div class="icon-group">
-        <!-- Barre de recherche -->
         <transition name="fade">
           <div class="search-inline" v-if="showSearch">
             <span class="search-icon-inside">🔍</span>
@@ -19,7 +16,6 @@
           </div>
         </transition>
 
-        <!-- Panier -->
         <router-link to="/panier" class="cart-icon" aria-label="Panier">
           <img src="@/assets/images/logo_panier.png" alt="Panier" />
           <span class="cart-badge" v-if="totalArticles > 0">{{ totalArticles }}</span>
@@ -27,7 +23,6 @@
       </div>
     </div>
 
-    <!-- Navigation -->
     <div class="top-nav">
       <nav class="nav-links">
         <router-link to="/">Accueil</router-link>
@@ -40,8 +35,7 @@
 </template>
 
 <script>
-import { getTotalQuantite } from '../utils/panier.js';
-
+import { getTotalQuantite } from '@/utils/panier.js';
 export default {
   name: 'Navbar',
   data() {
@@ -71,192 +65,191 @@ export default {
 };
 </script>
 
-
 <style scoped>
-/* STRUCTURE */
+
 header {
   width: 100%;
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
+/* Logo + fond rose */
 .logo-area {
   background-color: #f1dad7;
   text-align: center;
   padding: 1rem 0;
-  margin-bottom: 0.3rem;
   position: relative;
+ 
+  margin-bottom: 0.3rem;
 }
-
 .logo-area img {
   height: 140px;
 }
 
-/* ICÔNES + BARRE DE RECHERCHE */
+/* Barre + panier group */
 .icon-group {
   position: absolute;
-  top: 60px;
-  right: 30px;
+  top: 50%;
+  right: 2rem;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 1rem;
+  z-index: 10;
 }
 
-/* BARRE DE RECHERCHE INLINE */
+/* Barre de recherche inline (desktop) */
 .search-inline {
-  position: relative;
+  position: static;  
+  background: #fff;
+  padding: 0.3rem 1.2rem 0.3rem 2rem;
+  border-radius: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  max-width: 180px;
   display: flex;
   align-items: center;
-  background: white;
-  padding-left: 2rem;
-  padding-right: 0.8rem;
-  padding-top: 0.3rem;
-  padding-bottom: 0.3rem;
-  border-radius: 30px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transform: scale(0.88); /* ✅ Réduction globale de la taille */
 }
-
-
-
-.search-icon-inside {
+.search-inline .search-icon-inside {
   position: absolute;
-  left: 0.8rem;
+  left: 1rem;
   color: #e20e80;
-  font-size: 1.2rem;
-  pointer-events: none;
+  font-size: 1rem;
 }
-
 .search-inline input {
   border: none;
   outline: none;
   background: transparent;
-  width: 170px;
-  font-family: 'Raleway', sans-serif;
-  font-size: 0.95rem;
-  color: #333;
-
-  /* ✅ Nouvelle ligne pour décaler le curseur */
   margin-left: 1.2rem;
+  font-size: 0.95rem;
+  width: 100%;
 }
 
-
-/* PANIER */
+/* Panier */
 .cart-icon {
   position: relative;
   width: 60px;
   height: 60px;
 }
-
 .cart-icon img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-
 .cart-badge {
   position: absolute;
-  top: -8px;
-  right: -5px;
-  background-color: #000;
+  top: -1px;
+  right: 6px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #000;
   color: #fff;
-  font-size: 0.72rem;
-  font-weight: bold;
-  font-family: 'Lucida Sans', sans-serif;
+  font-size: 0.70rem;
   padding: 2px 6px;
   border-radius: 50%;
 }
 
-/* NAVIGATION */
+/* Navigation desktop */
 .top-nav {
-  background-color: rgba(255, 255, 255, 0.676);
-  padding: 0.7rem 0;
-  width: 100%;
-  z-index: 9999;
-  position: relative;
+  background: rgba(255,255,255,0.9);
+  padding: 0.4rem 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
-
 .nav-links {
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 3rem;
+  gap: 2.5rem;
   font-family: 'Raleway', sans-serif;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
 }
-
 .nav-links a {
   text-decoration: none;
   color: #333;
-  font-weight: 500;
   padding: 0.5rem 1rem;
-  border-radius: 12px;
-  transition: all 0.3s ease;
+  border-radius: 8px;
+  transition: background 0.3s ease, color 0.3s ease;
 }
-
 .nav-links a:hover {
-  background-color: #f1dad7;
+  background: #f1dad7;
   color: #e20e80;
 }
 
-/* RESPONSIVE */
-@media screen and (max-width: 768px) {
-  .logo-area img {
-    height: 100px;
+
+/* ================= */
+/* Styles MOBILE ONLY */
+/* ================= */
+
+@media (max-width: 768px) {
+
+  .logo-area {
+    padding: 1rem 0 5em;
   }
 
-  .icon-group {
-    top: 10px;
-    right: 15px;
-    flex-direction: column;
-    align-items: flex-end;
+  .logo-area > img:first-of-type {
+    height: clamp(70px, 25vw, 100px); 
+    position: relative;
+    right: clamp(20px, 6vw, 50px);    
+    bottom: clamp(-20px, -5vh, -40px);
   }
 
   .search-inline {
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    max-width: 240px;
-    padding-left: 2.2rem;
+    position: absolute !important;
+    padding: 0.1rem 0.5rem 0.1rem 1rem; 
+    top: calc(100% + 1.5rem + clamp(8px, 2vh, 15px));
+    transform: translateX(-50%);
+    width: clamp(80px, 25vw, 100px);
+    margin-top: clamp(0px, 0.2vh, 1px);
+    margin-bottom: clamp(5px, 1.3vh, 10px);
+    border-radius: 20px; 
   }
 
   .search-inline input {
-    width: 100%;
+    font-size: clamp(0.6rem, 1.5vw, 0.8rem); 
   }
 
-  .cart-icon {
-    width: 40px;
-    height: 40px;
+  .search-inline .search-icon-inside {
+    position: absolute;
+    left: 1rem;
+    color: #e20e80;
+    font-size: clamp(0.6rem, 1.5vw, 0.9rem); 
+  }
+
+  .top-nav {
+    padding: 0.1em 0;
+  }
+
+  .nav-links {
+    gap: 1.5rem;
+    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+    font-weight: 550;
+  }
+
+  .nav-links a {
+    padding: 0.3rem 0.6rem;
+  }
+
+  .cart-icon { 
+    position: relative;
+    width: clamp(50px, 9.5vw, 60px);   
+    height: clamp(50px, 9.5vw, 60px); 
   }
 
   .cart-icon img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
   }
 
   .cart-badge {
-    font-size: 0.65rem;
-    padding: 1px 4px;
-  }
-
-  .nav-links {
-    flex-direction: column;
-    gap: 1rem;
-    font-size: 1.2rem;
-    padding: 1rem 0;
-  }
-
-  .top-nav {
-    padding: 0.5rem;
+    position: absolute;
+    top: clamp(5px, 1.3vh, 8px);
+    right: clamp(3px, 1vw, 6px);
+    font-size: clamp(0.55rem, 1.2vw, 0.65rem); 
+    padding: clamp(1px, 0.3vw, 2px) clamp(3px, 0.6vw, 5px); 
+    border-radius: 50%;
+    background: #000;
+    color: #fff;
   }
 }
 
-/* ANIMATION */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
+
+
 </style>

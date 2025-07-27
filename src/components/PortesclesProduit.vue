@@ -208,4 +208,69 @@ export default {
   background-color: #8c6da2;
   color: whitesmoke;
 }
+
+@media (max-width: 768px) {
+    .carousel {
+      height: clamp(140px, 30vw, 180px);
+    }
+  
+    .product-image {
+      max-height: clamp(140px, 30vw, 180px);
+    }
+  
+    .product-info {
+      padding-top: 0.4rem;
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+    }
+  
+    .product-title {
+      font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+      margin-bottom: 0.2rem;
+    }
+  
+    .product-description {
+      margin-bottom: 0.2rem;
+    }
+  
+    .product-price {
+      font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+      margin: 0;
+      padding-left: 0.6rem;
+      flex: 1;
+      white-space: nowrap;
+    }
+  
+    .cart-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  
+    .add-to-cart {
+      font-size: clamp(0.60rem, 1vw, 0.6rem);
+      padding: 0.4rem 0.7rem;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+  
+    .product-card:hover,
+    .product-card:active,
+    .product-card:focus {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+  
+    .add-to-cart:hover {
+      background-color: #98babb !important;
+      color: black !important;
+    }
+  
+    .add-to-cart:active,
+    .add-to-cart:focus {
+      background-color: #8c6da2 !important;
+      color: whitesmoke !important;
+      outline: none;
+    }
+  }
+  
 </style>

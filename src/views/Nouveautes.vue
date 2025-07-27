@@ -164,4 +164,61 @@ h1 {
   font-style: italic;
   color: #777;
 }
+
+/* ================= */
+/* Styles MOBILE ONLY */
+/* ================= */
+
+@media (max-width: 768px) {
+  
+  .nouveautes-page {
+    padding: clamp(0.5rem, 3vw, 1rem);
+  }
+
+  
+  h1 {
+    font-size: clamp(1rem, 4.5vw, 1.5rem);
+    margin-bottom: clamp(1rem, 3vw, 1.5rem);
+  }
+
+  .grille-produits {
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(0.5rem, 3vw, 1rem);
+  }
+
+  .carte-produit {
+    padding: clamp(0.5rem, 2vw, 1rem);
+    border-radius: clamp(8px, 2vw, 12px);
+    font-size: clamp(0.7rem, 2.2vw, 0.85rem); 
+  }
+
+  .slider-container {
+    height: clamp(140px, 35vw, 180px);
+    border-radius: clamp(6px, 2vw, 10px);
+  }
+
+  .slider-container img {
+    border-radius: clamp(6px, 2vw, 10px);
+  }
+
+  .arrow {
+    font-size: clamp(1.2rem, 5vw, 1.6rem);
+  }
+
+  .arrow.left {
+    left: clamp(5px, 2vw, 10px);
+  }
+
+  .arrow.right {
+    right: clamp(5px, 2vw, 10px);
+  }
+
+  .voir-btn {
+    font-size: clamp(0.7rem, 1.8vw, 0.85rem); 
+    padding: clamp(0.3rem, 2vw, 0.5rem) clamp(0.5rem, 2.5vw, 0.8rem);
+    border-radius: clamp(5px, 1.5vw, 8px);
+  }
+}
+
+
 </style>

@@ -6,7 +6,8 @@ import App from './App.vue'
 import router from './router'
 import { api } from './utils/api.js'
 
-// Monkey‑patch avec log
+
+
 const _fetch = window.fetch.bind(window)
 window.fetch = (input, init) => {
   let url = input
@@ -28,5 +29,3 @@ const app = createApp(App)
 app.use(router)
 app.config.globalProperties.$api = api
 app.mount('#app')
-
-

@@ -100,7 +100,7 @@ export default {
 .banner {
   position: relative;
   width: 100%;
-  height: 50vh;
+  height: 50vh;  /* hauteur dynamique */
   overflow: hidden;
   margin-top: 4rem;
 }
@@ -150,4 +150,83 @@ export default {
   padding: 0 2rem;
   gap: 1.5rem;
 }
+
+
+@media (max-width: 768px) {
+    .section-title img {
+      width: clamp(80%, 95vw, 100%);
+      margin: 0 auto 1rem;
+    }
+  
+    .back-home {
+      padding-left: clamp(0.1rem, 1vw, 0.5rem);
+      width: fit-content;
+    }
+  
+    .back-button {
+      font-size: clamp(0.6rem, 2vw, 0.85rem);
+      padding: clamp(0.3rem, 1vw, 0.6rem) clamp(0.6rem, 2vw, 1rem);
+    }
+  
+    .products-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      justify-items: center;
+      gap: clamp(0.5rem, 3vw, 1rem);
+      padding: clamp(0.5rem, 3vw, 1rem);
+    }
+  
+    .product-card {
+      width: clamp(140px, 90%, 220px);
+      margin: 0;
+      transform: none;
+    }
+  
+    .product-card:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+  
+    .banner {
+      position: relative;
+      height: auto;
+      margin-top: 1.5rem;
+    }
+  
+    .banner-img {
+      width: 100%;
+      height: auto;
+      max-height: 180px;
+      object-fit: cover;
+      display: block;
+      margin-top: 30px;
+    }
+  
+    .banner-text {
+      position: absolute;
+      bottom: 35px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 340px;
+      background-color: rgba(245, 237, 224, 0.9);
+      border-radius: 10px;
+      padding: 0.5rem 0.5rem;
+      box-sizing: border-box;
+      text-align: center;
+    }
+  
+    .banner-text-box {
+      background: transparent;
+      padding: 0;
+      font-size: 0.6rem;
+      line-height: 1.3;
+      color: #333;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+  }
+  
+ 
 </style>
