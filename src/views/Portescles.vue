@@ -33,30 +33,38 @@
 </template>
 
 <script>
-import PendulesProduit from '../components/PendulesProduit.vue'
+import PortesclesProduit from '../components/PortesclesProduit.vue'
+import { api } from '@/utils/api'
 
 export default {
-  name: 'Pendules',
+  name: 'Portescles',
   components: {
-    PendulesProduit
+    PortesclesProduit
   },
   data() {
     return {
-      produitsPendules: []
-    };
+      produitsPortescles: []
+    }
   },
-  mounted() {
-    window.scrollTo(0, 0);
-    fetch('/produits')
-      .then(res => res.json())
-      .then(data => {
-        this.produitsPendules = data.filter(p =>
-          p.categorie?.toLowerCase().trim() === 'pendules'
-        );
-      })
-      .catch(err => console.error('Erreur chargement pendules :', err));
+  methods: {
+    getImageUrl(img) {
+      if (!img) return ''
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || ''
+      return img.startsWith('/uploads') ? backendUrl + img : img
+    }
+  },
+  async mounted() {
+    window.scrollTo(0, 0)
+    try {
+      const all = await api('/api/produits')
+      this.produitsPortescles = all.filter(p =>
+        p.categorie?.toLowerCase().trim() === 'portescles'
+      )
+    } catch (err) {
+      console.error('Erreur chargement portes‑clés :', err)
+    }
   }
-};
+}
 </script>
 
 

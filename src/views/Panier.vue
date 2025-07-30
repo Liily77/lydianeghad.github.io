@@ -56,11 +56,7 @@ export default {
     getImageUrl(img) {
       if (!img) return '';
       const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
-      // Si l'image est un chemin relatif commençant par /uploads, on préfixe le backend
-      if (img.startsWith('/uploads')) {
-        return backendUrl + img;
-      }
-      return img;
+      return img.startsWith('/uploads') ? backendUrl + img : img;
     },
     chargerPanier() {
       this.panier = getPanier();
@@ -86,6 +82,7 @@ export default {
   }
 };
 </script>
+
 
 
 

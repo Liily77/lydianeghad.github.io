@@ -176,7 +176,7 @@
 </template>
 
 <script>
-const BASE = import.meta.env.VITE_BACKEND_URL; // ex: "https://arcenciel-backend.onrender.com"
+import { api } from '@/utils/api'
 
 export default {
   name: 'Admin',
@@ -208,192 +208,178 @@ export default {
         'malas', 'parures', 'portecles',
         'cartesdiv', 'pendule'
       ]
-    };
+    }
   },
   computed: {
     produitsFiltres() {
       return this.produits.filter(p => {
         const matchCat = !this.filtreCategorie ||
-          p.categorie?.toLowerCase() === this.filtreCategorie.toLowerCase();
-        const texte = this.rechercheTexte.toLowerCase();
+          p.categorie?.toLowerCase() === this.filtreCategorie.toLowerCase()
+        const texte = this.rechercheTexte.toLowerCase()
         return p.nom.toLowerCase().includes(texte)
-            || p.description.toLowerCase().includes(texte);
-      });
+            || p.description.toLowerCase().includes(texte)
+      })
     },
     categoriesDisponibles() {
-      const dyn = [...new Set(this.produits.map(p => p.categorie?.toLowerCase()))].filter(Boolean);
-      return dyn.length ? dyn : this.categoriesFixes;
+      const dyn = [...new Set(this.produits.map(p => p.categorie?.toLowerCase()))].filter(Boolean)
+      return dyn.length ? dyn : this.categoriesFixes
     }
   },
-  mounted() {
-    const token = localStorage.getItem('admin_token');
+  async mounted() {
+    const token = localStorage.getItem('admin_token')
     if (token) {
-      this.isLoggedIn = true;
-      this.chargerProduits();
+      this.isLoggedIn = true
+      await this.chargerProduits()
     }
   },
   methods: {
     async seConnecter() {
-      this.loginError = '';
-      this.isLoading = true;
+      this.loginError = ''
+      this.isLoading = true
       try {
-        const res = await fetch(`${BASE}/login`, {
+        const { token } = await api('/api/login', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: this.loginUser, password: this.loginPass })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          localStorage.setItem('admin_token', data.token);
-          this.isLoggedIn = true;
-          await this.chargerProduits();
-        } else {
-          this.loginError = data.message || 'Identifiants invalides';
-        }
+          body: JSON.stringify({
+            username: this.loginUser,
+            password: this.loginPass
+          })
+        })
+        localStorage.setItem('admin_token', token)
+        this.isLoggedIn = true
+        await this.chargerProduits()
       } catch (err) {
-        this.loginError = 'Erreur serveur, réessayez plus tard';
+        this.loginError = err.message || 'Erreur serveur, réessayez plus tard'
       } finally {
-        this.isLoading = false;
+        this.isLoading = false
       }
     },
 
     seDeconnecter() {
-      localStorage.removeItem('admin_token');
-      this.isLoggedIn = false;
-      this.loginUser = '';
-      this.loginPass = '';
-      this.produits = [];
+      localStorage.removeItem('admin_token')
+      this.isLoggedIn = false
+      this.loginUser = ''
+      this.loginPass = ''
+      this.produits = []
     },
 
     onFileChange(event, index) {
-      this.fichiersImages[index] = event.target.files[0];
+      this.fichiersImages[index] = event.target.files[0]
     },
 
     async chargerProduits() {
       try {
-        const res = await fetch(`${BASE}/produits`, {
+        this.produits = await api('/api/produits', {
           headers: { Authorization: 'Bearer ' + localStorage.getItem('admin_token') }
-        });
-        if (res.status === 401) return this.seDeconnecter();
-        this.produits = await res.json();
+        })
       } catch (err) {
-        console.error('❌ Erreur chargement produits :', err);
+        if (err.message.includes('401')) return this.seDeconnecter()
+        console.error('❌ Erreur chargement produits :', err)
       }
     },
 
     validateForm() {
-      this.errors = {};
-      if (!this.nouveauProduit.nom) this.errors.nom = 'Le nom est requis';
-      if (!this.nouveauProduit.description) this.errors.description = 'La description est requise';
+      this.errors = {}
+      if (!this.nouveauProduit.nom) this.errors.nom = 'Le nom est requis'
+      if (!this.nouveauProduit.description) this.errors.description = 'La description est requise'
       if (!this.nouveauProduit.prix || this.nouveauProduit.prix <= 0)
-        this.errors.prix = 'Le prix doit être supérieur à 0';
-      if (!this.categorieChoisie) this.errors.categorie = 'La catégorie est requise';
+        this.errors.prix = 'Le prix doit être supérieur à 0'
+      if (!this.categorieChoisie) this.errors.categorie = 'La catégorie est requise'
       if (this.categorieChoisie === 'autre' && !this.nouvelleCategorie)
-        this.errors.nouvelleCategorie = 'Veuillez préciser la nouvelle catégorie';
-      return Object.keys(this.errors).length === 0;
+        this.errors.nouvelleCategorie = 'Veuillez préciser la nouvelle catégorie'
+      return Object.keys(this.errors).length === 0
     },
 
     async ajouterProduit() {
       if (!this.validateForm()) {
-        this.formMessage = 'Veuillez corriger les erreurs avant de soumettre.';
-        this.formError = true;
-        return;
+        this.formMessage = 'Veuillez corriger les erreurs avant de soumettre.'
+        this.formError = true
+        return
       }
-      this.isLoading = true;
-      this.formMessage = '';
+      this.isLoading = true
+      this.formMessage = ''
       try {
-        const formData = new FormData();
+        const formData = new FormData()
         const catFinale = this.categorieChoisie === 'autre'
           ? this.nouvelleCategorie.toLowerCase()
-          : this.categorieChoisie.toLowerCase();
+          : this.categorieChoisie.toLowerCase()
 
-        formData.append('nom', this.nouveauProduit.nom);
-        formData.append('description', this.nouveauProduit.description);
-        formData.append('prix', this.nouveauProduit.prix);
-        formData.append('categorie', catFinale);
-        this.fichiersImages.forEach(f => f && formData.append('images', f));
+        formData.append('nom', this.nouveauProduit.nom)
+        formData.append('description', this.nouveauProduit.description)
+        formData.append('prix', this.nouveauProduit.prix)
+        formData.append('categorie', catFinale)
+        this.fichiersImages.forEach(f => f && formData.append('images', f))
 
-        const res = await fetch(`${BASE}/produits`, {
+        const data = await api('/api/produits', {
           method: 'POST',
           headers: { Authorization: 'Bearer ' + localStorage.getItem('admin_token') },
           body: formData
-        });
-        const data = await res.json();
-        if (res.ok) {
-          this.produits.push(data.produit);
-          this.formMessage = '✅ Produit ajouté !';
-          this.formError = false;
-          this.resetFormulaire();
-        } else {
-          throw new Error(data.message || 'Erreur inconnue');
-        }
+        })
+        this.produits.push(data)
+        this.formMessage = '✅ Produit ajouté !'
+        this.formError = false
+        this.resetFormulaire()
       } catch (err) {
-        this.formMessage = '❌ Erreur ajout produit';
-        this.formError = true;
-        console.error(err);
+        this.formMessage = '❌ Erreur ajout produit'
+        this.formError = true
+        console.error(err)
       } finally {
-        this.isLoading = false;
+        this.isLoading = false
       }
     },
 
     resetFormulaire() {
-      this.nouveauProduit = { nom: '', description: '', prix: null };
-      this.categorieChoisie = '';
-      this.nouvelleCategorie = '';
-      this.fichiersImages = [null, null, null, null, null];
+      this.nouveauProduit = { nom: '', description: '', prix: null }
+      this.categorieChoisie = ''
+      this.nouvelleCategorie = ''
+      this.fichiersImages = [null, null, null, null, null]
       for (let i = 0; i < 5; i++) {
-        const ref = this.$refs['fichierImage' + i];
+        const ref = this.$refs['fichierImage' + i]
         if (ref) {
-          if (Array.isArray(ref)) ref[0].value = '';
-          else ref.value = '';
+          if (Array.isArray(ref)) ref[0].value = ''
+          else ref.value = ''
         }
       }
     },
 
     async supprimerProduit(id) {
-      if (!confirm('❓ Supprimer ce produit ?')) return;
+      if (!confirm('❓ Supprimer ce produit ?')) return
       try {
-        const res = await fetch(`${BASE}/produits/${id}`, {
+        await api(`/api/produits/${id}`, {
           method: 'DELETE',
           headers: { Authorization: 'Bearer ' + localStorage.getItem('admin_token') }
-        });
-        if (res.ok) {
-          this.produits = this.produits.filter(p => (p._id || p.id) !== id);
-        }
+        })
+        this.produits = this.produits.filter(p => (p._id||p.id) !== id)
       } catch (err) {
-        alert('❌ Erreur suppression');
-        console.error(err);
+        alert('❌ Erreur suppression')
+        console.error(err)
       }
     },
 
     async modifierProduit(produit) {
-      const id = produit._id || produit.id;
+      const id = produit._id || produit.id
       try {
-        const res = await fetch(`${BASE}/produits/${id}`, {
+        const updated = await api(`/api/produits/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem('admin_token')
           },
           body: JSON.stringify(produit)
-        });
-        if (res.ok) {
-          const idx = this.produits.findIndex(p => (p._id||p.id) === id);
-          if (idx !== -1) this.produits.splice(idx, 1, produit);
-          this.formMessage = '✔ Produit modifié !';
-          this.formError = false;
-        } else {
-          throw new Error('Erreur modification');
-        }
+        })
+        const idx = this.produits.findIndex(p => (p._id||p.id) === id)
+        if (idx !== -1) this.$set(this.produits, idx, updated)
+        this.formMessage = '✔ Produit modifié !'
+        this.formError = false
       } catch (err) {
-        this.formMessage = '❌ Erreur modification';
-        this.formError = true;
-        console.error(err);
+        this.formMessage = '❌ Erreur modification'
+        this.formError = true
+        console.error(err)
       }
     }
   }
-};
+}
 </script>
+
 
 
 <style scoped>

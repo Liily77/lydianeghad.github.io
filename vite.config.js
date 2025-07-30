@@ -11,24 +11,18 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      // en dev, /produits/* → backend
-      '/produits': {
+      // Proxy toute l'API derrière /api/*
+      '/api': {
         target: 'http://localhost:3001',
-        changeOrigin: true
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')  // enlève le /api avant de forwarder
       },
-      // login admin → backend
-      '/login': {
-        target: 'http://localhost:3001',
-        changeOrigin: true
-      },
-      '/send-email': {
-        target: 'http://localhost:3001',
-        changeOrigin: true
-      },
+      // Et si tu appelles directement /uploads en dev :
       '/uploads': {
         target: 'http://localhost:3001',
-        changeOrigin: true
+        changeOrigin: true,
       }
     }
   }
 })
+

@@ -11,18 +11,18 @@
         <!-- SLIDER IMAGE -->
         <div class="slider-container">
           <button
-            v-if="produit.images.length > 1"
+            v-if="prefixedImages(produit)[index].length > 1"
             class="arrow left"
             @click="prevImage(index)"
           >‹</button>
 
           <img
-            :src="produit.images[currentIndexes[index] || 0]"
+            :src="prefixedImages(produit)[currentIndexes[index] || 0]"
             :alt="produit.nom"
           />
 
           <button
-            v-if="produit.images.length > 1"
+            v-if="prefixedImages(produit).length > 1"
             class="arrow right"
             @click="nextImage(index)"
           >›</button>
@@ -42,54 +42,64 @@
 </template>
 
 <script>
+import { BASE } from '@/utils/api.js'
+
 export default {
   name: 'Rechercher',
   data() {
     return {
       resultats: [],
       currentIndexes: {}
-    };
+    }
   },
   watch: {
     '$route.query.q': {
       handler() {
-        this.lancerRecherche();
+        this.lancerRecherche()
       },
       immediate: true
     }
   },
   methods: {
-    nextImage(index) {
-      const total = this.resultats[index].images.length;
-      this.currentIndexes[index] = (this.currentIndexes[index] + 1) % total;
+    prefixedImages(prod) {
+      const backendUrl = BASE
+      return (prod.images || []).map(img =>
+        img.startsWith('/uploads') ? backendUrl + img : img
+      )
     },
-    prevImage(index) {
-      const total = this.resultats[index].images.length;
-      this.currentIndexes[index] = (this.currentIndexes[index] - 1 + total) % total;
+    nextImage(idx) {
+      const total = this.prefixedImages(this.resultats[idx]).length
+      this.currentIndexes[idx] = (this.currentIndexes[idx] + 1) % total
+    },
+    prevImage(idx) {
+      const total = this.prefixedImages(this.resultats[idx]).length
+      this.currentIndexes[idx] = (this.currentIndexes[idx] - 1 + total) % total
     },
     async lancerRecherche() {
-      const terme = this.$route.query.q;
+      const terme = this.$route.query.q
       if (!terme) {
-        this.resultats = [];
-        return;
+        this.resultats = []
+        return
       }
 
       try {
-        const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
-        const reponse = await fetch(
-          `${backendUrl}/produits/recherche?q=${encodeURIComponent(terme)}`
-        );
-        const donnees = await reponse.json();
-        this.resultats = donnees;
-        this.currentIndexes = Object.fromEntries(donnees.map((_, i) => [i, 0]));
-      } catch (error) {
-        console.error('Erreur lors de la recherche :', error);
-        this.resultats = [];
+        const res = await fetch(
+          `${BASE}/api/produits/recherche?q=${encodeURIComponent(terme)}`,
+          { credentials: 'include' }
+        )
+        this.resultats = await res.json()
+        this.currentIndexes = Object.fromEntries(
+          this.resultats.map((_, i) => [i, 0])
+        )
+      } catch (err) {
+        console.error('Erreur lors de la recherche :', err)
+        this.resultats = []
       }
     }
   }
-};
+}
 </script>
+
 
 
 

@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import { api } from '@/utils/api'
+
 export default {
   name: 'Contact',
   data() {
@@ -70,70 +72,70 @@ export default {
       sending: false,
       toastMessage: '',
       toastSuccess: false,
-    };
+    }
   },
   methods: {
     validateForm() {
-      this.errors = {};
+      this.errors = {}
 
       if (!this.form.nom) {
-        this.errors.nom = 'Le nom est obligatoire.';
+        this.errors.nom = 'Le nom est obligatoire.'
       }
       if (!this.form.email) {
-        this.errors.email = 'L’email est obligatoire.';
+        this.errors.email = 'L’email est obligatoire.'
       } else if (!this.isValidEmail(this.form.email)) {
-        this.errors.email = 'Format d’email invalide.';
+        this.errors.email = 'Format d’email invalide.'
       }
       if (!this.form.message) {
-        this.errors.message = 'Le message est obligatoire.';
+        this.errors.message = 'Le message est obligatoire.'
       } else if (this.form.message.length < 10) {
-        this.errors.message = 'Le message doit contenir au moins 10 caractères.';
+        this.errors.message = 'Le message doit contenir au moins 10 caractères.'
       }
 
-      return Object.keys(this.errors).length === 0;
+      return Object.keys(this.errors).length === 0
     },
     isValidEmail(email) {
       // Simple regex email validation
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(email);
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      return re.test(email)
     },
     async envoyerMessage() {
       if (!this.validateForm()) {
-        return;
+        return
       }
 
-      this.sending = true;
-      this.toastMessage = '';
+      this.sending = true
+      this.toastMessage = ''
+
       try {
-        const res = await fetch('/send-email', {
+        const { success, message } = await api('/api/send-email', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.form)
-        });
-        const { success, message } = await res.json();
+        })
+
         if (success) {
-          this.toastMessage = '✅ Message envoyé avec succès !';
-          this.toastSuccess = true;
-          this.form.nom = '';
-          this.form.email = '';
-          this.form.message = '';
+          this.toastMessage = '✅ Message envoyé avec succès !'
+          this.toastSuccess = true
+          this.form.nom = ''
+          this.form.email = ''
+          this.form.message = ''
         } else {
-          this.toastMessage = message || 'Erreur inconnue lors de l’envoi.';
-          this.toastSuccess = false;
+          this.toastMessage = message || 'Erreur inconnue lors de l’envoi.'
+          this.toastSuccess = false
         }
       } catch (err) {
-        console.error(err);
-        this.toastMessage = '❌ Impossible d’envoyer le message. Réessayez plus tard.';
-        this.toastSuccess = false;
+        console.error(err)
+        this.toastMessage = '❌ Impossible d’envoyer le message. Réessayez plus tard.'
+        this.toastSuccess = false
       } finally {
-        this.sending = false;
+        this.sending = false
         setTimeout(() => {
-          this.toastMessage = '';
-        }, 4000);
+          this.toastMessage = ''
+        }, 4000)
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>

@@ -75,15 +75,12 @@ export default {
     };
   },
   computed: {
-    // Ajoute le préfixe backend sur chaque image si nécessaire
+    // Préfixe backend sur chaque image si besoin
     prefixedImages() {
       const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
-      return (this.produit?.images || []).map(img => {
-        if (img.startsWith('/uploads')) {
-          return backendUrl + img;
-        }
-        return img;
-      });
+      return (this.produit?.images || []).map(img =>
+        img.startsWith('/uploads') ? backendUrl + img : img
+      );
     },
     categorieURL() {
       const from = this.$route.query.from;
@@ -103,17 +100,23 @@ export default {
     },
     nextImage() {
       this.transitionName = 'slide-right';
-      if (this.currentIndex < this.prefixedImages.length - 1) this.currentIndex++;
+      if (this.currentIndex < this.prefixedImages.length - 1) {
+        this.currentIndex++;
+      }
     },
     prevImage() {
       this.transitionName = 'slide-left';
-      if (this.currentIndex > 0) this.currentIndex--;
+      if (this.currentIndex > 0) {
+        this.currentIndex--;
+      }
     },
     increaseQuantity() {
       this.quantity++;
     },
     decreaseQuantity() {
-      if (this.quantity > 1) this.quantity--;
+      if (this.quantity > 1) {
+        this.quantity--;
+      }
     },
     ajouterProduitAuPanier() {
       ajouterAuPanier(this.produit, this.quantity);
@@ -126,10 +129,11 @@ export default {
   async mounted() {
     const id = this.$route.params.id;
     try {
-      const res = await fetch(`/produits/${id}`);
-      const produit = await res.json();
-      if (res.ok && produit && produit.nom) {
-        this.produit = produit;
+      const res = await fetch(`/api/produits/${id}`);
+      if (!res.ok) throw new Error(`API ${res.status}`);
+      const data = await res.json();
+      if (data && data.nom) {
+        this.produit = data;
         this.$nextTick(() => {
           const el = document.getElementById('fiche');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -141,6 +145,7 @@ export default {
   }
 };
 </script>
+
 
 
 <style scoped>

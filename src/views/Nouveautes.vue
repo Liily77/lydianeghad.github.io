@@ -34,7 +34,12 @@
         <h3>{{ produit.nom }}</h3>
         <p>{{ produit.description }}</p>
         <p>{{ produit.prix.toFixed(2) }} €</p>
-        <router-link :to="`/produit/${produit._id || produit.id}`" class="voir-btn">Voir</router-link>
+        <router-link
+          :to="`/produit/${produit._id || produit.id}`"
+          class="voir-btn"
+        >
+          Voir
+        </router-link>
       </div>
     </div>
 
@@ -45,6 +50,8 @@
 </template>
 
 <script>
+import { api } from '@/utils/api.js';
+
 export default {
   name: 'Nouveautes',
   data() {
@@ -53,39 +60,40 @@ export default {
       currentIndexes: {}
     };
   },
-  mounted() {
-    fetch('/produits')
-      .then(res => res.json())
-      .then(data => {
-        const derniers = data.slice().reverse().slice(0, 10);
-        this.produits = derniers;
-        this.currentIndexes = Object.fromEntries(derniers.map((_, i) => [i, 0]));
-      })
-      .catch(err => {
-        console.error('❌ Erreur chargement nouveautés', err);
-      });
+  async mounted() {
+    try {
+      const data = await api('/api/produits');
+      // On prend les 10 derniers produits
+      const derniers = data.slice().reverse().slice(0, 10);
+      this.produits = derniers;
+      this.currentIndexes = Object.fromEntries(
+        derniers.map((_, i) => [i, 0])
+      );
+    } catch (err) {
+      console.error('❌ Erreur chargement nouveautés', err);
+    }
   },
   methods: {
     getImageUrl(img) {
       if (!img) return '';
+      // Utilise BASE défini dans api.js pour prepender en prod
       const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
-      // Si l’image est une URL relative (commence par /uploads), on préfixe par l’URL backend
-      if (img.startsWith('/uploads')) {
-        return backendUrl + img;
-      }
-      return img;
+      return img.startsWith('/uploads') ? backendUrl + img : img;
     },
     nextImage(index) {
       const total = this.produits[index].images.length;
-      this.currentIndexes[index] = (this.currentIndexes[index] + 1) % total;
+      this.currentIndexes[index] =
+        (this.currentIndexes[index] + 1) % total;
     },
     prevImage(index) {
       const total = this.produits[index].images.length;
-      this.currentIndexes[index] = (this.currentIndexes[index] - 1 + total) % total;
+      this.currentIndexes[index] =
+        (this.currentIndexes[index] - 1 + total) % total;
     }
   }
 };
 </script>
+
 
 <style scoped>
 /* Ton style actuel, très bien */

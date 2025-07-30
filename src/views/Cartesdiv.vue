@@ -35,40 +35,37 @@
 
 <script>
 import CartesdivProduit from '../components/CartesdivProduit.vue'
+import { api } from '@/utils/api'
 
 export default {
   name: 'Cartesdiv',
-  components: {
-    CartesdivProduit
-  },
+  components: { CartesdivProduit },
   data() {
     return {
       produitsCartes: []
-    };
+    }
   },
   methods: {
     getImageUrl(img) {
-      if (!img) return '';
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
-      if (img.startsWith('/uploads')) {
-        return backendUrl + img;
-      }
-      return img;
+      if (!img) return ''
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || ''
+      return img.startsWith('/uploads') ? backendUrl + img : img
     }
   },
-  mounted() {
+  async mounted() {
     window.scrollTo(0, 0)
-    fetch('/produits')
-      .then(res => res.json())
-      .then(data => {
-        this.produitsCartes = data.filter(p =>
-          p.categorie?.toLowerCase().trim() === 'cartesdiv'
-        );
-      })
-      .catch(err => console.error('Erreur chargement cartes divinatoires :', err));
+    try {
+      const all = await api('/api/produits')
+      this.produitsCartes = all.filter(
+        p => p.categorie?.toLowerCase().trim() === 'cartesdiv'
+      )
+    } catch (err) {
+      console.error('Erreur chargement cartes divinatoires :', err)
+    }
   }
 }
 </script>
+
 
 
 

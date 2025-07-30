@@ -33,30 +33,37 @@
 
 <script>
 import ParuresProduit from '../components/ParuresProduit.vue'
+import { api } from '@/utils/api'
 
 export default {
   name: 'Parures',
-  components: {
-    ParuresProduit
-  },
+  components: { ParuresProduit },
   data() {
     return {
       produitsParures: []
-    };
+    }
   },
-  mounted() {
-    window.scrollTo(0, 0);
-    fetch('/produits')
-      .then(res => res.json())
-      .then(data => {
-        this.produitsParures = data.filter(p =>
-          p.categorie?.toLowerCase().trim() === 'parures'
-        );
-      })
-      .catch(err => console.error('Erreur chargement parures :', err));
+  methods: {
+    getImageUrl(img) {
+      if (!img) return ''
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || ''
+      return img.startsWith('/uploads') ? backendUrl + img : img
+    }
+  },
+  async mounted() {
+    window.scrollTo(0, 0)
+    try {
+      const all = await api('/api/produits')
+      this.produitsParures = all.filter(
+        p => p.categorie?.toLowerCase().trim() === 'parures'
+      )
+    } catch (err) {
+      console.error('Erreur chargement parures :', err)
+    }
   }
 }
 </script>
+
 
 
 

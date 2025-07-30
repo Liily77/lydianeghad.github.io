@@ -35,12 +35,11 @@
 
 <script>
 import ChapeletProduit from '../components/ChapeletProduit.vue'
+import { api } from '@/utils/api'
 
 export default {
   name: 'Chapelets',
-  components: {
-    ChapeletProduit
-  },
+  components: { ChapeletProduit },
   data() {
     return {
       produitsChapelets: []
@@ -48,27 +47,25 @@ export default {
   },
   methods: {
     getImageUrl(img) {
-      if (!img) return '';
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
-      if (img.startsWith('/uploads')) {
-        return backendUrl + img;
-      }
-      return img;
+      if (!img) return ''
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || ''
+      return img.startsWith('/uploads') ? backendUrl + img : img
     }
   },
-  mounted() {
+  async mounted() {
     window.scrollTo(0, 0)
-    fetch('/produits')
-      .then(res => res.json())
-      .then(data => {
-        this.produitsChapelets = data.filter(p =>
-          p.categorie?.toLowerCase().includes('chapelet')
-        )
-      })
-      .catch(err => console.error('Erreur chargement chapelets :', err))
+    try {
+      const all = await api('/api/produits')
+      this.produitsChapelets = all.filter(p =>
+        p.categorie?.toLowerCase().includes('chapelet')
+      )
+    } catch (err) {
+      console.error('Erreur chargement chapelets :', err)
+    }
   }
 }
 </script>
+
 
 
 <style scoped>

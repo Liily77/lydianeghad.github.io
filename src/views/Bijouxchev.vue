@@ -35,12 +35,11 @@
 
 <script>
 import BijouxchevProduit from '../components/BijouxchevProduit.vue'
+import { api } from '@/utils/api'
 
 export default {
   name: 'Bijouxchev',
-  components: {
-    BijouxchevProduit
-  },
+  components: { BijouxchevProduit },
   data() {
     return {
       produitsBijouxchev: []
@@ -48,27 +47,25 @@ export default {
   },
   methods: {
     getImageUrl(img) {
-      if (!img) return '';
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
-      if (img.startsWith('/uploads')) {
-        return backendUrl + img;
-      }
-      return img;
+      if (!img) return ''
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || ''
+      return img.startsWith('/uploads') ? backendUrl + img : img
     }
   },
-  mounted() {
-    window.scrollTo(0, 0);
-    fetch('/produits')
-      .then(res => res.json())
-      .then(data => {
-        this.produitsBijouxchev = data.filter(p =>
-          p.categorie?.toLowerCase() === 'bijoux de cheville'
-        )
-      })
-      .catch(err => console.error('Erreur chargement bijoux de cheville :', err));
+  async mounted() {
+    window.scrollTo(0, 0)
+    try {
+      const all = await api('/api/produits')
+      this.produitsBijouxchev = all.filter(
+        p => p.categorie?.toLowerCase() === 'bijoux de cheville'
+      )
+    } catch (err) {
+      console.error('Erreur chargement bijoux de cheville :', err)
+    }
   }
 }
 </script>
+
 
 
 

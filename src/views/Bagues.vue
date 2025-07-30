@@ -32,38 +32,39 @@
   </div>
 </template>
 
+
 <script>
 import BagueProduit from '../components/BagueProduit.vue'
+import { api } from '@/utils/api'
 
 export default {
   name: 'Bagues',
-  components: {
-    BagueProduit
-  },
+  components: { BagueProduit },
   data() {
     return {
       produitsBagues: []
-    };
+    }
   },
   methods: {
     getImageUrl(img) {
-      if (!img) return '';
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
-      return img.startsWith('/uploads') ? backendUrl + img : img;
+      if (!img) return ''
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || ''
+      return img.startsWith('/uploads') ? backendUrl + img : img
     }
   },
-  mounted() {
-    window.scrollTo(0, 0);
-    fetch('/produits')
-      .then(res => res.json())
-      .then(data => {
-        this.produitsBagues = data.filter(p => p.categorie?.toLowerCase() === 'bagues');
-      })
-      .catch(err => console.error('Erreur chargement bagues :', err));
+  async mounted() {
+    window.scrollTo(0, 0)
+    try {
+      const all = await api('/api/produits')
+      this.produitsBagues = all.filter(
+        p => p.categorie?.toLowerCase() === 'bagues'
+      )
+    } catch (err) {
+      console.error('Erreur chargement bagues :', err)
+    }
   }
-};
+}
 </script>
-
 
 
 

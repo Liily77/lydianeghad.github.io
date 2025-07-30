@@ -35,12 +35,11 @@
 
 <script>
 import BraceletProduit from '../components/BraceletProduit.vue'
+import { api } from '@/utils/api'
 
 export default {
   name: 'Bracelets',
-  components: {
-    BraceletProduit
-  },
+  components: { BraceletProduit },
   data() {
     return {
       produitsBracelets: []
@@ -48,25 +47,25 @@ export default {
   },
   methods: {
     getImageUrl(img) {
-      if (!img) return '';
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
-      if (img.startsWith('/uploads')) {
-        return backendUrl + img;
-      }
-      return img;
+      if (!img) return ''
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || ''
+      return img.startsWith('/uploads') ? backendUrl + img : img
     }
   },
-  mounted() {
+  async mounted() {
     window.scrollTo(0, 0)
-    fetch('/produits')
-      .then(res => res.json())
-      .then(data => {
-        this.produitsBracelets = data.filter(p => p.categorie?.toLowerCase() === 'bracelet');
-      })
-      .catch(err => console.error('Erreur chargement bracelets :', err))
+    try {
+      const all = await api('/api/produits')
+      this.produitsBracelets = all.filter(
+        p => p.categorie?.toLowerCase() === 'bracelet'
+      )
+    } catch (err) {
+      console.error('Erreur chargement bracelets :', err)
+    }
   }
 }
 </script>
+
 
 
 <style scoped>
