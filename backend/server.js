@@ -1,23 +1,28 @@
 // backend/server.js
-require('dotenv').config();
-const express     = require('express');
-const cors        = require('cors');
-const multer      = require('multer');
-const path        = require('path');
-const fs          = require('fs');
-const mongoose    = require('mongoose');
-const morgan      = require('morgan');
-const helmet      = require('helmet');
-const rateLimit   = require('express-rate-limit');
-const xssClean    = require('xss-clean');
-const hpp         = require('hpp');
-const jwt         = require('jsonwebtoken');
-const nodemailer  = require('nodemailer');
 
-const app = express();
+// ─── 1) Dotenv en dev seulement ───────────────────────────────────────────
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+const express   = require('express');
+const cors      = require('cors');
+const multer    = require('multer');
+const path      = require('path');
+const fs        = require('fs');
+const mongoose  = require('mongoose');
+const morgan    = require('morgan');
+const helmet    = require('helmet');
+const rateLimit = require('express-rate-limit');
+const xssClean  = require('xss-clean');
+const hpp       = require('hpp');
+const jwt       = require('jsonwebtoken');
+const nodemailer= require('nodemailer');
+
+const app  = express();
 const PORT = process.env.PORT || 3001;
 
-// ─── Sécurité & rate limiting ─────────────────────────────────────────────
+// ─── 2) Sécurité & rate limiting ──────────────────────────────────────────
 app.set('trust proxy', 1);
 app.use(helmet());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
@@ -25,76 +30,88 @@ app.use(xssClean());
 app.use(hpp());
 app.use(morgan('combined'));
 
-// ─── Static & JSON body ───────────────────────────────────────────────────
-app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.static(path.resolve(__dirname, '../dist')));
-
-// ─── CORS whitelist ───────────────────────────────────────────────────────
+// ─── 3) CORS whitelist ────────────────────────────────────────────────────
 const whitelist = [
-  process.env.FRONTEND_URL,      // ex: https://arc-en-ciel-gl75.onrender.com
-  'http://localhost:5173',       // Vite dev
-  'http://localhost:4173'        // Vite preview
-];
+  process.env.FRONTEND_URL,   // URL du front prod (à définir en env)
+  'https://arc-en-ciel-gl75.onrender.com', // fallback si FRONTEND_URL n'est pas set
+  'http://localhost:5173',    // Vite dev
+  'http://localhost:4173'     // Vite preview
+].filter(Boolean);
+
 app.use(cors({
-  origin(origin, cb) {
-    if (!origin) return cb(null, true);
-    if (whitelist.includes(origin)) return cb(null, true);
-    cb(new Error(`Origin ${origin} non autorisée par CORS`));
+  origin: (origin, callback) => {
+    // autoriser postman, mobile apps, etc.
+    if (!origin) return callback(null, true);
+    if (whitelist.includes(origin)) return callback(null, true);
+    callback(new Error(`Origin ${origin} non autorisée par CORS`));
   },
   credentials: true
 }));
 
-// ─── MongoDB ──────────────────────────────────────────────────────────────
-mongoose.connect(process.env.MONGODB_URI)
+// ─── 4) Static & JSON body ─────────────────────────────────────────────────
+app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.resolve(__dirname, '../dist')));
+
+// ─── 5) Connexion MongoDB ──────────────────────────────────────────────────
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
   .then(() => console.log('✅ MongoDB connectée !'))
   .catch(err => console.error('❌ Erreur MongoDB :', err));
 
-// ─── Modèle Produit ──────────────────────────────────────────────────────
+// ─── 6) Modèle Produit ────────────────────────────────────────────────────
 const produitSchema = new mongoose.Schema({
-  nom:         String,
-  description: String,
-  prix:        Number,
-  categorie:   String,
+  nom:         { type: String, required: true },
+  description: { type: String, required: true },
+  prix:        { type: Number, required: true },
+  categorie:   { type: String, required: true },
   images:      [String]
-});
+}, { timestamps: true });
+
 const Produit = mongoose.model('Produit', produitSchema);
 
-// ─── Multer upload ────────────────────────────────────────────────────────
+// ─── 7) Multer upload ──────────────────────────────────────────────────────
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
 const storage = multer.diskStorage({
-  destination: (_, __, cb) => cb(null, uploadDir),
-  filename:    (_, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+  destination: (_req, _file, cb) => cb(null, uploadDir),
+  filename: (_req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
 });
+
 const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter(req, file, cb) {
     if (/image\/(jpeg|png|gif)/.test(file.mimetype)) cb(null, true);
-    else cb(new Error('Seules JPEG/PNG/GIF acceptées'));
+    else cb(new Error('Seules JPEG, PNG et GIF sont acceptées'));
   }
 });
+
 async function supprimerFichier(fp) {
-  try { await fs.promises.unlink(fp); }
-  catch (e) { console.error('Erreur suppression', fp, e); }
+  try {
+    await fs.promises.unlink(fp);
+  } catch (err) {
+    console.error('Erreur suppression', fp, err);
+  }
 }
 
-// ─── Auth middleware ─────────────────────────────────────────────────────
+// ─── 8) Auth middleware ────────────────────────────────────────────────────
 function authMiddleware(req, res, next) {
-  const header = req.headers.authorization;
-  if (!header) return res.status(401).json({ message: 'Auth manquante' });
-  const token = header.split(' ')[1];
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ message: 'Authentification requise' });
+  const token = authHeader.split(' ')[1];
   try {
     req.user = jwt.verify(token, process.env.JWT_SECRET);
     next();
-  } catch {
-    res.status(401).json({ message: 'Token invalide' });
+  } catch (err) {
+    return res.status(401).json({ message: 'Token invalide' });
   }
 }
 
-// ─── Login Admin ─────────────────────────────────────────────────────────
+// ─── 9) Login Admin ───────────────────────────────────────────────────────
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   if (
@@ -107,13 +124,12 @@ app.post('/login', (req, res) => {
   res.status(401).json({ message: 'Identifiants invalides' });
 });
 
-// ─── Routes publiques ─────────────────────────────────────────────────────
-
-// Envoyer un email de contact
+// ─── 10) Routes publiques ──────────────────────────────────────────────────
+// Envoi d'email de contact
 app.post('/send-email', async (req, res) => {
   const { name, email, message } = req.body;
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
-    return res.status(500).json({ message: 'Email non configuré.' });
+    return res.status(500).json({ message: 'Configuration email manquante' });
   }
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -138,28 +154,25 @@ app.post('/send-email', async (req, res) => {
   }
 });
 
-// Recherche de produits
+// Recherche et listing
+app.get('/produits', async (_req, res) => {
+  const produits = await Produit.find();
+  res.json(produits);
+});
+
 app.get('/produits/recherche', async (req, res) => {
   const q = req.query.q || '';
   const produits = await Produit.find({ nom: { $regex: q, $options: 'i' } });
   res.json(produits);
 });
 
-// Lister tous les produits
-app.get('/produits', async (_, res) => {
-  res.json(await Produit.find());
-});
-
-// Détail d’un produit
 app.get('/produits/:id', async (req, res) => {
-  const p = await Produit.findById(req.params.id);
-  if (!p) return res.status(404).json({ message: 'Produit introuvable' });
-  res.json(p);
+  const prod = await Produit.findById(req.params.id);
+  if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
+  res.json(prod);
 });
 
-// ─── Routes protégées (requièrent JWT) ────────────────────────────────────
-
-// Créer un produit (avec images)
+// ─── 11) Routes protégées (CRUD produits) ──────────────────────────────────
 app.post(
   '/produits',
   authMiddleware,
@@ -167,8 +180,10 @@ app.post(
   async (req, res) => {
     const images = req.files.map(f => `/uploads/${f.filename}`);
     const prod = new Produit({
-      ...req.body,
+      nom: req.body.nom,
+      description: req.body.description,
       prix: parseFloat(req.body.prix),
+      categorie: req.body.categorie,
       images
     });
     await prod.save();
@@ -176,7 +191,6 @@ app.post(
   }
 );
 
-// Mettre à jour un produit
 app.put(
   '/produits/:id',
   authMiddleware,
@@ -185,36 +199,41 @@ app.put(
     const prod = await Produit.findById(req.params.id);
     if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
 
-    // Si nouvelles images, on supprime les anciennes
+    // suppression des anciennes images si de nouvelles uploadées
     if (req.files.length) {
-      for (let img of prod.images) {
-        await supprimerFichier(path.join(__dirname, img));
+      for (const imgPath of prod.images) {
+        await supprimerFichier(path.join(__dirname, imgPath));
       }
       prod.images = req.files.map(f => `/uploads/${f.filename}`);
     }
 
-    prod.nom         = req.body.nom;
+    prod.nom = req.body.nom;
     prod.description = req.body.description;
-    prod.prix        = parseFloat(req.body.prix);
-    prod.categorie   = req.body.categorie;
+    prod.prix = parseFloat(req.body.prix);
+    prod.categorie = req.body.categorie;
     await prod.save();
     res.json(prod);
   }
 );
 
-// Supprimer un produit
-app.delete('/produits/:id', authMiddleware, async (req, res) => {
-  const prod = await Produit.findByIdAndDelete(req.params.id);
-  if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
-  for (let img of prod.images) {
-    await supprimerFichier(path.join(__dirname, img));
-  }
-  res.json({ message: 'Produit supprimé' });
-});
+app.delete(
+  '/produits/:id',
+  authMiddleware,
+  async (req, res) => {
+    const prod = await Produit.findByIdAndDelete(req.params.id);
+    if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
 
-// ─── Fallback pour SPA ────────────────────────────────────────────────────
-app.get('*', (_, res) => {
+    for (const imgPath of prod.images) {
+      await supprimerFichier(path.join(__dirname, imgPath));
+    }
+    res.json({ message: 'Produit supprimé' });
+  }
+);
+
+// ─── 12) Fallback SPA pour gérer le refresh/url directe ─────────────────────
+app.get('*', (_req, res) => {
   res.sendFile(path.resolve(__dirname, '../dist/index.html'));
 });
 
+// ─── 13) Lancement du serveur ─────────────────────────────────────────────
 app.listen(PORT, () => console.log(`🚀 Serveur sur port ${PORT}`));
