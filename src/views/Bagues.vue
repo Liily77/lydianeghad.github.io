@@ -35,7 +35,6 @@
 
 <script>
 import BagueProduit from '../components/BagueProduit.vue'
-import { api } from '@/utils/api'
 
 export default {
   name: 'Bagues',
@@ -47,17 +46,24 @@ export default {
   },
   methods: {
     getImageUrl(img) {
-      if (!img) return ''
       const backendUrl = import.meta.env.VITE_BACKEND_URL || ''
       return img.startsWith('/uploads') ? backendUrl + img : img
     }
   },
   async mounted() {
+    // pour debug : vérifier que ce hook est appelé
+    console.log('[Bagues.vue] mounted — lancement du fetch /api/produits')
+
     window.scrollTo(0, 0)
     try {
-      const all = await api('/api/produits')
+      // appel direct à /api/produits (sera rewrité par Render)
+      const res = await fetch('/api/produits', { credentials: 'include' })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const all = await res.json()
+
+      // ne garder que les bagues
       this.produitsBagues = all.filter(
-        p => p.categorie?.toLowerCase() === 'bagues'
+        p => p.categorie && p.categorie.toLowerCase() === 'bagues'
       )
     } catch (err) {
       console.error('Erreur chargement bagues :', err)
@@ -65,6 +71,8 @@ export default {
   }
 }
 </script>
+
+
 
 
 
