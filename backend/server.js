@@ -38,7 +38,6 @@ const whitelist = [
 ];
 app.use(cors({
   origin(origin, callback) {
-    // si pas d’origin (Postman, script serveur→serveur…) on accepte
     if (!origin) return callback(null, true);
     if (whitelist.includes(origin)) return callback(null, true);
     callback(new Error(`Origin ${origin} non autorisée par CORS`));
@@ -113,15 +112,15 @@ app.post('/login', (req, res) => {
 });
 
 // ─── ROUTES PUBLIQUES ─────────────────────────────────────────────────────
-app.post('/send-email', async (req, res) => { /* … */ });
-app.get('/produits/recherche', async (req, res) => { /* … */ });
+app.post('/send-email', async (req, res) => { /* implémentation */ });
+app.get('/produits/recherche', async (req, res) => { /* implémentation */ });
 app.get('/produits', async (_, res) => res.json(await Produit.find()));
-app.get('/produits/:id', async (req, res) => { /* … */ });
+app.get('/produits/:id', async (req, res) => { /* implémentation */ });
 
 // ─── ROUTES PROTÉGÉES ─────────────────────────────────────────────────────
-app.post('/produits', authMiddleware, upload.array('images'), async (req, res) => { /* … */ });
-app.put('/produits/:id', authMiddleware, upload.array('images'), async (req, res) => { /* … */ });
-app.delete('/produits/:id', authMiddleware, async (req, res) => { /* … */ });
+app.post('/produits', authMiddleware, upload.array('images'), async (req, res) => { /* implémentation */ });
+app.put('/produits/:id', authMiddleware, upload.array('images'), async (req, res) => { /* implémentation */ });
+app.delete('/produits/:id', authMiddleware, async (req, res) => { /* implémentation */ });
 
 // ─── SPA FALLBACK ──────────────────────────────────────────────────────────
 app.get('*', (_, res) => {
