@@ -30,35 +30,35 @@ app.use(xssClean());
 app.use(hpp());
 app.use(morgan('combined'));
 
-// ─── 3) Static & JSON body ─────────────────────────────────────────────────
-// Servir SPA et uploads avant CORS pour ne pas bloquer les fichiers statiques
+// ─── 3) Servir SPA et uploads avant CORS ───────────────────────────────────
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.resolve(__dirname, '../dist')));
-app.use(express.json());
 
-// ─── 4) CORS whitelist ────────────────────────────────────────────────────
+// ─── 4) CORS whitelist + middleware ─────────────────────────────────────────
 const whitelist = [
-  process.env.FRONTEND_URL,    // https://arc-en-ciel-gl75.onrender.com
-  'http://localhost:5173',     // Vite dev
-  'http://localhost:4173'      // Vite preview
-].filter(Boolean);
+  process.env.FRONTEND_URL || 'https://arc-en-ciel-gl75.onrender.com',
+  'http://localhost:5173',
+  'http://localhost:4173'
+];
 
 app.use(cors({
-  origin(origin, callback) {
-    // autoriser Postman, mobile, refresh direct sans origin
+  origin: (origin, callback) => {
     if (!origin) return callback(null, true);
     if (whitelist.includes(origin)) return callback(null, true);
-    callback(new Error(`Origin ${origin} non autorisée par CORS`));
+    return callback(new Error(`Origin ${origin} non autorisée par CORS`));
   },
   credentials: true
 }));
 
-// ─── 5) Connexion MongoDB ──────────────────────────────────────────────────
+// ─── 5) JSON body parser ──────────────────────────────────────────────────
+app.use(express.json());
+
+// ─── 6) Connexion MongoDB ──────────────────────────────────────────────────
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connectée !'))
   .catch(err => console.error('❌ Erreur MongoDB :', err));
 
-// ─── 6) Modèle Produit ────────────────────────────────────────────────────
+// ─── 7) Modèle Produit ────────────────────────────────────────────────────
 const produitSchema = new mongoose.Schema({
   nom:         { type: String, required: true },
   description: { type: String, required: true },
@@ -69,7 +69,7 @@ const produitSchema = new mongoose.Schema({
 
 const Produit = mongoose.model('Produit', produitSchema);
 
-// ─── 7) Multer upload ──────────────────────────────────────────────────────
+// ─── 8) Multer upload ──────────────────────────────────────────────────────
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
@@ -92,7 +92,7 @@ async function supprimerFichier(fp) {
   catch (err) { console.error('Erreur suppression', fp, err); }
 }
 
-// ─── 8) Auth middleware ────────────────────────────────────────────────────
+// ─── 9) Auth middleware ────────────────────────────────────────────────────
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: 'Authentification requise' });
@@ -105,7 +105,7 @@ function authMiddleware(req, res, next) {
   }
 }
 
-// ─── 9) Login Admin ───────────────────────────────────────────────────────
+// ─── 10) Login Admin ───────────────────────────────────────────────────────
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS) {
@@ -115,7 +115,7 @@ app.post('/login', (req, res) => {
   res.status(401).json({ message: 'Identifiants invalides' });
 });
 
-// ─── 10) Routes publiques ──────────────────────────────────────────────────
+// ─── 11) Routes publiques ──────────────────────────────────────────────────
 app.post('/send-email', async (req, res) => {
   const { name, email, message } = req.body;
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
@@ -150,7 +150,7 @@ app.get('/produits/:id', async (req, res) => {
   res.json(prod);
 });
 
-// ─── 11) Routes protégées (CRUD produits) ──────────────────────────────────
+// ─── 12) CRUD protégées (produits) ─────────────────────────────────────────
 app.post('/produits', authMiddleware, upload.array('images'), async (req, res) => {
   const images = req.files.map(f => `/uploads/${f.filename}`);
   const prod = new Produit({ nom: req.body.nom, description: req.body.description, prix: parseFloat(req.body.prix), categorie: req.body.categorie, images });
@@ -180,10 +180,10 @@ app.delete('/produits/:id', authMiddleware, async (req, res) => {
   res.json({ message: 'Produit supprimé' });
 });
 
-// ─── 12) Fallback SPA pour gérer le refresh/url directe ─────────────────────
+// ─── 13) Fallback SPA pour gérer le refresh/url directe ─────────────────────
 app.get('*', (_req, res) => {
   res.sendFile(path.resolve(__dirname, '../dist/index.html'));
 });
 
-// ─── 13) Lancement du serveur ─────────────────────────────────────────────
+// ─── 14) Lancement du serveur ─────────────────────────────────────────────
 app.listen(PORT, () => console.log(`🚀 Serveur sur port ${PORT}`));
