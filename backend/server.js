@@ -21,29 +21,40 @@ app.set('trust proxy', 1);
 
 // ─── MIDDLEWARES SÉCURITÉ ─────────────────────────────────────────────────
 app.use(helmet());
-app.use(rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: "Trop de requêtes venant de cette IP, réessayez plus tard."
-}));
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: "Trop de requêtes venant de cette IP, réessayez plus tard."
+  })
+);
 app.use(xssClean());
 app.use(hpp());
 app.use(morgan('combined'));
 
 // ─── CORS ─────────────────────────────────────────────────────────────────
+// on récupère l’URL de ton front et de ton back (prod)
+const FRONT = process.env.FRONTEND_URL;                       // ex: https://arc-en-ciel-gl75.onrender.com
+const BACK  = process.env.BACKEND_URL || `https://${process.env.RENDER_SERVICE_ID}.onrender.com`;
+
 const whitelist = [
-  process.env.FRONTEND_URL,          // ton front prod, p.ex. https://arc-en-ciel-gl75.onrender.com
-  'http://localhost:4173',           // pour ton Vite preview local
-  'http://localhost:5173'            // pour ton dev Vite normal
+  FRONT,
+  BACK,
+  'http://localhost:4173',  // preview local
+  'http://localhost:5173'   // dev Vite
 ];
-app.use(cors({
-  origin(origin, callback) {
-    if (!origin) return callback(null, true);
-    if (whitelist.includes(origin)) return callback(null, true);
-    callback(new Error(`Origin ${origin} non autorisée par CORS`));
-  },
-  credentials: true
-}));
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin) return callback(null, true);
+      return whitelist.includes(origin)
+        ? callback(null, true)
+        : callback(new Error(`Origin ${origin} non autorisée par CORS`));
+    },
+    credentials: true
+  })
+);
 
 // ─── PARSING & STATIC ─────────────────────────────────────────────────────
 app.use(express.json());
@@ -51,9 +62,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.resolve(__dirname, '../dist')));
 
 // ─── MONGO ─────────────────────────────────────────────────────────────────
-mongoose.connect(process.env.MONGODB_URI)
+mongoose
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connectée !'))
-  .catch(err => console.error('❌ Erreur MongoDB :', err));
+  .catch((err) => console.error('❌ Erreur MongoDB :', err));
 
 // ─── SCHÉMA PRODUIT ────────────────────────────────────────────────────────
 const produitSchema = new mongoose.Schema({
@@ -68,9 +80,10 @@ const Produit = mongoose.model('Produit', produitSchema);
 // ─── MULTER (upload) ───────────────────────────────────────────────────────
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
+
 const storage = multer.diskStorage({
   destination: (_, __, cb) => cb(null, uploadDir),
-  filename: (_, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+  filename:    (_, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 });
 const upload = multer({
   storage,
@@ -80,9 +93,13 @@ const upload = multer({
     else cb(new Error('Seules JPEG/PNG/GIF acceptées'));
   }
 });
+
 async function supprimerFichier(filePath) {
-  try { await fs.promises.unlink(filePath); }
-  catch (e) { console.error('Erreur suppression', filePath, e); }
+  try {
+    await fs.promises.unlink(filePath);
+  } catch (e) {
+    console.error('Erreur suppression', filePath, e);
+  }
 }
 
 // ─── AUTH (JWT) ───────────────────────────────────────────────────────────
@@ -112,15 +129,25 @@ app.post('/login', (req, res) => {
 });
 
 // ─── ROUTES PUBLIQUES ─────────────────────────────────────────────────────
-app.post('/send-email', async (req, res) => { /* implémentation */ });
-app.get('/produits/recherche', async (req, res) => { /* implémentation */ });
+app.post('/send-email', async (req, res) => { /* … implémentation … */ });
+app.get('/produits/recherche', async (req, res) => { /* … implémentation … */ });
 app.get('/produits', async (_, res) => res.json(await Produit.find()));
-app.get('/produits/:id', async (req, res) => { /* implémentation */ });
+app.get('/produits/:id', async (req, res) => { /* … implémentation … */ });
 
 // ─── ROUTES PROTÉGÉES ─────────────────────────────────────────────────────
-app.post('/produits', authMiddleware, upload.array('images'), async (req, res) => { /* implémentation */ });
-app.put('/produits/:id', authMiddleware, upload.array('images'), async (req, res) => { /* implémentation */ });
-app.delete('/produits/:id', authMiddleware, async (req, res) => { /* implémentation */ });
+app.post(
+  '/produits',
+  authMiddleware,
+  upload.array('images'),
+  async (req, res) => { /* … implémentation … */ }
+);
+app.put(
+  '/produits/:id',
+  authMiddleware,
+  upload.array('images'),
+  async (req, res) => { /* … implémentation … */ }
+);
+app.delete('/produits/:id', authMiddleware, async (req, res) => { /* … */ });
 
 // ─── SPA FALLBACK ──────────────────────────────────────────────────────────
 app.get('*', (_, res) => {
