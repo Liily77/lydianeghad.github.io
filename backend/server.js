@@ -6,7 +6,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const express   = require('express');
-const cors      = require('cors');
 const multer    = require('multer');
 const path      = require('path');
 const fs        = require('fs');
@@ -30,25 +29,23 @@ app.use(xssClean());
 app.use(hpp());
 app.use(morgan('combined'));
 
-// ─── 3) Servir SPA et uploads avant CORS ───────────────────────────────────
+// ─── 3) Servir SPA et uploads (statics) avant tout ──────────────────────────
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.resolve(__dirname, '../dist')));
 
-// ─── 4) CORS whitelist + middleware ─────────────────────────────────────────
-const whitelist = [
-  process.env.FRONTEND_URL || 'https://arc-en-ciel-gl75.onrender.com',
-  'http://localhost:5173',
-  'http://localhost:4173'
-];
+// ─── 4) CORS manuel (headers + pré‑vol OPTIONS) ──────────────────────────
+app.use((req, res, next) => {
+  const allowedOrigin = process.env.FRONTEND_URL || 'https://arc-en-ciel-gl75.onrender.com';
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-    if (whitelist.includes(origin)) return callback(null, true);
-    return callback(new Error(`Origin ${origin} non autorisée par CORS`));
-  },
-  credentials: true
-}));
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+  next();
+});
 
 // ─── 5) JSON body parser ──────────────────────────────────────────────────
 app.use(express.json());
@@ -77,7 +74,6 @@ const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, uploadDir),
   filename: (_req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
 });
-
 const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 },
@@ -86,7 +82,6 @@ const upload = multer({
     else cb(new Error('Seules JPEG, PNG et GIF sont acceptées'));
   }
 });
-
 async function supprimerFichier(fp) {
   try { await fs.promises.unlink(fp); }
   catch (err) { console.error('Erreur suppression', fp, err); }
@@ -121,10 +116,7 @@ app.post('/send-email', async (req, res) => {
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
     return res.status(500).json({ message: 'Configuration email manquante' });
   }
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
-  });
+  const transporter = nodemailer.createTransport({ service: 'gmail', auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS } });
   try {
     await transporter.sendMail({
       from: `"${name}" <${email}>`,
@@ -138,7 +130,6 @@ app.post('/send-email', async (req, res) => {
     res.status(500).json({ success: false });
   }
 });
-
 app.get('/produits', async (_req, res) => res.json(await Produit.find()));
 app.get('/produits/recherche', async (req, res) => {
   const q = req.query.q || '';
@@ -157,7 +148,6 @@ app.post('/produits', authMiddleware, upload.array('images'), async (req, res) =
   await prod.save();
   res.status(201).json(prod);
 });
-
 app.put('/produits/:id', authMiddleware, upload.array('images'), async (req, res) => {
   const prod = await Produit.findById(req.params.id);
   if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
@@ -172,7 +162,6 @@ app.put('/produits/:id', authMiddleware, upload.array('images'), async (req, res
   await prod.save();
   res.json(prod);
 });
-
 app.delete('/produits/:id', authMiddleware, async (req, res) => {
   const prod = await Produit.findByIdAndDelete(req.params.id);
   if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
