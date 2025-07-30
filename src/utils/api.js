@@ -1,10 +1,10 @@
 // src/utils/api.js
 
-// 1) En prod on utilise toujours des URLs relatives (/api/...),
-//    en dev on pointe vers le back local.
+// En prod on fait des appels relatifs (/api/… réécrit par Render vers ton backend),
+// en dev on pointe vers le backend local.
 export const BASE = import.meta.env.MODE === 'production'
-  ? ''                         // prod : même domaine + rewrite Render
-  : 'http://localhost:3001';   // dev : back local
+  ? ''                       // prod → on reste sur le même domaine
+  : 'http://localhost:3001'; // dev  → back local
 
 console.log('🔧 API base URL →', BASE);
 
@@ -12,19 +12,20 @@ console.log('🔧 API base URL →', BASE);
  * Appelle l’API en préfixant avec BASE.
  * Lève une erreur si status ≠ 2xx.
  *
- * Exemple :
+ * Exemples :
  *   api('/api/produits');
- *   api('/api/login', { method: 'POST', body: JSON.stringify({ ... }) });
+ *   api('/api/login', { method: 'POST', body: JSON.stringify({ username, password }) });
  */
 export async function api(url, options = {}) {
   const res = await fetch(BASE + url, {
-    credentials: 'include', // si besoin d’envoyer cookies/jwt
+    credentials: 'include',    // si besoin d’envoyer cookies/jwt
     headers: {
       'Content-Type': 'application/json',
-      // ...options.headers si tu veux ajouter d'autres
+      ...(options.headers || {})
     },
     ...options
   });
+
   if (!res.ok) {
     throw new Error(`API ${res.status}: ${res.statusText}`);
   }

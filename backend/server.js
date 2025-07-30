@@ -5,19 +5,19 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-const express   = require('express');
-const cors      = require('cors');
-const multer    = require('multer');
-const path      = require('path');
-const fs        = require('fs');
-const mongoose  = require('mongoose');
-const morgan    = require('morgan');
-const helmet    = require('helmet');
-const rateLimit = require('express-rate-limit');
-const xssClean  = require('xss-clean');
-const hpp       = require('hpp');
-const jwt       = require('jsonwebtoken');
-const nodemailer= require('nodemailer');
+const express    = require('express');
+const cors       = require('cors');
+const multer     = require('multer');
+const path       = require('path');
+const fs         = require('fs');
+const mongoose   = require('mongoose');
+const morgan     = require('morgan');
+const helmet     = require('helmet');
+const rateLimit  = require('express-rate-limit');
+const xssClean   = require('xss-clean');
+const hpp        = require('hpp');
+const jwt        = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
 const app  = express();
 const PORT = process.env.PORT || 3001;
@@ -30,7 +30,7 @@ app.use(hpp());
 app.use(morgan('combined'));
 
 // ─── 3) CORS global ───────────────────────────────────────────────────────
-// Autorise ton front prod et localhost en dev
+// Autorise ton front prod + localhost dev
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL || 'https://arc-en-ciel-gl75.onrender.com',
@@ -77,6 +77,7 @@ const upload = multer({
     else cb(new Error('Seules JPEG, PNG et GIF sont acceptées'));
   }
 });
+
 async function supprimerFichier(fp) {
   try { await fs.promises.unlink(fp); }
   catch (err) { console.error('Erreur suppression', fp, err); }
@@ -115,7 +116,7 @@ app.post('/api/send-email', async (req, res) => {
   }
   const transporter = nodemailer.createTransport({
     service: 'gmail',
-    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+    auth:    { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
   });
   try {
     await transporter.sendMail({
@@ -147,11 +148,11 @@ app.get('/api/produits/:id', async (req, res) => {
 // ─── 12) CRUD protégées (produits) ─────────────────────────────────────────
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
   const images = req.files.map(f => `/uploads/${f.filename}`);
-  const prod = new Produit({
-    nom: req.body.nom,
+  const prod   = new Produit({
+    nom:         req.body.nom,
     description: req.body.description,
-    prix: parseFloat(req.body.prix),
-    categorie: req.body.categorie,
+    prix:        parseFloat(req.body.prix),
+    categorie:   req.body.categorie,
     images
   });
   await prod.save();
@@ -167,10 +168,10 @@ app.put('/api/produits/:id', authMiddleware, upload.array('images'), async (req,
     }
     prod.images = req.files.map(f => `/uploads/${f.filename}`);
   }
-  prod.nom = req.body.nom;
+  prod.nom         = req.body.nom;
   prod.description = req.body.description;
-  prod.prix = parseFloat(req.body.prix);
-  prod.categorie = req.body.categorie;
+  prod.prix        = parseFloat(req.body.prix);
+  prod.categorie   = req.body.categorie;
   await prod.save();
   res.json(prod);
 });
@@ -184,7 +185,7 @@ app.delete('/api/produits/:id', authMiddleware, async (req, res) => {
   res.json({ message: 'Produit supprimé' });
 });
 
-// ─── 13) Fallback SPA (refresh & routes front) ─────────────────────────────
+// ─── 13) Fallback SPA (refresh & front routes) ─────────────────────────────
 app.get('*', (_req, res) => {
   res.sendFile(path.resolve(__dirname, '../dist/index.html'));
 });
