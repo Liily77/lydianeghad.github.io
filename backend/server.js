@@ -30,17 +30,22 @@ app.use(xssClean());
 app.use(hpp());
 app.use(morgan('combined'));
 
-// ─── 3) CORS whitelist ────────────────────────────────────────────────────
+// ─── 3) Static & JSON body ─────────────────────────────────────────────────
+// Servir SPA et uploads avant CORS pour ne pas bloquer les fichiers statiques
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.resolve(__dirname, '../dist')));
+app.use(express.json());
+
+// ─── 4) CORS whitelist ────────────────────────────────────────────────────
 const whitelist = [
-  process.env.FRONTEND_URL,   // URL du front prod (à définir en env)
-  'https://arc-en-ciel-gl75.onrender.com', // fallback si FRONTEND_URL n'est pas set
-  'http://localhost:5173',    // Vite dev
-  'http://localhost:4173'     // Vite preview
+  process.env.FRONTEND_URL,    // https://arc-en-ciel-gl75.onrender.com
+  'http://localhost:5173',     // Vite dev
+  'http://localhost:4173'      // Vite preview
 ].filter(Boolean);
 
 app.use(cors({
-  origin: (origin, callback) => {
-    // autoriser postman, mobile apps, etc.
+  origin(origin, callback) {
+    // autoriser Postman, mobile, refresh direct sans origin
     if (!origin) return callback(null, true);
     if (whitelist.includes(origin)) return callback(null, true);
     callback(new Error(`Origin ${origin} non autorisée par CORS`));
@@ -48,16 +53,8 @@ app.use(cors({
   credentials: true
 }));
 
-// ─── 4) Static & JSON body ─────────────────────────────────────────────────
-app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.static(path.resolve(__dirname, '../dist')));
-
 // ─── 5) Connexion MongoDB ──────────────────────────────────────────────────
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connectée !'))
   .catch(err => console.error('❌ Erreur MongoDB :', err));
 
@@ -91,11 +88,8 @@ const upload = multer({
 });
 
 async function supprimerFichier(fp) {
-  try {
-    await fs.promises.unlink(fp);
-  } catch (err) {
-    console.error('Erreur suppression', fp, err);
-  }
+  try { await fs.promises.unlink(fp); }
+  catch (err) { console.error('Erreur suppression', fp, err); }
 }
 
 // ─── 8) Auth middleware ────────────────────────────────────────────────────
@@ -106,7 +100,7 @@ function authMiddleware(req, res, next) {
   try {
     req.user = jwt.verify(token, process.env.JWT_SECRET);
     next();
-  } catch (err) {
+  } catch {
     return res.status(401).json({ message: 'Token invalide' });
   }
 }
@@ -114,10 +108,7 @@ function authMiddleware(req, res, next) {
 // ─── 9) Login Admin ───────────────────────────────────────────────────────
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-  if (
-    username === process.env.ADMIN_USER &&
-    password === process.env.ADMIN_PASS
-  ) {
+  if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS) {
     const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: '2h' });
     return res.json({ token });
   }
@@ -125,7 +116,6 @@ app.post('/login', (req, res) => {
 });
 
 // ─── 10) Routes publiques ──────────────────────────────────────────────────
-// Envoi d'email de contact
 app.post('/send-email', async (req, res) => {
   const { name, email, message } = req.body;
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
@@ -133,19 +123,14 @@ app.post('/send-email', async (req, res) => {
   }
   const transporter = nodemailer.createTransport({
     service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    }
+    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
   });
   try {
     await transporter.sendMail({
       from: `"${name}" <${email}>`,
       to: process.env.EMAIL_TO,
       subject: '📩 Nouveau message de contact',
-      html: `<p><strong>Nom :</strong> ${name}</p>
-             <p><strong>Email :</strong> ${email}</p>
-             <p>${message}</p>`
+      html: `<p><strong>Nom :</strong> ${name}</p><p><strong>Email :</strong> ${email}</p><p>${message}</p>`
     });
     res.json({ success: true });
   } catch (err) {
@@ -154,18 +139,11 @@ app.post('/send-email', async (req, res) => {
   }
 });
 
-// Recherche et listing
-app.get('/produits', async (_req, res) => {
-  const produits = await Produit.find();
-  res.json(produits);
-});
-
+app.get('/produits', async (_req, res) => res.json(await Produit.find()));
 app.get('/produits/recherche', async (req, res) => {
   const q = req.query.q || '';
-  const produits = await Produit.find({ nom: { $regex: q, $options: 'i' } });
-  res.json(produits);
+  res.json(await Produit.find({ nom: { $regex: q, $options: 'i' } }));
 });
-
 app.get('/produits/:id', async (req, res) => {
   const prod = await Produit.findById(req.params.id);
   if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
@@ -173,62 +151,34 @@ app.get('/produits/:id', async (req, res) => {
 });
 
 // ─── 11) Routes protégées (CRUD produits) ──────────────────────────────────
-app.post(
-  '/produits',
-  authMiddleware,
-  upload.array('images'),
-  async (req, res) => {
-    const images = req.files.map(f => `/uploads/${f.filename}`);
-    const prod = new Produit({
-      nom: req.body.nom,
-      description: req.body.description,
-      prix: parseFloat(req.body.prix),
-      categorie: req.body.categorie,
-      images
-    });
-    await prod.save();
-    res.status(201).json(prod);
+app.post('/produits', authMiddleware, upload.array('images'), async (req, res) => {
+  const images = req.files.map(f => `/uploads/${f.filename}`);
+  const prod = new Produit({ nom: req.body.nom, description: req.body.description, prix: parseFloat(req.body.prix), categorie: req.body.categorie, images });
+  await prod.save();
+  res.status(201).json(prod);
+});
+
+app.put('/produits/:id', authMiddleware, upload.array('images'), async (req, res) => {
+  const prod = await Produit.findById(req.params.id);
+  if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
+  if (req.files.length) {
+    for (const imgPath of prod.images) await supprimerFichier(path.join(__dirname, imgPath));
+    prod.images = req.files.map(f => `/uploads/${f.filename}`);
   }
-);
+  prod.nom = req.body.nom;
+  prod.description = req.body.description;
+  prod.prix = parseFloat(req.body.prix);
+  prod.categorie = req.body.categorie;
+  await prod.save();
+  res.json(prod);
+});
 
-app.put(
-  '/produits/:id',
-  authMiddleware,
-  upload.array('images'),
-  async (req, res) => {
-    const prod = await Produit.findById(req.params.id);
-    if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
-
-    // suppression des anciennes images si de nouvelles uploadées
-    if (req.files.length) {
-      for (const imgPath of prod.images) {
-        await supprimerFichier(path.join(__dirname, imgPath));
-      }
-      prod.images = req.files.map(f => `/uploads/${f.filename}`);
-    }
-
-    prod.nom = req.body.nom;
-    prod.description = req.body.description;
-    prod.prix = parseFloat(req.body.prix);
-    prod.categorie = req.body.categorie;
-    await prod.save();
-    res.json(prod);
-  }
-);
-
-app.delete(
-  '/produits/:id',
-  authMiddleware,
-  async (req, res) => {
-    const prod = await Produit.findByIdAndDelete(req.params.id);
-    if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
-
-    for (const imgPath of prod.images) {
-      await supprimerFichier(path.join(__dirname, imgPath));
-    }
-    res.json({ message: 'Produit supprimé' });
-  }
-);
+app.delete('/produits/:id', authMiddleware, async (req, res) => {
+  const prod = await Produit.findByIdAndDelete(req.params.id);
+  if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
+  for (const imgPath of prod.images) await supprimerFichier(path.join(__dirname, imgPath));
+  res.json({ message: 'Produit supprimé' });
+});
 
 // ─── 12) Fallback SPA pour gérer le refresh/url directe ─────────────────────
 app.get('*', (_req, res) => {
