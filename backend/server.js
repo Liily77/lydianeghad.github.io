@@ -40,30 +40,23 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Front dist
 app.use(express.static(path.resolve(__dirname, '../dist')));
 
-// ─── CORS ─────────────────────────────────────────────────────────────────
-// Origines autorisées
-const FRONT = process.env.FRONTEND_URL;                         // ex: https://arc-en-ciel-gl75.onrender.com
-const BACK  = process.env.BACKEND_URL                             
-  || `https://${process.env.RENDER_SERVICE_ID}.onrender.com`;     // ou ton URL back
 
+// ─── CORS ─────────────────────────────────────────────────────────────────
 const whitelist = [
-  FRONT,
-  BACK,
-  'http://localhost:4173',
-  'http://localhost:5173'
+  process.env.FRONTEND_URL,     // ← https://arc-en-ciel-gl75.onrender.com
+  'http://localhost:5173',      // dev local
+  'http://localhost:4173'       // preview vite
 ];
 
-app.use(
-  cors({
-    origin(origin, callback) {
-      // Postman ou req serveur→serveur
-      if (!origin) return callback(null, true);
-      if (whitelist.includes(origin)) return callback(null, true);
-      callback(new Error(`Origin ${origin} non autorisée par CORS`));
-    },
-    credentials: true
-  })
-);
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);                // Postman, fetch serveurs…
+    if (whitelist.includes(origin)) return callback(null, true);
+    return callback(new Error(`Origin ${origin} non autorisée par CORS`));
+  },
+  credentials: true
+}));
+
 
 // ─── Connexion MongoDB ────────────────────────────────────────────────────
 mongoose
