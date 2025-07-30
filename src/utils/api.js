@@ -1,5 +1,3 @@
-// src/utils/api.js
-
 // En prod on fait des appels relatifs (/api/… réécrit par Render vers ton backend),
 // en dev on pointe vers le backend local.
 export const BASE = import.meta.env.MODE === 'production'
@@ -18,7 +16,7 @@ console.log('🔧 API base URL →', BASE);
  */
 export async function api(url, options = {}) {
   const res = await fetch(BASE + url, {
-    credentials: 'include',    // si besoin d’envoyer cookies/jwt
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       ...(options.headers || {})
