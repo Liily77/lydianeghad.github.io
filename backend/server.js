@@ -1,3 +1,6 @@
+// backend/server.js
+
+// ─── 1) Dotenv en dev seulement ───────────────────────────────────────────
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
@@ -19,12 +22,14 @@ const nodemailer = require('nodemailer');
 const app  = express();
 const PORT = process.env.PORT || 3001;
 
+// ─── 2) Sécurité & rate limiting ──────────────────────────────────────────
 app.use(helmet());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(xssClean());
 app.use(hpp());
 app.use(morgan('combined'));
 
+// ─── 3) CORS global ───────────────────────────────────────────────────────
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL || 'https://arc-en-ciel-gl75.onrender.com',
@@ -33,14 +38,17 @@ app.use(cors({
   credentials: true
 }));
 
+// ─── 4) Servir SPA + uploads avant JSON/API ────────────────────────────────
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.resolve(__dirname, '../dist')));
 app.use(express.json());
 
+// ─── 5) Connexion MongoDB ──────────────────────────────────────────────────
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connectée !'))
   .catch(err => console.error('❌ Erreur MongoDB :', err));
 
+// ─── 6) Modèle Produit ────────────────────────────────────────────────────
 const produitSchema = new mongoose.Schema({
   nom:         { type: String, required: true },
   description: { type: String, required: true },
@@ -50,6 +58,7 @@ const produitSchema = new mongoose.Schema({
 }, { timestamps: true });
 const Produit = mongoose.model('Produit', produitSchema);
 
+// ─── 7) Multer upload ──────────────────────────────────────────────────────
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
@@ -70,9 +79,12 @@ async function supprimerFichier(fp) {
   catch (err) { console.error('Erreur suppression', fp, err); }
 }
 
+// ─── 8) Auth middleware ────────────────────────────────────────────────────
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: 'Authentification requise' });
+  if (!authHeader) {
+    return res.status(401).json({ message: 'Authentification requise' });
+  }
   const token = authHeader.split(' ')[1];
   try {
     req.user = jwt.verify(token, process.env.JWT_SECRET);
@@ -82,6 +94,7 @@ function authMiddleware(req, res, next) {
   }
 }
 
+// ─── 9) Login Admin ───────────────────────────────────────────────────────
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS) {
@@ -91,6 +104,7 @@ app.post('/api/login', (req, res) => {
   res.status(401).json({ message: 'Identifiants invalides' });
 });
 
+// ─── 10) Routes publiques ─────────────────────────────────────────────────
 app.post('/api/send-email', async (req, res) => {
   const { name, email, message } = req.body;
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
@@ -105,7 +119,9 @@ app.post('/api/send-email', async (req, res) => {
       from:    `"${name}" <${email}>`,
       to:      process.env.EMAIL_TO,
       subject: '📩 Nouveau message de contact',
-      html:    `<p><strong>Nom :</strong> ${name}</p><p><strong>Email :</strong> ${email}</p><p>${message}</p>`
+      html:    `<p><strong>Nom :</strong> ${name}</p>
+                <p><strong>Email :</strong> ${email}</p>
+                <p>${message}</p>`
     });
     res.json({ success: true });
   } catch (err) {
@@ -127,6 +143,7 @@ app.get('/api/produits/:id', async (req, res) => {
   res.json(prod);
 });
 
+// ─── 11) CRUD protégées (produits) ─────────────────────────────────────────
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
   const images = req.files.map(f => `/uploads/${f.filename}`);
   const prod   = new Produit({
@@ -166,8 +183,10 @@ app.delete('/api/produits/:id', authMiddleware, async (req, res) => {
   res.json({ message: 'Produit supprimé' });
 });
 
+// ─── 12) Fallback SPA (refresh & front routes) ─────────────────────────────
 app.get('*', (_req, res) =>
   res.sendFile(path.resolve(__dirname, '../dist/index.html'))
 );
 
+// ─── 13) Lancement du serveur ─────────────────────────────────────────────
 app.listen(PORT, () => console.log(`🚀 Serveur sur port ${PORT}`));
