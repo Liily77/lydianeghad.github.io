@@ -30,6 +30,7 @@ app.use(hpp());
 app.use(morgan('combined'));
 
 // ─── 3) CORS global ───────────────────────────────────────────────────────
+// Autorise ton front en prod + localhost en dev
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL || 'https://arc-en-ciel-gl75.onrender.com',
