@@ -42,8 +42,6 @@
 </template>
 
 <script>
-import { BASE } from '@/utils/api.js'
-
 export default {
   name: 'Rechercher',
   data() {
@@ -62,7 +60,9 @@ export default {
   },
   methods: {
     prefixedImages(prod) {
-      const backendUrl = BASE
+      // Si tu as vraiment besoin de BASE pour préfixer tes images,
+      // tu peux laisser importé BASE ici. Sinon, garde-le vide
+      const backendUrl = ''
       return (prod.images || []).map(img =>
         img.startsWith('/uploads') ? backendUrl + img : img
       )
@@ -83,10 +83,12 @@ export default {
       }
 
       try {
+        // Appel en URL relative pure vers /api/produits
         const res = await fetch(
-          `${BASE}/api/produits/recherche?q=${encodeURIComponent(terme)}`,
+          `/api/produits/recherche?q=${encodeURIComponent(terme)}`,
           { credentials: 'include' }
         )
+        if (!res.ok) throw new Error(`Erreur ${res.status}`)
         this.resultats = await res.json()
         this.currentIndexes = Object.fromEntries(
           this.resultats.map((_, i) => [i, 0])
@@ -99,6 +101,7 @@ export default {
   }
 }
 </script>
+
 
 
 
