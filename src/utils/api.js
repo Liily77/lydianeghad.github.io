@@ -1,31 +1,26 @@
 // src/utils/api.js
 
 /**
- * BASE = chaîne vide en prod (même domaine, on passe par le rewrite Render),
- *        URL complète en dev.
+ * BASE = URL du backend en prod (via VITE_BACKEND_URL),
+ *        chaîne vide en dev (on fait tourner le back en localhost).
  */
-export const BASE = '';
+export const BASE = import.meta.env.PROD
+  ? import.meta.env.VITE_BACKEND_URL
+  : 'http://localhost:3001'
 
 /**
- * Fonction utilitaire pour appeler l'API.
+ * Wrapper fetch pour appeler l’API.
  * @param {string} url     Chemin relatif (ex: '/api/produits')
- * @param {object} options fetch options (method, body, headers, etc.)
- * @returns {Promise<any>} JSON parsé de la réponse.
+ * @param {object} options fetch options
  */
 export async function api(url, options = {}) {
-  const res = await fetch(url, {
-    credentials: 'include',    // si besoin d’envoyer cookies/jwt
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {})
-    },
+  const fullUrl = `${BASE}${url}`
+  const res = await fetch(fullUrl, {
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
     ...options
-  });
-
-  if (!res.ok) {
-    throw new Error(`API ${res.status}: ${res.statusText}`);
-  }
-  return await res.json();
+  })
+  if (!res.ok) throw new Error(`API ${res.status}`)
+  return res.json()
 }
-
 

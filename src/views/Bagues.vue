@@ -53,16 +53,20 @@ export default {
     }
   },
   async mounted() {
-    window.scrollTo(0, 0)
-    try {
-      const all = await api('/api/produits')
-      this.produitsBagues = all.filter(
-        p => p.categorie?.toLowerCase() === 'bagues'
-      )
-    } catch (err) {
-      console.error('Erreur chargement bagues :', err)
-    }
+  window.scrollTo(0, 0)
+  console.log('[Bagues.vue] mounted — test full URL')
+  try {
+    // TEST : URL absolue vers le backend, on contourne la rewrite
+    const res = await fetch('https://arcenciel-backend.onrender.com/api/produits', { credentials: 'include' })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const all = await res.json()
+    this.produitsBagues = all.filter(
+      p => p.categorie && p.categorie.toLowerCase() === 'bagues'
+    )
+  } catch (err) {
+    console.error('Erreur chargement bagues :', err)
   }
+}
 }
 </script>
 
