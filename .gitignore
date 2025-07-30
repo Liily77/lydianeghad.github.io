@@ -7,23 +7,27 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Node.js dependencies
-node_modules
+node_modules/
 
 # Build outputs
 # dist est requis pour Render, donc on ne l'ignore pas
 # dist-ssr peut rester ignoré si non utilisé
-dist-ssr
+dist-ssr/
+\# Production and development env for front are versioned
+!.env.production
+!.env.development
 
-# Local env files
-*.local
+# Local env files for backend (contains secrets)
 backend/.env
-.env
-.env.*                
+
+# Ignore all other env files
+env.local
+*.local
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
