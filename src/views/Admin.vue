@@ -387,8 +387,8 @@ export default {
   padding: 2rem;
   font-family: 'Raleway', sans-serif;
   background: #f1dad7;
-  max-width: 1300px;
-  margin: auto;
+  width: 100vw;
+  min-height: 100vh;
 }
 
 /* ===== Login ===== */
