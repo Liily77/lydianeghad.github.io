@@ -19,6 +19,10 @@ const hpp        = require('hpp');
 const jwt        = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
+// Import des routes OAuth / checkout
+const authRouter     = require('./routes/authentification');
+const checkoutRouter = require('./routes/checkout');
+
 const app  = express();
 const PORT = process.env.PORT || 3001;
 
@@ -30,7 +34,6 @@ app.use(hpp());
 app.use(morgan('combined'));
 
 // ─── 3) CORS global ───────────────────────────────────────────────────────
-// Autorise toutes les origines (front et mobiles sans config supplémentaire)
 app.use(cors({ origin: true, credentials: true }));
 
 // ─── 4) Servir fichiers statiques (SPA) et uploads avant JSON/API ────────
@@ -65,7 +68,7 @@ const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter(req, file, cb) {
-    if (/image\/jpeg|image\/png|image\/gif/.test(file.mimetype)) cb(null, true);
+    if (/image\/(jpeg|png|gif)/.test(file.mimetype)) cb(null, true);
     else cb(new Error('Seules JPEG, PNG et GIF sont acceptées'));
   }
 });
@@ -76,15 +79,11 @@ async function supprimerFichier(fp) {
 
 // ─── 8) Auth middleware ────────────────────────────────────────────────────
 function authMiddleware(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: 'Authentification requise' });
-  const token = authHeader.split(' ')[1];
-  try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
-    next();
-  } catch {
-    return res.status(401).json({ message: 'Token invalide' });
-  }
+  const h = req.headers.authorization;
+  if (!h) return res.status(401).json({ message: 'Authentification requise' });
+  const token = h.split(' ')[1];
+  try { req.user = jwt.verify(token, process.env.JWT_SECRET); next(); }
+  catch { return res.status(401).json({ message: 'Token invalide' }); }
 }
 
 // ─── 9) Login Admin ───────────────────────────────────────────────────────
@@ -103,79 +102,51 @@ app.post('/api/send-email', async (req, res) => {
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
     return res.status(500).json({ message: 'Configuration email manquante' });
   }
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth:    { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
-  });
+  const transporter = nodemailer.createTransport({ service: 'gmail', auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS } });
   try {
-    await transporter.sendMail({
-      from:    `"${name}" <${email}>`,
-      to:      process.env.EMAIL_TO,
-      subject: '📩 Nouveau message de contact',
-      html:    `<p><strong>Nom :</strong> ${name}</p><p><strong>Email :</strong> ${email}</p><p>${message}</p>`
-    });
+    await transporter.sendMail({ from: `"${name}" <${email}>`, to: process.env.EMAIL_TO, subject: '📩 Nouveau message', html: `<p>${message}</p>` });
     res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false });
-  }
+  } catch (err) { console.error(err); res.status(500).json({ success: false }); }
 });
 
-app.get('/api/produits', async (_req, res) => res.json(await Produit.find()));
-app.get('/api/produits/recherche', async (req, res) => {
+app.get('/api/produits', (_req, res) => Produit.find().then(r => res.json(r)));
+app.get('/api/produits/recherche', (req, res) => {
   const q = req.query.q || '';
-  res.json(await Produit.find({ nom: { $regex: q, $options: 'i' } }));
+  Produit.find({ nom: { $regex: q, $options: 'i' } }).then(r => res.json(r));
 });
-app.get('/api/produits/:id', async (req, res) => {
-  const prod = await Produit.findById(req.params.id);
-  if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
-  res.json(prod);
+app.get('/api/produits/:id', (req, res) => {
+  Produit.findById(req.params.id).then(prod => prod ? res.json(prod) : res.status(404).json({ message: 'Produit introuvable' }));
 });
 
-// ─── 11) CRUD protégées (produits) ─────────────────────────────────────────
+// ─── 11) Injection des routes OAuth et checkout ───────────────────────────
+app.use(authRouter);
+app.use('/api/checkout', checkoutRouter);
+
+// ─── 12) CRUD produits protégées ──────────────────────────────────────────
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
   const images = req.files.map(f => `/uploads/${f.filename}`);
-  const prod   = new Produit({
-    nom: req.body.nom,
-    description: req.body.description,
-    prix: parseFloat(req.body.prix),
-    categorie: req.body.categorie,
-    images
-  });
-  await prod.save();
-  res.status(201).json(prod);
+  const prod = new Produit({ ...req.body, prix: parseFloat(req.body.prix), images });
+  prod.save().then(p => res.status(201).json(p));
 });
-
 app.put('/api/produits/:id', authMiddleware, upload.array('images'), async (req, res) => {
   const prod = await Produit.findById(req.params.id);
   if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
   if (req.files.length) {
-    for (const imgPath of prod.images) await supprimerFichier(path.join(__dirname, imgPath));
+    for (const img of prod.images) await supprimerFichier(path.join(__dirname, img));
     prod.images = req.files.map(f => `/uploads/${f.filename}`);
   }
-  prod.nom = req.body.nom;
-  prod.description = req.body.description;
-  prod.prix = parseFloat(req.body.prix);
-  prod.categorie = req.body.categorie;
-  await prod.save();
-  res.json(prod);
+  Object.assign(prod, { nom: req.body.nom, description: req.body.description, prix: parseFloat(req.body.prix), categorie: req.body.categorie });
+  prod.save().then(p => res.json(p));
 });
-
 app.delete('/api/produits/:id', authMiddleware, async (req, res) => {
   const prod = await Produit.findByIdAndDelete(req.params.id);
   if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
-  for (const imgPath of prod.images) await supprimerFichier(path.join(__dirname, imgPath));
+  prod.images.forEach(img => supprimerFichier(path.join(__dirname, img)));
   res.json({ message: 'Produit supprimé' });
 });
 
-// ─── 12) Fallback SPA (routes front-end) ──────────────────────────────────
-app.get('*', (_req, res) =>
-  res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
-);
+// ─── 13) Fallback SPA ─────────────────────────────────────────────────────
+app.get('*', (_req, res) => res.sendFile(path.resolve(__dirname, 'dist', 'index.html')));
 
-// ─── 13) Lancement du serveur ─────────────────────────────────────────────
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    app.listen(PORT, () => console.log(`🚀 Serveur front+API sur port ${PORT}`));
-  })
-  .catch(err => console.error('❌ Erreur MongoDB:', err));
+// ─── 14) Lancement du serveur ─────────────────────────────────────────────
+app.listen(PORT, () => console.log(`🚀 Serveur front+API sur port ${PORT}`));

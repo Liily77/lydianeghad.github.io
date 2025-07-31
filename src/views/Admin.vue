@@ -20,8 +20,14 @@
 
     <!-- Sinon, afficher interface admin -->
     <div v-else>
-      <h1 class="titre-centre">Gestion des produits 🛍️</h1>
-      <button @click="seDeconnecter" class="logout-btn">Déconnexion</button>
+      <!-- En-tête : titre + boutons -->
+      <div class="admin-header">
+        <h1 class="titre-centre">Gestion des produits 🛍️</h1>
+        <div class="admin-header-buttons">
+          <button @click="connectSumUp" class="connect-btn">Connecter SumUp</button>
+          <button @click="seDeconnecter" class="logout-btn">Déconnexion</button>
+        </div>
+      </div>
 
       <!-- Filtres -->
       <div class="filters">
@@ -48,7 +54,7 @@
       </div>
 
       <div class="admin-layout">
-        <!-- FORMULAIRE -->
+        <!-- FORMULAIRE AJOUT -->
         <form @submit.prevent="ajouterProduit" class="formulaire-ajout" novalidate>
           <h2>Ajouter un produit 🛒</h2>
 
@@ -140,7 +146,7 @@
           </p>
         </form>
 
-        <!-- TABLEAU -->
+        <!-- TABLEAU PRODUITS -->
         <div class="tableau-produits" v-if="produitsFiltres.length">
           <h2>📦 Produits filtrés ({{ produitsFiltres.length }})</h2>
           <div
@@ -182,47 +188,43 @@ export default {
   name: 'Admin',
   data() {
     return {
-      // Login
       loginUser: '',
       loginPass: '',
       isLoggedIn: false,
       loginError: '',
       isLoading: false,
 
-      // Formulaire produits
+      produits: [],
+      filtreCategorie: '',
+      rechercheTexte: '',
+
       nouveauProduit: { nom: '', description: '', prix: null },
       categorieChoisie: '',
       nouvelleCategorie: '',
       fichiersImages: [null, null, null, null, null],
-
-      produits: [],
-      filtreCategorie: '',
-      rechercheTexte: '',
+      errors: {},
       formMessage: '',
       formError: false,
-      errors: {},
 
       categoriesFixes: [
-        'bague', 'collier', 'bracelet', 'chapelet',
-        'boucles doreilles', 'bijoux de cheville',
-        'malas', 'parures', 'portecles',
-        'cartesdiv', 'pendule'
+        'bague','collier','bracelet','chapelet',
+        'boucles doreilles','bijoux de cheville',
+        'malas','parures','portecles',
+        'cartesdiv','pendule'
       ]
     }
   },
   computed: {
-    produitsFiltres() {
-      return this.produits.filter(p => {
-        const matchCat = !this.filtreCategorie ||
-          p.categorie?.toLowerCase() === this.filtreCategorie.toLowerCase()
-        const texte = this.rechercheTexte.toLowerCase()
-        return p.nom.toLowerCase().includes(texte)
-            || p.description.toLowerCase().includes(texte)
-      })
-    },
     categoriesDisponibles() {
       const dyn = [...new Set(this.produits.map(p => p.categorie?.toLowerCase()))].filter(Boolean)
       return dyn.length ? dyn : this.categoriesFixes
+    },
+    produitsFiltres() {
+      const txt = this.rechercheTexte.toLowerCase()
+      return this.produits.filter(p =>
+        (!this.filtreCategorie || p.categorie?.toLowerCase() === this.filtreCategorie.toLowerCase()) &&
+        (p.nom.toLowerCase().includes(txt) || p.description.toLowerCase().includes(txt))
+      )
     }
   },
   async mounted() {
@@ -239,10 +241,7 @@ export default {
       try {
         const { token } = await api('/api/login', {
           method: 'POST',
-          body: JSON.stringify({
-            username: this.loginUser,
-            password: this.loginPass
-          })
+          body: JSON.stringify({ username: this.loginUser, password: this.loginPass })
         })
         localStorage.setItem('admin_token', token)
         this.isLoggedIn = true
@@ -253,7 +252,6 @@ export default {
         this.isLoading = false
       }
     },
-
     seDeconnecter() {
       localStorage.removeItem('admin_token')
       this.isLoggedIn = false
@@ -261,34 +259,32 @@ export default {
       this.loginPass = ''
       this.produits = []
     },
-
+    connectSumUp() {
+      window.location.href = '/auth/connect'
+    },
     onFileChange(event, index) {
       this.fichiersImages[index] = event.target.files[0]
     },
-
     async chargerProduits() {
       try {
         this.produits = await api('/api/produits', {
           headers: { Authorization: 'Bearer ' + localStorage.getItem('admin_token') }
         })
       } catch (err) {
-        if (err.message.includes('401')) return this.seDeconnecter()
-        console.error('❌ Erreur chargement produits :', err)
+        if (err.message.includes('401')) this.seDeconnecter()
       }
     },
-
     validateForm() {
       this.errors = {}
       if (!this.nouveauProduit.nom) this.errors.nom = 'Le nom est requis'
       if (!this.nouveauProduit.description) this.errors.description = 'La description est requise'
       if (!this.nouveauProduit.prix || this.nouveauProduit.prix <= 0)
-        this.errors.prix = 'Le prix doit être supérieur à 0'
+        this.errors.prix = 'Le prix doit être > 0'
       if (!this.categorieChoisie) this.errors.categorie = 'La catégorie est requise'
       if (this.categorieChoisie === 'autre' && !this.nouvelleCategorie)
-        this.errors.nouvelleCategorie = 'Veuillez préciser la nouvelle catégorie'
+        this.errors.nouvelleCategorie = 'Veuillez préciser la catégorie'
       return Object.keys(this.errors).length === 0
     },
-
     async ajouterProduit() {
       if (!this.validateForm()) {
         this.formMessage = 'Veuillez corriger les erreurs avant de soumettre.'
@@ -299,34 +295,31 @@ export default {
       this.formMessage = ''
       try {
         const formData = new FormData()
-        const catFinale = this.categorieChoisie === 'autre'
-          ? this.nouvelleCategorie.toLowerCase()
-          : this.categorieChoisie.toLowerCase()
-
+        const catFinale =
+          this.categorieChoisie === 'autre'
+            ? this.nouvelleCategorie.toLowerCase()
+            : this.categorieChoisie.toLowerCase()
         formData.append('nom', this.nouveauProduit.nom)
         formData.append('description', this.nouveauProduit.description)
         formData.append('prix', this.nouveauProduit.prix)
         formData.append('categorie', catFinale)
         this.fichiersImages.forEach(f => f && formData.append('images', f))
-
         const data = await api('/api/produits', {
           method: 'POST',
           headers: { Authorization: 'Bearer ' + localStorage.getItem('admin_token') },
           body: formData
         })
         this.produits.push(data)
-        this.formMessage = '✅ Produit ajouté !'
+        this.formMessage = '✅ Produit ajouté !'
         this.formError = false
         this.resetFormulaire()
       } catch (err) {
         this.formMessage = '❌ Erreur ajout produit'
         this.formError = true
-        console.error(err)
       } finally {
         this.isLoading = false
       }
     },
-
     resetFormulaire() {
       this.nouveauProduit = { nom: '', description: '', prix: null }
       this.categorieChoisie = ''
@@ -340,21 +333,6 @@ export default {
         }
       }
     },
-
-    async supprimerProduit(id) {
-      if (!confirm('❓ Supprimer ce produit ?')) return
-      try {
-        await api(`/api/produits/${id}`, {
-          method: 'DELETE',
-          headers: { Authorization: 'Bearer ' + localStorage.getItem('admin_token') }
-        })
-        this.produits = this.produits.filter(p => (p._id||p.id) !== id)
-      } catch (err) {
-        alert('❌ Erreur suppression')
-        console.error(err)
-      }
-    },
-
     async modifierProduit(produit) {
       const id = produit._id || produit.id
       try {
@@ -366,21 +344,30 @@ export default {
           },
           body: JSON.stringify(produit)
         })
-        const idx = this.produits.findIndex(p => (p._id||p.id) === id)
+        const idx = this.produits.findIndex(p => (p._id || p.id) === id)
         if (idx !== -1) this.$set(this.produits, idx, updated)
-        this.formMessage = '✔ Produit modifié !'
+        this.formMessage = '✔ Produit modifié !'
         this.formError = false
-      } catch (err) {
+      } catch {
         this.formMessage = '❌ Erreur modification'
         this.formError = true
-        console.error(err)
+      }
+    },
+    async supprimerProduit(id) {
+      if (!confirm('❓ Supprimer ce produit ?')) return
+      try {
+        await api(`/api/produits/${id}`, {
+          method: 'DELETE',
+          headers: { Authorization: 'Bearer ' + localStorage.getItem('admin_token') }
+        })
+        this.produits = this.produits.filter(p => (p._id || p.id) !== id)
+      } catch {
+        alert('❌ Erreur suppression')
       }
     }
   }
 }
 </script>
-
-
 
 <style scoped>
 .admin-page {
@@ -389,6 +376,55 @@ export default {
   background: #f1dad7;
   width: 100vw;
   min-height: 100vh;
+}
+
+/* ===== Header titre + boutons ===== */
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.admin-header-buttons {
+  position: absolute;
+  top: 0.5rem;    
+  right: 0;       
+  transform: translateX(-5rem); /* décale de 1rem vers la gauche */
+  display: flex;
+  gap: 0.8rem;
+  white-space: nowrap;
+}
+
+.connect-btn {
+  background: #007bff;
+  color: #fff;
+  padding: 0.6rem 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.connect-btn:hover {
+  background: #0056b3;
+}
+
+.logout-btn {
+  background: #e20e0e;
+  color: #fff;
+  padding: 0.6rem 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.logout-btn:hover {
+  background: #9b0404;
 }
 
 /* ===== Login ===== */
@@ -400,18 +436,15 @@ export default {
   border-radius: 8px;
   background: #fafafae0;
 }
-
 .login-form h1 {
   text-align: center;
   margin-bottom: 1.5rem;
 }
-
 .login-form label {
   display: block;
   font-weight: 600;
   margin-bottom: 1rem;
 }
-
 .login-form input {
   width: 100%;
   padding: 0.4rem 0.6rem;
@@ -419,7 +452,6 @@ export default {
   border-radius: 4px;
   border: 1px solid #ddd;
 }
-
 .login-form button {
   display: block;
   width: 100%;
@@ -430,14 +462,12 @@ export default {
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s;
 }
-
 .login-form button:hover:not(:disabled) {
   background: #8c6da2;
   color: #fff;
 }
-
 .error-msg {
   color: #d9534f;
   font-size: 0.875rem;
@@ -448,27 +478,8 @@ export default {
 .titre-centre {
   text-align: center;
   font-size: 2rem;
-  margin-bottom: 1.5rem;
+  margin: 0; /* on gère l'espacement via .admin-header */
 }
-
-.logout-btn {
-  display: block;
-  margin: 1rem 0 1rem auto;
-  background: #e20e0e;
-  color: #fff;
-  padding: 0.6rem 0.9rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-
-.logout-btn:hover {
-  background: #9b0404;   
-}
-
 
 /* Filtres */
 .filters {
@@ -477,13 +488,11 @@ export default {
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
 }
-
 .filters label {
   font-weight: bold;
   display: flex;
   flex-direction: column;
 }
-
 .filters select,
 .filters input {
   padding: 0.4rem;
@@ -502,26 +511,23 @@ export default {
 
 /* Formulaire ajout */
 .formulaire-ajout {
-  background-color: #ffffffb7;               
-  border: 1px solid #ddd;               
-  border-radius: 10px;                  
+  background-color: #ffffffb7;
+  border: 1px solid #ddd;
+  border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;                      
-  margin-bottom: 1.5rem;                
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
 }
-
 .formulaire-ajout h2 {
-  margin: 2rem 0 2rem; 
+  margin: 2rem 0 2rem;
   font-size: 1.25rem;
 }
-
 .formulaire-ajout label {
   font-weight: 600;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
 }
-
 .formulaire-ajout input,
 .formulaire-ajout textarea,
 .formulaire-ajout select {
@@ -530,11 +536,9 @@ export default {
   border-radius: 6px;
   border: 1px solid #ccc;
 }
-
 .input-error {
   border-color: #d9534f !important;
 }
-
 .ajouter-btn {
   margin-top: 1rem;
   background: #98babb;
@@ -547,13 +551,10 @@ export default {
   align-self: center;
   transition: background 0.2s ease;
 }
-
 .ajouter-btn:hover:not(:disabled) {
   background: #8c6da2;
   color: #fff;
 }
-
-/* Feedback form */
 .success-msg {
   color: #28a745;
   font-size: 0.875rem;
@@ -565,12 +566,10 @@ export default {
   flex: 2;
   min-width: 400px;
 }
-
 .tableau-produits h2 {
   margin-top: 0;
   margin-bottom: 1rem;
 }
-
 .produit-item {
   border: 1px solid #ddd;
   padding: 1rem;
@@ -579,7 +578,6 @@ export default {
   background-color: #ffffffc8;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
-
 .produit-item input {
   width: 100%;
   margin-bottom: 0.6rem;
@@ -588,14 +586,12 @@ export default {
   border-radius: 6px;
   border: 1px solid #ccc;
 }
-
 .img-preview {
   display: flex;
   gap: 0.5rem;
   margin: 0.5rem 0;
   flex-wrap: wrap;
 }
-
 .img-preview img {
   width: 70px;
   height: 70px;
@@ -603,14 +599,12 @@ export default {
   border-radius: 6px;
   border: 1px solid #ccc;
 }
-
 .btn-droite {
   display: flex;
   justify-content: flex-end;
   gap: 0.6rem;
   margin-top: 0.6rem;
 }
-
 .btn-droite button {
   background: #98babb;
   border: none;
@@ -620,126 +614,139 @@ export default {
   font-weight: bold;
   transition: background-color 0.2s;
 }
-
 .btn-droite button:hover {
   background-color: #8c6da2;
   color: white;
 }
 
-
-
+/* Responsive mobile */
 @media (max-width: 480px) {
-  /* Container principal */
+  /* === CENTRAGE LOGIN === */
   .admin-page {
-    padding: 1rem;
-    max-width: 100%;
+    display: flex !important;
+    justify-content: center;
+    align-items: flex-start;  /* remonte le login sous la nav */
+    min-height: 100vh;
+    padding: 0 !important;
+  }
+  .login-form {
+    width: 100% !important;
+    max-width: 360px;
+    margin: 2rem auto !important; /* espace au-dessus */
     box-sizing: border-box;
   }
 
-  /* Titre */
+  /* === GLOBAL === */
+  .admin-layout,
+  .formulaire-ajout,
+  .tableau-produits {
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* === HEADER === */
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .admin-header-buttons {
+    position: static !important;
+    transform: none !important;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  .connect-btn,
+  .logout-btn {
+    width: 100%;
+  }
+
+  /* === TITRE === */
   .titre-centre {
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin: 1.5rem 0 !important;  /* espace au-dessus et en-dessous */
+    width: 100%;
   }
 
-  /* Bouton Déconnexion */
-  .logout-btn {
-    display: block;
-    margin: 2rem 1rem 2rem auto; /* 2rem haut/bas, 1rem gauche, auto à droite */
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  /* Filtres empilés */
+  /* === FILTRES === */
   .filters {
     flex-direction: column;
     gap: 0.5rem;
-    margin-bottom: 1rem;
-    width: 100%;
-  }
-  .filters label {
-    font-size: 0.9rem;
   }
   .filters select,
   .filters input {
     width: 100%;
   }
 
-  /* Passage en colonne pour le layout */
-  .admin-layout {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  /* Formulaire ajout */
+  /* === FORMULAIRE AJOUT === */
   .formulaire-ajout {
-  background-color: #fff;               /* même fond blanc */
-  border: 1px solid #ddd;              /* même bordure grise claire */
-  border-radius: 10px;                 /* mêmes coins arrondis */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* même ombre légère */
-  padding: 1.5rem;                     /* généreux padding interne */
-  margin-bottom: 1.5rem;               /* espace sous le bloc */
-}
-
-/* Facultatif : uniformiser le gap avec tes produit-items */
-.formulaire-ajout label {
-  margin-bottom: 1rem;
-}
-  .formulaire-ajout h2 {
-    font-size: 1.2rem;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 1rem !important;
+    margin-bottom: 1rem !important;
   }
-
-  .formulaire-ajout input,
+  .formulaire-ajout h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .formulaire-ajout label {
+    display: block;
+    margin-bottom: 1rem;
+  }
+  .formulaire-ajout input[type="text"],
+  .formulaire-ajout input[type="number"],
   .formulaire-ajout textarea,
-  .formulaire-ajout select {
-    width: calc(100% - 1rem) !important; 
-    margin: 0.5rem auto;                 
+  .formulaire-ajout select,
+  .formulaire-ajout input[type="file"] {
+    width: 100% !important;
+    margin: 0;
     box-sizing: border-box;
   }
   .ajouter-btn {
-    width: 100%;
-    font-size: 0.95rem;
-    padding: 0.6rem;
+    width: 100% !important;
+    margin-top: 1rem !important;
   }
 
-  /* Tableau produits */
+  /* === TABLEAU PRODUITS === */
   .tableau-produits {
-    width: 100% !important;
-    min-width: auto !important;
-    margin-top: 1rem;
+    margin-top: 1rem !important;
   }
   .tableau-produits h2 {
     font-size: 1rem;
     margin-bottom: 0.8rem;
   }
-
-  /* Items et inputs */
   .produit-item {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
     padding: 0.8rem;
     margin-bottom: 1rem;
   }
   .produit-item input {
-    width: 100%;
-    font-size: 0.9rem;
-    padding: 0.4rem;
+    width: 100% !important;
+    margin-bottom: 0.6rem;
     box-sizing: border-box;
   }
-
-  /* Aperçu images plus petit */
   .img-preview img {
     width: 50px;
     height: 50px;
   }
-
-  /* Boutons modifier/supprimer */
   .btn-droite {
-    justify-content: flex-end;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
   .btn-droite button {
+    flex: 1 1 48%;
+    padding: 0.6rem;
     font-size: 0.85rem;
-    padding: 0.4rem 0.6rem;
   }
 }
-
 
 </style>
