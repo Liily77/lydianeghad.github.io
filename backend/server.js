@@ -30,15 +30,12 @@ app.use(hpp());
 app.use(morgan('combined'));
 
 // ─── 3) CORS global ───────────────────────────────────────────────────────
-// Autorise ton front en prod + localhost en dev
-app.use(cors({
-  origin: true,
-  credentials: true
-}));
+// Autorise toutes les origines (front et mobiles sans config supplémentaire)
+app.use(cors({ origin: true, credentials: true }));
 
-// ─── 4) Servir SPA + uploads avant JSON/API ────────────────────────────────
+// ─── 4) Servir fichiers statiques (SPA) et uploads avant JSON/API ────────
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.static(path.resolve(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.json());
 
 // ─── 5) Connexion MongoDB ──────────────────────────────────────────────────
@@ -68,7 +65,7 @@ const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter(req, file, cb) {
-    if (/image\/(jpeg|png|gif)/.test(file.mimetype)) cb(null, true);
+    if (/image\/jpeg|image\/png|image\/gif/.test(file.mimetype)) cb(null, true);
     else cb(new Error('Seules JPEG, PNG et GIF sont acceptées'));
   }
 });
@@ -80,9 +77,7 @@ async function supprimerFichier(fp) {
 // ─── 8) Auth middleware ────────────────────────────────────────────────────
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return res.status(401).json({ message: 'Authentification requise' });
-  }
+  if (!authHeader) return res.status(401).json({ message: 'Authentification requise' });
   const token = authHeader.split(' ')[1];
   try {
     req.user = jwt.verify(token, process.env.JWT_SECRET);
@@ -117,9 +112,7 @@ app.post('/api/send-email', async (req, res) => {
       from:    `"${name}" <${email}>`,
       to:      process.env.EMAIL_TO,
       subject: '📩 Nouveau message de contact',
-      html:    `<p><strong>Nom :</strong> ${name}</p>
-                <p><strong>Email :</strong> ${email}</p>
-                <p>${message}</p>`
+      html:    `<p><strong>Nom :</strong> ${name}</p><p><strong>Email :</strong> ${email}</p><p>${message}</p>`
     });
     res.json({ success: true });
   } catch (err) {
@@ -128,9 +121,7 @@ app.post('/api/send-email', async (req, res) => {
   }
 });
 
-app.get('/api/produits', async (_req, res) =>
-  res.json(await Produit.find())
-);
+app.get('/api/produits', async (_req, res) => res.json(await Produit.find()));
 app.get('/api/produits/recherche', async (req, res) => {
   const q = req.query.q || '';
   res.json(await Produit.find({ nom: { $regex: q, $options: 'i' } }));
@@ -145,10 +136,10 @@ app.get('/api/produits/:id', async (req, res) => {
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
   const images = req.files.map(f => `/uploads/${f.filename}`);
   const prod   = new Produit({
-    nom:         req.body.nom,
+    nom: req.body.nom,
     description: req.body.description,
-    prix:        parseFloat(req.body.prix),
-    categorie:   req.body.categorie,
+    prix: parseFloat(req.body.prix),
+    categorie: req.body.categorie,
     images
   });
   await prod.save();
@@ -159,15 +150,13 @@ app.put('/api/produits/:id', authMiddleware, upload.array('images'), async (req,
   const prod = await Produit.findById(req.params.id);
   if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
   if (req.files.length) {
-    for (const imgPath of prod.images) {
-      await supprimerFichier(path.join(__dirname, imgPath));
-    }
+    for (const imgPath of prod.images) await supprimerFichier(path.join(__dirname, imgPath));
     prod.images = req.files.map(f => `/uploads/${f.filename}`);
   }
-  prod.nom         = req.body.nom;
+  prod.nom = req.body.nom;
   prod.description = req.body.description;
-  prod.prix        = parseFloat(req.body.prix);
-  prod.categorie   = req.body.categorie;
+  prod.prix = parseFloat(req.body.prix);
+  prod.categorie = req.body.categorie;
   await prod.save();
   res.json(prod);
 });
@@ -175,16 +164,18 @@ app.put('/api/produits/:id', authMiddleware, upload.array('images'), async (req,
 app.delete('/api/produits/:id', authMiddleware, async (req, res) => {
   const prod = await Produit.findByIdAndDelete(req.params.id);
   if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
-  for (const imgPath of prod.images) {
-    await supprimerFichier(path.join(__dirname, imgPath));
-  }
+  for (const imgPath of prod.images) await supprimerFichier(path.join(__dirname, imgPath));
   res.json({ message: 'Produit supprimé' });
 });
 
-// ─── 12) Fallback SPA (refresh & front routes) ─────────────────────────────
+// ─── 12) Fallback SPA (routes front-end) ──────────────────────────────────
 app.get('*', (_req, res) =>
-  res.sendFile(path.resolve(__dirname, '../dist/index.html'))
+  res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
 );
 
 // ─── 13) Lancement du serveur ─────────────────────────────────────────────
-app.listen(PORT, () => console.log(`🚀 Serveur sur port ${PORT}`));
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    app.listen(PORT, () => console.log(`🚀 Serveur front+API sur port ${PORT}`));
+  })
+  .catch(err => console.error('❌ Erreur MongoDB:', err));

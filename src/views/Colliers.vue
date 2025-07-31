@@ -54,10 +54,11 @@ export default {
   },
   async mounted() {
     window.scrollTo(0, 0)
+    console.log('[Colliers.vue] mounted — fetch via api()')
     try {
-      const all = await api('/api/produits')
+      const all = await api('/api/produits', { credentials: 'include' })
       this.produitsColliers = all.filter(
-        p => p.categorie?.toLowerCase() === 'collier'
+        p => p.categorie && p.categorie.toLowerCase() === 'collier'
       )
     } catch (err) {
       console.error('Erreur chargement colliers :', err)
@@ -65,6 +66,7 @@ export default {
   }
 }
 </script>
+
 
 
 

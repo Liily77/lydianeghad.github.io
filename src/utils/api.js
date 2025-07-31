@@ -12,6 +12,7 @@ export const BASE = import.meta.env.PROD
  * Wrapper fetch pour appeler l’API.
  * @param {string} url     Chemin relatif (ex: '/api/produits')
  * @param {object} options fetch options
+ * @returns {Promise<any>} JSON parsé
  */
 export async function api(url, options = {}) {
   const fullUrl = `${BASE}${url}`
@@ -20,7 +21,6 @@ export async function api(url, options = {}) {
     headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
     ...options
   })
-  if (!res.ok) throw new Error(`API ${res.status}`)
+  if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`)
   return res.json()
 }
-

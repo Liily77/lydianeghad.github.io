@@ -10,10 +10,14 @@ lerna-debug.log*
 node_modules/
 
 # Build outputs
-# dist est requis pour Render, donc on ne l'ignore pas
+# On ignore le dist racine, on ne sert que backend/dist
+/dist/
+# dist est requis pour Render, donc on ne l'ignore PAS dans backend
+backend/dist/
 # dist-ssr peut rester ignoré si non utilisé
 dist-ssr/
-\# Production and development env for front are versioned
+
+# Production and development env for front are versioned
 !.env.production
 !.env.development
 
@@ -33,4 +37,4 @@ env.local
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
+*.sw? 
