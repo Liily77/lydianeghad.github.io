@@ -12,8 +12,6 @@ node_modules/
 # Build outputs
 # On ignore le dist racine, on ne sert que backend/dist
 /dist/
-# dist est requis pour Render, donc on ne l'ignore PAS dans backend
-backend/dist/
 # dist-ssr peut rester ignoré si non utilisé
 dist-ssr/
 
@@ -37,4 +35,4 @@ env.local
 *.ntvs*
 *.njsproj
 *.sln
-*.sw? 
+*.sw?
