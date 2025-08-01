@@ -1,4 +1,3 @@
-
 <template>
   <div class="admin-page">
     <!-- Si pas connecté, afficher formulaire login -->
@@ -249,9 +248,14 @@ export default {
       try {
         const { token } = await api('/api/login', {
           method: 'POST',
-          body: JSON.stringify({ username: this.loginUser, password: this.loginPass })
+          body: JSON.stringify({
+            username: this.loginUser,
+            password: this.loginPass
+          })
         })
+        console.log('JWT reçu:', token)
         localStorage.setItem('admin_token', token)
+        console.log('Enregistré en localStorage:', localStorage.getItem('admin_token'))
         this.isLoggedIn = true
         await this.chargerProduits()
       } catch (err) {
@@ -375,6 +379,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .admin-page {
