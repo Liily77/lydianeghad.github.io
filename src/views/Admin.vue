@@ -386,6 +386,12 @@ export default {
 }
 
 /* ===== Header titre + boutons ===== */
+
+.titre-centre {
+  font-size: 1.8rem;
+  margin: 1.5rem 0 !important;
+  }
+
 .admin-header {
   display: flex;
   align-items: center;
@@ -393,15 +399,12 @@ export default {
   flex-wrap: wrap;
   margin-bottom: 1rem;
 }
-.titre-centre {
-  font-size: 1.8rem;
-  margin: 1.5rem 0 !important;
-  }
 
 .admin-header-buttons {
   display: flex;
   gap: 0.6rem;
 }
+
 .connect-btn,
 .logout-btn {
   padding: 0.5rem 0.8rem;
