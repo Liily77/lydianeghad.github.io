@@ -27,6 +27,7 @@
           <button @click="connectSumUp" class="connect-btn">
             Connecter SumUp
           </button>
+          <!-- DEBUG : commit test pour vérifier le push -->
           <button @click="seDeconnecter" class="logout-btn">
             Déconnexion
           </button>
