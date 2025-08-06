@@ -243,6 +243,7 @@ export default {
     }
   },
   methods: {
+    // ========== Authentification admin ==========
     async seConnecter() {
       this.loginError = ''
       this.isLoading = true
@@ -254,9 +255,7 @@ export default {
             password: this.loginPass
           })
         })
-        console.log('JWT reçu:', token)
         localStorage.setItem('admin_token', token)
-        console.log('Enregistré en localStorage:', localStorage.getItem('admin_token'))
         this.isLoggedIn = true
         await this.chargerProduits()
       } catch (err) {
@@ -272,12 +271,33 @@ export default {
       this.loginPass = ''
       this.produits = []
     },
+
+    // ========== OAuth SumUp ==========
     connectSumUp() {
-      window.location.href = '/auth/connect'
+      const isSandbox     = import.meta.env.VITE_USE_SUMUP_SANDBOX === 'true'
+      const AUTHORIZE_URL = isSandbox
+        ? 'https://sandbox.sumup.com/authorize'
+        : 'https://api.sumup.com/authorize'
+      const CLIENT_ID     = isSandbox
+        ? import.meta.env.VITE_SUMUP_SANDBOX_CLIENT_ID
+        : import.meta.env.VITE_SUMUP_CLIENT_ID
+      const REDIRECT_URI  = import.meta.env.VITE_REDIRECT_URI
+
+      const params = new URLSearchParams({
+        response_type: 'code',
+        client_id:     CLIENT_ID,
+        redirect_uri:  REDIRECT_URI,
+        scope:         'payments transactions'
+      })
+      window.location.href = `${AUTHORIZE_URL}?${params.toString()}`
     },
+
+    // ========== Gestion des fichiers images ==========
     onFileChange(event, index) {
       this.fichiersImages[index] = event.target.files[0]
     },
+
+    // ========== Chargement des produits ==========
     async chargerProduits() {
       try {
         this.produits = await api('/api/produits', {
@@ -287,6 +307,8 @@ export default {
         if (err.message.includes('401')) this.seDeconnecter()
       }
     },
+
+    // ========== Validation formulaire ajout ==========
     validateForm() {
       this.errors = {}
       if (!this.nouveauProduit.nom) this.errors.nom = 'Le nom est requis'
@@ -298,6 +320,8 @@ export default {
         this.errors.nouvelleCategorie = 'Veuillez préciser la catégorie'
       return Object.keys(this.errors).length === 0
     },
+
+    // ========== Ajout d’un produit ==========
     async ajouterProduit() {
       if (!this.validateForm()) {
         this.formMessage = 'Veuillez corriger les erreurs avant de soumettre.'
@@ -332,6 +356,8 @@ export default {
         this.isLoading = false
       }
     },
+
+    // ========== Réinitialiser le formulaire ==========
     resetFormulaire() {
       this.nouveauProduit = { nom: '', description: '', prix: null }
       this.categorieChoisie = ''
@@ -345,6 +371,8 @@ export default {
         }
       }
     },
+
+    // ========== Modification d’un produit ==========
     async modifierProduit(produit) {
       const id = produit._id || produit.id
       try {
@@ -365,6 +393,8 @@ export default {
         this.formError = true
       }
     },
+
+    // ========== Suppression d’un produit ==========
     async supprimerProduit(id) {
       if (!confirm('❓ Supprimer ce produit ?')) return
       try {
@@ -380,6 +410,7 @@ export default {
   }
 }
 </script>
+
 
 
 <style scoped>
