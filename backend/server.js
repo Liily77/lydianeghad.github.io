@@ -156,41 +156,24 @@ app.get('/api/produits/:id', (req, res) => {
 
 // ─── 14) OAuth SumUp ──────────────────────────────────────────────────────
 app.get('/auth/connect', (_req, res) => {
+  // 1) Construction des paramètres OAuth
   const params = new URLSearchParams({
     response_type: 'code',
     client_id:     CLIENT_ID,
     redirect_uri:  REDIRECT_URI,
     scope:         'payments transactions'
   });
-  res.redirect(`${AUTHORIZE_URL}?${params.toString()}`);
+
+  // 2) URL complète vers l'endpoint SumUp
+  const fullUrl = `${AUTHORIZE_URL}?${params.toString()}`;
+
+  // 3) Debug : on loggue l'URL générée
+  console.log('→ SumUp OAuth URL:', fullUrl);
+
+  // 4) Redirection vers SumUp
+  res.redirect(fullUrl);
 });
 
-app.get('/auth/callback', async (req, res) => {
-  const { code } = req.query;
-  try {
-    const params = new URLSearchParams({
-      grant_type:    'authorization_code',
-      client_id:     CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      code,
-      redirect_uri:  REDIRECT_URI
-    }).toString();
-
-    const { data } = await axios.post(TOKEN_URL, params, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    });
-
-    console.log(
-      isSandbox ? 'Sandbox token:' : 'Prod token:',
-      data.access_token
-    );
-    // 👉 Ici, tu peux persister data.access_token dans ton DB ou .env
-    res.redirect('/admin');
-  } catch (err) {
-    console.error('Échec échange code→token', err.response?.data || err);
-    res.status(500).send('Échec connexion SumUp');
-  }
-});
 
 // ─── 15) Création de checkout SumUp ───────────────────────────────────────
 app.post('/api/checkout', async (req, res) => {
