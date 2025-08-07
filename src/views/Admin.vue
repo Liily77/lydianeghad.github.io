@@ -274,22 +274,8 @@ export default {
 
     // ========== OAuth SumUp ==========
     connectSumUp() {
-      const isSandbox     = import.meta.env.VITE_USE_SUMUP_SANDBOX === 'true'
-      const AUTHORIZE_URL = isSandbox
-        ? 'https://sandbox.sumup.com/authorize'
-        : 'https://api.sumup.com/authorize'
-      const CLIENT_ID     = isSandbox
-        ? import.meta.env.VITE_SUMUP_SANDBOX_CLIENT_ID
-        : import.meta.env.VITE_SUMUP_CLIENT_ID
-      const REDIRECT_URI  = import.meta.env.VITE_REDIRECT_URI
-
-      const params = new URLSearchParams({
-        response_type: 'code',
-        client_id:     CLIENT_ID,
-        redirect_uri:  REDIRECT_URI,
-        scope:         'payments transactions'
-      })
-      window.location.href = `${AUTHORIZE_URL}?${params.toString()}`
+      // On appelle directement la route /auth/connect de notre backend
+      window.location.href = import.meta.env.VITE_BACKEND_URL + '/auth/connect'
     },
 
     // ========== Gestion des fichiers images ==========

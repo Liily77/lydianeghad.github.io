@@ -20,7 +20,7 @@ router.get('/auth/connect', (req, res) => {
     response_type: 'code',
     client_id:     CLIENT_ID,
     redirect_uri:  REDIRECT_URI,
-    scope:         'payments transactions'
+    scope:         'payments'
   });
   res.redirect(`${AUTHORIZE_URL}?${params.toString()}`);
 });

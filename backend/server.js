@@ -161,7 +161,7 @@ app.get('/auth/connect', (_req, res) => {
     response_type: 'code',
     client_id:     CLIENT_ID,
     redirect_uri:  REDIRECT_URI,
-    scope:         'payments transactions'
+    scope:         'payments'
   });
 
   // 2) URL complète vers l'endpoint SumUp
