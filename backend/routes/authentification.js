@@ -13,7 +13,7 @@ const AUTHORIZE_URL = isSandbox
 const CLIENT_ID    = isSandbox
   ? process.env.SUMUP_SANDBOX_CLIENT_ID
   : process.env.SUMUP_CLIENT_ID;
-const REDIRECT_URI = process.env.REDIRECT_URI;  // doit correspondre exactement à l'URL configurée chez SumUp
+const REDIRECT_URI = process.env.REDIRECT_URI;  // Doit correspondre exactement à l'URL configurée chez SumUp
 
 // ─── Route de connexion OAuth SumUp ──────────────────────────────────────
 router.get('/auth/connect', (req, res) => {
