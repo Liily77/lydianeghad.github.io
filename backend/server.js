@@ -28,19 +28,18 @@ const AUTHORIZE_URL = isSandbox
 const TOKEN_URL     = isSandbox
   ? 'https://sandbox.sumup.com/token'
   : 'https://api.sumup.com/token';
-// Le même endpoint checkout pour sandbox et prod
 const CHECKOUT_URL  = isSandbox
   ? 'https://sandbox.sumup.com/v0.1/checkouts'
   : 'https://api.sumup.com/v0.1/checkouts';
 
 // ─── 3) Credentials OAuth & tokens ────────────────────────────────────────
-const CLIENT_ID     = isSandbox
+const CLIENT_ID            = isSandbox
   ? process.env.SUMUP_SANDBOX_CLIENT_ID
   : process.env.SUMUP_CLIENT_ID;
-const CLIENT_SECRET = isSandbox
+const CLIENT_SECRET        = isSandbox
   ? process.env.SUMUP_SANDBOX_CLIENT_SECRET
   : process.env.SUMUP_CLIENT_SECRET;
-const REDIRECT_URI  = process.env.REDIRECT_URI;
+const REDIRECT_URI         = process.env.REDIRECT_URI;
 const ACCESS_TOKEN_SANDBOX = process.env.SUMUP_SANDBOX_ACCESS_TOKEN;
 const ACCESS_TOKEN_PROD    = process.env.SUMUP_PROD_ACCESS_TOKEN;
 
@@ -110,7 +109,10 @@ function authMiddleware(req, res, next) {
 // ─── 12) Login Admin ──────────────────────────────────────────────────────
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-  if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS) {
+  if (
+    username === process.env.ADMIN_USER &&
+    password === process.env.ADMIN_PASS
+  ) {
     const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: '2h' });
     return res.json({ token });
   }
@@ -129,8 +131,8 @@ app.post('/api/send-email', async (req, res) => {
   });
   try {
     await transporter.sendMail({
-      from: `"${name}" <${email}>`,
-      to:   process.env.EMAIL_TO,
+      from:    `"${name}" <${email}>`,
+      to:      process.env.EMAIL_TO,
       subject: '📩 Nouveau message',
       html:    `<p>${message}</p>`
     });
@@ -150,14 +152,13 @@ app.get('/api/produits/:id', (req, res) => {
     .then(p => p ? res.json(p) : res.status(404).json({ message: 'Produit introuvable' }));
 });
 
-// ─── 14) OAuth SumUp ──────────────────────────────────────────────────────
+// ─── 14) OAuth SumUp (connexion) ─────────────────────────────────────────
 app.get('/auth/connect', (_req, res) => {
-  // on ne passe plus le scope
   const params = new URLSearchParams({
     response_type: 'code',
     client_id:     CLIENT_ID,
     redirect_uri:  REDIRECT_URI,
-    scope:         'payments' 
+    scope:         'payments'
   });
   const fullUrl = `${AUTHORIZE_URL}?${params.toString()}`;
   console.log('→ SumUp OAuth URL:', fullUrl);
@@ -180,7 +181,7 @@ app.get('/auth/callback', async (req, res) => {
     });
 
     console.log('→ Access token:', data.access_token);
-    // TODO: stocker le token quelque part
+    // TODO: persister data.access_token
     res.redirect('/admin');
   } catch (err) {
     console.error('Échec échange code→token', err.response?.data || err);
@@ -188,33 +189,9 @@ app.get('/auth/callback', async (req, res) => {
   }
 });
 
-// ─── 16) Création de checkout SumUp ───────────────────────────────────────
-app.post('/api/checkout', async (req, res) => {
-  try {
-    const total = req.body.items.reduce((sum, i) => sum + i.quantity * i.unit_price, 0);
-    const accessToken = isSandbox ? ACCESS_TOKEN_SANDBOX : ACCESS_TOKEN_PROD;
-    const response = await axios.post(
-      CHECKOUT_URL,
-      {
-        checkout_reference: `order_${Date.now()}`,
-        amount:             total,
-        currency:           'EUR',
-        shop_name:          'Arc En Ciel',
-        description:        'Commande Arc En Ciel'
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-    res.json({ checkoutUrl: response.data.checkout_url });
-  } catch (err) {
-    console.error('Échec création checkout', err.response?.data || err);
-    res.status(500).json({ error: 'Impossible de créer le checkout' });
-  }
-});
+// ─── 16) Route de création de checkout via SumUp ─────────────────────────
+const checkoutRouter = require('./routes/checkout');
+app.use('/api/checkout', checkoutRouter);
 
 // ─── 17) CRUD Produits protégées ──────────────────────────────────────────
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
@@ -231,10 +208,10 @@ app.put('/api/produits/:id', authMiddleware, upload.array('images'), async (req,
     prod.images = req.files.map(f => `/uploads/${f.filename}`);
   }
   Object.assign(prod, {
-    nom: req.body.nom,
+    nom:         req.body.nom,
     description: req.body.description,
-    prix: parseFloat(req.body.prix),
-    categorie: req.body.categorie
+    prix:        parseFloat(req.body.prix),
+    categorie:   req.body.categorie
   });
   await prod.save();
   res.json(prod);

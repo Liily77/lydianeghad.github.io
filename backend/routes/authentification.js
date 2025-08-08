@@ -21,7 +21,7 @@ router.get('/auth/connect', (req, res) => {
     response_type: 'code',
     client_id:     CLIENT_ID,
     redirect_uri:  REDIRECT_URI,
-    scope:         'payments' 
+    scope:         'payments'
   });
 
   const authorizeUrl = `${AUTHORIZE_URL}?${params.toString()}`;

@@ -4,13 +4,13 @@ const express = require('express');
 const axios   = require('axios');
 const router  = express.Router();
 
-// Configuration sandbox vs production
+// ─── Sandbox vs Production pour SumUp ──────────────────────────────────
 const isSandbox    = process.env.USE_SUMUP_SANDBOX === 'true';
 const CHECKOUT_URL = isSandbox
   ? 'https://sandbox.sumup.com/v0.1/checkouts'
   : 'https://api.sumup.com/v0.1/checkouts';
 
-// Sélection dynamique du token OAuth
+// ─── Sélection dynamique du token OAuth ───────────────────────────────
 const ACCESS_TOKEN = isSandbox
   ? process.env.SUMUP_SANDBOX_ACCESS_TOKEN
   : process.env.SUMUP_PROD_ACCESS_TOKEN;
@@ -24,10 +24,10 @@ router.post('/', async (req, res) => {
       CHECKOUT_URL,
       {
         checkout_reference: `order_${Date.now()}`,
-        amount: total,
-        currency: 'EUR',
-        shop_name: 'Arc En Ciel',
-        description: 'Commande Arc En Ciel'
+        amount:             total,
+        currency:           'EUR',
+        shop_name:          'Arc En Ciel',
+        description:        'Commande Arc En Ciel'
       },
       {
         headers: {
