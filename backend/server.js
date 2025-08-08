@@ -60,7 +60,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
 // ─── 7) Montage du routeur d’authentification OAuth SumUp ─────────────────
-app.use('/', authRouter);
+app.use('/auth', authRouter);
 
 // ─── 8) Static + uploads ─────────────────────────────────────────────────
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
