@@ -156,7 +156,8 @@ app.get('/auth/connect', (_req, res) => {
   const params = new URLSearchParams({
     response_type: 'code',
     client_id:     CLIENT_ID,
-    redirect_uri:  REDIRECT_URI
+    redirect_uri:  REDIRECT_URI,
+    scope:         'payments' 
   });
   const fullUrl = `${AUTHORIZE_URL}?${params.toString()}`;
   console.log('→ SumUp OAuth URL:', fullUrl);

@@ -20,7 +20,8 @@ router.get('/auth/connect', (req, res) => {
   const params = new URLSearchParams({
     response_type: 'code',
     client_id:     CLIENT_ID,
-    redirect_uri:  REDIRECT_URI
+    redirect_uri:  REDIRECT_URI,
+    scope:         'payments' 
   });
 
   const authorizeUrl = `${AUTHORIZE_URL}?${params.toString()}`;
