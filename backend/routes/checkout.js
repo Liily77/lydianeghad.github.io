@@ -1,11 +1,10 @@
 // backend/routes/checkout.js
-
 const express = require('express');
-const axios   = require('axios');
-const router  = express.Router();
+const axios = require('axios');
+const router = express.Router();
 
 // ─── Sandbox vs Production pour SumUp ──────────────────────────────────
-const isSandbox    = process.env.USE_SUMUP_SANDBOX === 'true';
+const isSandbox = process.env.USE_SUMUP_SANDBOX === 'true';
 const CHECKOUT_URL = isSandbox
   ? 'https://sandbox.sumup.com/v0.1/checkouts'
   : 'https://api.sumup.com/v0.1/checkouts';
@@ -18,37 +17,36 @@ const ACCESS_TOKEN = isSandbox
 // ─── Création d’un checkout SumUp ─────────────────────────────────────
 router.post('/', async (req, res) => {
   try {
-    const { items } = req.body;
-    // Calcul du total à partir des lignes de commande
-    const total = items.reduce(
-      (sum, i) => sum + i.quantity * i.unit_price,
-      0
-    );
+    const { amount, currency, title, orderId } = req.body;
+
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ error: 'Montant invalide' });
+    }
 
     // Appel à l’API SumUp pour créer un checkout
     const response = await axios.post(
       CHECKOUT_URL,
       {
-        checkout_reference: `order_${Date.now()}`,
-        amount:             total,
-        currency:           'EUR',
-        shop_name:          'Arc En Ciel',
-        description:        'Commande Arc En Ciel'
+        checkout_reference: orderId || `order_${Date.now()}`,
+        amount: Number(amount),
+        currency: currency || 'EUR',
+        shop_name: 'Arc En Ciel',
+        description: title || 'Commande Arc En Ciel'
       },
       {
         headers: {
           Authorization: `Bearer ${ACCESS_TOKEN}`,
-          'Content-Type':  'application/json'
+          'Content-Type': 'application/json'
         }
       }
     );
 
     // On renvoie l’URL de paiement au front
-    res.json({ checkoutUrl: response.data.checkout_url });
+    res.json({ checkout_url: response.data.checkout_url });
   } catch (err) {
     console.error(
       'Erreur création checkout SumUp:',
-      err.response?.data || err
+      err.response?.data || err.message
     );
     res.status(500).json({ error: 'Impossible de créer le checkout' });
   }

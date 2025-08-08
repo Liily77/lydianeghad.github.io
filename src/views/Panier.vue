@@ -37,6 +37,7 @@
 
 <script>
 import { getPanier, retirerProduit, modifierQuantite } from '../utils/panier';
+import { api } from '@/utils/api'; // Assure-toi que api.js est bien configuré
 
 export default {
   name: 'Panier',
@@ -73,8 +74,39 @@ export default {
       modifierQuantite(id, -1);
       this.chargerPanier();
     },
-    payer() {
-      alert('Paiement non encore disponible.');
+    async payer() {
+      try {
+        if (!this.panier.length) {
+          alert('Votre panier est vide.');
+          return;
+        }
+
+        // On prépare les articles au format attendu par le backend
+        const items = this.panier.map(p => ({
+          name: p.nom,
+          quantity: p.quantite,
+          unit_price: p.prix
+        }));
+
+        // Envoi vers ton backend
+        const data = await api('/api/checkout', {
+          method: 'POST',
+          body: JSON.stringify({ items })
+        });
+
+        if (!data.checkoutUrl) {
+          console.error('Réponse checkout invalide:', data);
+          alert('Impossible de créer le paiement.');
+          return;
+        }
+
+        // Redirection vers SumUp
+        window.location.href = data.checkoutUrl;
+
+      } catch (e) {
+        console.error(e);
+        alert('Erreur lors de la création du paiement.');
+      }
     }
   },
   mounted() {
