@@ -21,8 +21,8 @@ const nodemailer = require('nodemailer');
 const axios      = require('axios');
 
 // ─── 2) Endpoints SumUp (toujours sur api.sumup.com) ──────────────────────
-const AUTHORIZE_URL = 'https://api.sumup.com/authorize';
-const TOKEN_URL     = 'https://api.sumup.com/token';
+const AUTHORIZE_URL = 'https://auth.sumup.com/authorize';
+const TOKEN_URL     = 'https://auth.sumup.com/token';
 const CHECKOUT_URL  = 'https://api.sumup.com/v0.1/checkouts';
 
 // ─── 3) Credentials OAuth & tokens ────────────────────────────────────────
