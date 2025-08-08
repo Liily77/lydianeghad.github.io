@@ -20,19 +20,13 @@ const jwt        = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const axios      = require('axios');
 
-// ─── 2) Sandbox vs Production pour SumUp ─────────────────────────────────
-const isSandbox     = process.env.USE_SUMUP_SANDBOX === 'true';
-const AUTHORIZE_URL = isSandbox
-  ? 'https://sandbox.sumup.com/authorize'
-  : 'https://api.sumup.com/authorize';
-const TOKEN_URL     = isSandbox
-  ? 'https://sandbox.sumup.com/token'
-  : 'https://api.sumup.com/token';
-const CHECKOUT_URL  = isSandbox
-  ? 'https://sandbox.sumup.com/v0.1/checkouts'
-  : 'https://api.sumup.com/v0.1/checkouts';
+// ─── 2) Endpoints OAuth SumUp toujours sur api.sumup.com ─────────────────
+const AUTHORIZE_URL = 'https://api.sumup.com/authorize';
+const TOKEN_URL     = 'https://api.sumup.com/token';
+const CHECKOUT_URL  = 'https://api.sumup.com/v0.1/checkouts';
 
-// ─── 3) Credentials OAuth & tokens ────────────────────────────────────────
+// ─── 3) Récupération des credentials OAuth / tokens ───────────────────────
+const isSandbox     = process.env.USE_SUMUP_SANDBOX === 'true';
 const CLIENT_ID     = isSandbox
   ? process.env.SUMUP_SANDBOX_CLIENT_ID
   : process.env.SUMUP_CLIENT_ID;
@@ -43,7 +37,7 @@ const REDIRECT_URI  = process.env.REDIRECT_URI;
 const ACCESS_TOKEN_SANDBOX = process.env.SUMUP_SANDBOX_ACCESS_TOKEN;
 const ACCESS_TOKEN_PROD    = process.env.SUMUP_PROD_ACCESS_TOKEN;
 
-// ─── 4) Express setup ─────────────────────────────────────────────────────
+// ─── 4) Initialisation Express ────────────────────────────────────────────
 const app  = express();
 const PORT = process.env.PORT || 3001;
 
@@ -54,20 +48,20 @@ app.use(xssClean());
 app.use(hpp());
 app.use(morgan('combined'));
 
-// ─── 6) CORS + JSON ───────────────────────────────────────────────────────
+// ─── 6) CORS ──────────────────────────────────────────────────────────────
 app.use(cors({ origin: true, credentials: true }));
-app.use(express.json());
 
-// ─── 7) Static + uploads ─────────────────────────────────────────────────
+// ─── 7) Static + JSON parser ──────────────────────────────────────────────
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.json());
 
-// ─── 8) MongoDB ─────────────────────────────────────────────────────────
+// ─── 8) Connexion MongoDB ─────────────────────────────────────────────────
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connectée !'))
   .catch(err => console.error('❌ Erreur MongoDB :', err));
 
-// ─── 9) Modèle Produit ───────────────────────────────────────────────────
+// ─── 9) Modèle Produit ────────────────────────────────────────────────────
 const produitSchema = new mongoose.Schema({
   nom:         { type: String, required: true },
   description: { type: String, required: true },
@@ -77,20 +71,27 @@ const produitSchema = new mongoose.Schema({
 }, { timestamps: true });
 const Produit = mongoose.model('Produit', produitSchema);
 
-// ─── 10) Multer & nettoyage ───────────────────────────────────────────────
+// ─── 10) Multer upload et nettoyage ────────────────────────────────────────
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, uploadDir),
   filename:    (_req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
 });
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter(req, file, cb) {
+    if (/image\/(jpeg|png|gif)/.test(file.mimetype)) cb(null, true);
+    else cb(new Error('Seules JPEG, PNG et GIF sont acceptées'));
+  }
+});
 async function supprimerFichier(fp) {
   try { await fs.promises.unlink(fp); }
   catch (err) { console.error('Erreur suppression', fp, err); }
 }
 
-// ─── 11) Auth middleware ─────────────────────────────────────────────────
+// ─── 11) Middleware JWT ──────────────────────────────────────────────────
 function authMiddleware(req, res, next) {
   const h = req.headers.authorization;
   if (!h) return res.status(401).json({ message: 'Authentification requise' });
@@ -102,24 +103,33 @@ function authMiddleware(req, res, next) {
 // ─── 12) Login Admin ──────────────────────────────────────────────────────
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-  if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS) {
+  if (
+    username === process.env.ADMIN_USER &&
+    password === process.env.ADMIN_PASS
+  ) {
     const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: '2h' });
     return res.json({ token });
   }
   res.status(401).json({ message: 'Identifiants invalides' });
 });
 
-// ─── 13) API Produits & Email ────────────────────────────────────────────
+// ─── 13) Routes publiques (Produits & Email) ─────────────────────────────
 app.post('/api/send-email', async (req, res) => {
   const { name, email, message } = req.body;
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
     return res.status(500).json({ message: 'Configuration email manquante' });
   }
   const transporter = nodemailer.createTransport({
-    service: 'gmail', auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+    service: 'gmail',
+    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
   });
   try {
-    await transporter.sendMail({ from: `"${name}" <${email}>`, to: process.env.EMAIL_TO, subject: '📩 Nouveau message', html: `<p>${message}</p>` });
+    await transporter.sendMail({
+      from:    `"${name}" <${email}>`,
+      to:      process.env.EMAIL_TO,
+      subject: '📩 Nouveau message',
+      html:    `<p>${message}</p>`
+    });
     res.json({ success: true });
   } catch (err) {
     console.error(err);
@@ -132,14 +142,17 @@ app.get('/api/produits/recherche', (req, res) => {
   Produit.find({ nom: { $regex: q, $options: 'i' } }).then(r => res.json(r));
 });
 app.get('/api/produits/:id', (req, res) => {
-  Produit.findById(req.params.id).then(p => p ? res.json(p) : res.status(404).json({ message: 'Produit introuvable' }));
+  Produit.findById(req.params.id)
+    .then(p => p ? res.json(p) : res.status(404).json({ message: 'Produit introuvable' }));
 });
 
 // ─── 14) OAuth SumUp ──────────────────────────────────────────────────────
 app.get('/auth/connect', (_req, res) => {
   const params = new URLSearchParams({
-    response_type: 'code', client_id: CLIENT_ID,
-    redirect_uri: REDIRECT_URI, scope: 'payments'
+    response_type: 'code',
+    client_id:     CLIENT_ID,
+    redirect_uri:  REDIRECT_URI,
+    scope:         'payments'
   });
   const fullUrl = `${AUTHORIZE_URL}?${params.toString()}`;
   console.log('→ SumUp OAuth URL:', fullUrl);
@@ -147,15 +160,22 @@ app.get('/auth/connect', (_req, res) => {
 });
 
 app.get('/auth/callback', async (req, res) => {
+  const { code } = req.query;
   try {
     const params = new URLSearchParams({
-      grant_type: 'authorization_code', client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET, code: req.query.code,
-      redirect_uri: REDIRECT_URI
+      grant_type:    'authorization_code',
+      client_id:     CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      code,
+      redirect_uri:  REDIRECT_URI
     }).toString();
-    const { data } = await axios.post(TOKEN_URL, params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }});
-    console.log('→ Sandbox access token:', data.access_token);
-    // TODO: Persist data.access_token securely
+
+    const { data } = await axios.post(TOKEN_URL, params, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    });
+
+    console.log(isSandbox ? '→ Sandbox token:' : '→ Prod token:', data.access_token);
+    // ici: persiste data.access_token en DB ou .env si besoin
     res.redirect('/admin');
   } catch (err) {
     console.error('Échec échange code→token', err.response?.data || err);
@@ -166,12 +186,29 @@ app.get('/auth/callback', async (req, res) => {
 // ─── 15) Création de checkout SumUp ───────────────────────────────────────
 app.post('/api/checkout', async (req, res) => {
   try {
-    const total = req.body.items.reduce((sum, i) => sum + i.quantity * i.unit_price, 0);
-    const accessToken = isSandbox ? ACCESS_TOKEN_SANDBOX : ACCESS_TOKEN_PROD;
-    const response = await axios.post(CHECKOUT_URL, {
-      checkout_reference: `order_${Date.now()}`, amount: total, currency: 'EUR',
-      shop_name: 'Arc En Ciel', description: 'Commande Arc En Ciel'
-    }, { headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' }});
+    const { items } = req.body;
+    const total = items.reduce((sum, i) => sum + i.quantity * i.unit_price, 0);
+    const accessToken = isSandbox
+      ? ACCESS_TOKEN_SANDBOX
+      : ACCESS_TOKEN_PROD;
+
+    const response = await axios.post(
+      CHECKOUT_URL,
+      {
+        checkout_reference: `order_${Date.now()}`,
+        amount:             total,
+        currency:           'EUR',
+        shop_name:          'Arc En Ciel',
+        description:        'Commande Arc En Ciel'
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
     res.json({ checkoutUrl: response.data.checkout_url });
   } catch (err) {
     console.error('Échec création checkout', err.response?.data || err);
@@ -183,19 +220,25 @@ app.post('/api/checkout', async (req, res) => {
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
   const images = req.files.map(f => `/uploads/${f.filename}`);
   const p = new Produit({ ...req.body, prix: parseFloat(req.body.prix), images });
-  await p.save();
-  res.status(201).json(p);
+  p.save().then(doc => res.status(201).json(doc));
 });
 app.put('/api/produits/:id', authMiddleware, upload.array('images'), async (req, res) => {
   const prod = await Produit.findById(req.params.id);
   if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
+
   if (req.files.length) {
-    for (const img of prod.images) await supprimerFichier(path.join(__dirname, img));
+    for (const img of prod.images) {
+      await supprimerFichier(path.join(__dirname, img));
+    }
     prod.images = req.files.map(f => `/uploads/${f.filename}`);
   }
-  Object.assign(prod, { nom: req.body.nom, description: req.body.description, prix: parseFloat(req.body.prix), categorie: req.body.categorie });
-  await prod.save();
-  res.json(prod);
+  Object.assign(prod, {
+    nom:         req.body.nom,
+    description: req.body.description,
+    prix:        parseFloat(req.body.prix),
+    categorie:   req.body.categorie
+  });
+  prod.save().then(updated => res.json(updated));
 });
 app.delete('/api/produits/:id', authMiddleware, async (req, res) => {
   const prod = await Produit.findByIdAndDelete(req.params.id);
@@ -210,4 +253,6 @@ app.get('*', (_req, res) => {
 });
 
 // ─── 18) Démarrage serveur ────────────────────────────────────────────────
-app.listen(PORT, () => console.log(`🚀 Serveur front+API sur port ${PORT} (Sandbox: ${isSandbox})`));
+app.listen(PORT, () => {
+  console.log(`🚀 Serveur front+API sur port ${PORT} (Sandbox: ${isSandbox})`);
+});
