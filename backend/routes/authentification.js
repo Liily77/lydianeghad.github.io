@@ -53,7 +53,8 @@ router.get('/callback', async (req, res, next) => {
 
     // TODO : persister accessToken (BDD ou session)
 
-    res.redirect(`${process.env.FRONTEND_URL}/admin`);
+    // Front et back sur le même domaine : on renvoie vers la page admin de la SPA
+    res.redirect('/admin');
   } catch (err) {
     next(err);
   }
