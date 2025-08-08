@@ -25,13 +25,11 @@ const authRouter     = require('./routes/authentification');
 const checkoutRouter = require('./routes/checkout');
 
 // ─── 2) Endpoints SumUp (prod vs sandbox) ─────────────────────────────────
+// OAuth (même en sandbox) :
+const AUTHORIZE_URL = 'https://auth.sumup.com/authorize';
+const TOKEN_URL     = 'https://auth.sumup.com/token';
+// API Checkouts : sandbox vs prod
 const isSandbox     = process.env.USE_SUMUP_SANDBOX === 'true';
-const AUTHORIZE_URL = isSandbox
-  ? 'https://sandbox.sumup.com/authorize'
-  : 'https://api.sumup.com/authorize';
-const TOKEN_URL     = isSandbox
-  ? 'https://sandbox.sumup.com/token'
-  : 'https://api.sumup.com/token';
 const CHECKOUT_URL  = isSandbox
   ? 'https://sandbox.sumup.com/v0.1/checkouts'
   : 'https://api.sumup.com/v0.1/checkouts';

@@ -5,9 +5,7 @@ const router  = express.Router();
 
 // ─── Sandbox vs Production ───────────────────────────────────────────────
 const isSandbox     = process.env.USE_SUMUP_SANDBOX === 'true';
-const AUTHORIZE_URL = isSandbox
-  ? 'https://sandbox.sumup.com/authorize'
-  : 'https://api.sumup.com/authorize';
+const AUTHORIZE_URL = 'https://auth.sumup.com/authorize';
 
 // ─── OAuth Client ID & Redirect URI ──────────────────────────────────────
 const CLIENT_ID    = isSandbox
