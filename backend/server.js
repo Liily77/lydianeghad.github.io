@@ -20,19 +20,13 @@ const jwt        = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const axios      = require('axios');
 
-// ─── 2) Sandbox vs Production pour SumUp ─────────────────────────────────
-const isSandbox     = process.env.USE_SUMUP_SANDBOX === 'true';
-const AUTHORIZE_URL = isSandbox
-  ? 'https://sandbox.sumup.com/authorize'
-  : 'https://api.sumup.com/authorize';
-const TOKEN_URL     = isSandbox
-  ? 'https://sandbox.sumup.com/token'
-  : 'https://api.sumup.com/token';
-const CHECKOUT_URL  = isSandbox
-  ? 'https://sandbox.sumup.com/v0.1/checkouts'
-  : 'https://api.sumup.com/v0.1/checkouts';
+// ─── 2) Endpoints SumUp (toujours sur api.sumup.com) ──────────────────────
+const AUTHORIZE_URL = 'https://api.sumup.com/authorize';
+const TOKEN_URL     = 'https://api.sumup.com/token';
+const CHECKOUT_URL  = 'https://api.sumup.com/v0.1/checkouts';
 
 // ─── 3) Credentials OAuth & tokens ────────────────────────────────────────
+const isSandbox            = process.env.USE_SUMUP_SANDBOX === 'true';
 const CLIENT_ID            = isSandbox
   ? process.env.SUMUP_SANDBOX_CLIENT_ID
   : process.env.SUMUP_CLIENT_ID;
@@ -193,7 +187,7 @@ app.get('/auth/callback', async (req, res) => {
 const checkoutRouter = require('./routes/checkout');
 app.use('/api/checkout', checkoutRouter);
 
-// ─── 17) CRUD Produits protégées ──────────────────────────────────────────
+// ─── 17) CRUD Produits protégées ─────────────────────────────────────────
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
   const images = req.files.map(f => `/uploads/${f.filename}`);
   const p = new Produit({ ...req.body, prix: parseFloat(req.body.prix), images });
