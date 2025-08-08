@@ -15,11 +15,17 @@ const ACCESS_TOKEN = isSandbox
   ? process.env.SUMUP_SANDBOX_ACCESS_TOKEN
   : process.env.SUMUP_PROD_ACCESS_TOKEN;
 
+// ─── Création d’un checkout SumUp ─────────────────────────────────────
 router.post('/', async (req, res) => {
   try {
     const { items } = req.body;
-    const total = items.reduce((sum, i) => sum + i.quantity * i.unit_price, 0);
+    // Calcul du total à partir des lignes de commande
+    const total = items.reduce(
+      (sum, i) => sum + i.quantity * i.unit_price,
+      0
+    );
 
+    // Appel à l’API SumUp pour créer un checkout
     const response = await axios.post(
       CHECKOUT_URL,
       {
@@ -37,9 +43,13 @@ router.post('/', async (req, res) => {
       }
     );
 
+    // On renvoie l’URL de paiement au front
     res.json({ checkoutUrl: response.data.checkout_url });
   } catch (err) {
-    console.error('Erreur création checkout SumUp:', err.response?.data || err);
+    console.error(
+      'Erreur création checkout SumUp:',
+      err.response?.data || err
+    );
     res.status(500).json({ error: 'Impossible de créer le checkout' });
   }
 });
