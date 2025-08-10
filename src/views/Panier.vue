@@ -269,13 +269,13 @@ export default {
   .panier-page {
     padding: 1rem;
     max-width: 100%;
-    min-height: 100vh; /* Prend toute la hauteur de l’écran */
+    min-height: 100vh; /* prend toute la hauteur */
     display: flex;
     flex-direction: column;
   }
 
   .panier-liste {
-    flex: 1; /* pousse le footer vers le bas */
+    flex: 1; /* pousse le bloc footer vers le bas */
   }
 
   .logo-panier {
@@ -330,26 +330,35 @@ export default {
     padding: 0.2rem 0.5rem;
   }
 
+  /* Bloc total + payer collant en bas */
   .panier-footer {
+    position: sticky;
+    bottom: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    margin-top: auto; /* colle le footer en bas */
-    gap: 1rem;
+    width: 92%;
+    max-width: 480px;
+    margin: 0.75rem auto 0;
+    gap: 0.75rem;
+    background: #f9f4f0cc; /* fond léger */
+    backdrop-filter: blur(2px);
+    padding: 0.75rem;
+    border-radius: 12px;
   }
 
   .panier-footer h2 {
     font-size: 1rem;
     margin: 0;
+    width: 100%;
     text-align: center;
   }
 
   .payer-btn {
     width: 100%;
-    max-width: 300px;
-    font-size: 0.8rem;
-    padding: 0.5rem 1rem;
+    max-width: 320px;
+    font-size: 0.85rem;
+    padding: 0.55rem 1rem;
     border-radius: 10px;
   }
 }
