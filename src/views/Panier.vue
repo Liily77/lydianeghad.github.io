@@ -269,14 +269,13 @@ export default {
   .panier-page {
     padding: 1rem;
     max-width: 100%;
-    min-height: 100vh; /* prend toute la hauteur */
     display: flex;
     flex-direction: column;
-    padding-bottom: 120px; /* espace réservé si on fixe le footer */
   }
 
   .panier-liste {
-    flex: 1; /* pousse le bloc footer vers le bas */
+    flex: 1; /* pousse le footer vers le bas si la liste est longue */
+    padding-bottom: 90px; /* espace de sécurité pour le footer fixe */
   }
 
   .logo-panier {
@@ -298,7 +297,7 @@ export default {
     width: 70px;
     height: 70px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     object-fit: cover;
   }
 
@@ -331,21 +330,22 @@ export default {
     padding: 0.2rem 0.5rem;
   }
 
-  /* Bloc total + payer collant en bas */
+  /* Footer paiement fixe en bas */
   .panier-footer {
-    position: fixed; /* collé en bas */
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+    width: min(92%, 480px);
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
     gap: 0.75rem;
-    background: rgba(249, 244, 240, 0.95); /* fond léger */
+    background: rgba(249, 244, 240, 0.95);
     backdrop-filter: blur(2px);
     padding: 0.75rem 1rem;
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
     z-index: 100;
   }
 
@@ -357,7 +357,7 @@ export default {
   }
 
   .payer-btn {
-    width: 92%;
+    width: 100%;
     max-width: 320px;
     font-size: 0.85rem;
     padding: 0.55rem 1rem;
