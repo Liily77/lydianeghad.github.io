@@ -278,7 +278,7 @@ export default {
 
   .panier-item {
     flex-direction: row;
-    width: 90%;
+    width: 95%;
     max-width: 480px;
     margin: 0 auto;
     padding: 0.8rem;
@@ -299,12 +299,10 @@ export default {
     width: auto;
   }
 
-  /* Titre des catégories, produits */
   .infos h3 {
     font-size: 0.9rem;
   }
 
-  /* Texte descriptif et prix */
   .infos p {
     font-size: 0.75rem;
   }
@@ -314,40 +312,42 @@ export default {
     gap: 0.4rem;
   }
 
-  /* Boutons + / - */
   .quantity-controls button {
-    padding: 0.2rem 0.5rem;
-    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
   }
 
-  /* Bouton Retirer */
   .retirer-btn {
     margin-left: auto;
     font-size: 0.7rem;
-    padding: 0.2rem 0.5rem;
+    padding: 0.3rem 0.6rem;
   }
 
   .panier-footer {
+    position: sticky;
+    bottom: 0;
+    background-color: #f9f4f0;
     display: flex;
     flex-direction: column;
-    align-items: center;   /* centre horizontalement */
-    width: max-content;    /* largeur au contenu */
+    align-items: center;
+    width: 100%;
     margin: 1rem auto 0;
-    gap: 1rem;
+    padding: 1rem;
+    gap: 0.8rem;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
   }
 
   .panier-footer h2 {
     font-size: 1rem;
     margin: 0;
-    width: 100%;          /* prend la largeur du parent */
     text-align: center;
   }
 
   .payer-btn {
-    width: 100%;           /* occupe toute la largeur du parent */
-    max-width: 300px;      /* max-width comme tu souhaites */
+    width: 100%;
+    max-width: 300px;
     font-size: 0.8rem;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1rem;
     border-radius: 10px;
   }
 }
