@@ -272,6 +272,7 @@ export default {
     min-height: 100vh; /* prend toute la hauteur */
     display: flex;
     flex-direction: column;
+    padding-bottom: 120px; /* espace réservé si on fixe le footer */
   }
 
   .panier-liste {
@@ -332,19 +333,20 @@ export default {
 
   /* Bloc total + payer collant en bas */
   .panier-footer {
-    position: sticky;
-    bottom: 12px;
+    position: fixed; /* collé en bas */
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 92%;
-    max-width: 480px;
-    margin: 0.75rem auto 0;
+    width: 100%;
     gap: 0.75rem;
-    background: #f9f4f0cc; /* fond léger */
+    background: rgba(249, 244, 240, 0.95); /* fond léger */
     backdrop-filter: blur(2px);
-    padding: 0.75rem;
-    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
   }
 
   .panier-footer h2 {
@@ -355,14 +357,13 @@ export default {
   }
 
   .payer-btn {
-    width: 100%;
+    width: 92%;
     max-width: 320px;
     font-size: 0.85rem;
     padding: 0.55rem 1rem;
     border-radius: 10px;
   }
 }
-
 
 
 </style>
