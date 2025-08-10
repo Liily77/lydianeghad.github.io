@@ -18,31 +18,17 @@ const xssClean   = require('xss-clean');
 const hpp        = require('hpp');
 const jwt        = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-const axios      = require('axios');
 
 // ─── Import des routeurs ──────────────────────────────────────────────────
 const authRouter     = require('./routes/authentification');
 const checkoutRouter = require('./routes/checkout');
 
+// ─── Store en mémoire pour le token SumUp ─────────────────────────────────
+const sumupTokenStore = require('./sumupTokenStore');
+
 // ─── 2) Endpoints SumUp (prod vs sandbox) ─────────────────────────────────
-// OAuth (connexion & token, sandbox ou prod)
-const AUTHORIZE_URL = 'https://api.sumup.com/authorize';
-const TOKEN_URL     = 'https://api.sumup.com/token';
-
-// API Checkouts : sandbox vs prod
+// (Références uniquement, la logique d’OAuth est dans routes/authentification)
 const isSandbox    = process.env.USE_SUMUP_SANDBOX === 'true';
-const CHECKOUT_URL = isSandbox
-  ? 'https://sandbox.sumup.com/v0.1/checkouts'
-  : 'https://api.sumup.com/v0.1/checkouts';
-
-// ─── 3) Credentials OAuth & tokens ────────────────────────────────────────
-const CLIENT_ID     = isSandbox
-  ? process.env.SUMUP_SANDBOX_CLIENT_ID
-  : process.env.SUMUP_CLIENT_ID;
-const CLIENT_SECRET = isSandbox
-  ? process.env.SUMUP_SANDBOX_CLIENT_SECRET
-  : process.env.SUMUP_CLIENT_SECRET;
-const REDIRECT_URI  = process.env.REDIRECT_URI;
 
 // ─── 4) Express setup ─────────────────────────────────────────────────────
 const app  = express();
@@ -59,8 +45,13 @@ app.use(morgan('combined'));
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
-// ─── 7) Montage du routeur d’authentification OAuth SumUp ─────────────────
+// ─── 7) Routes OAuth SumUp + statut connexion ─────────────────────────────
 app.use('/auth', authRouter);
+
+// Petit endpoint de diagnostic : indique si un token est présent côté serveur
+app.get('/auth/status', (_req, res) => {
+  res.json({ connected: sumupTokenStore.isSet() });
+});
 
 // ─── 8) Static + uploads ─────────────────────────────────────────────────
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -91,7 +82,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter(req, file, cb) {
+  fileFilter(_req, file, cb) {
     if (/image\/(jpeg|png|gif)/.test(file.mimetype)) cb(null, true);
     else cb(new Error('Seules JPEG, PNG et GIF sont acceptées'));
   }
@@ -146,6 +137,7 @@ app.post('/api/send-email', async (req, res) => {
     res.status(500).json({ success: false });
   }
 });
+
 app.get('/api/produits', (_req, res) => Produit.find().then(r => res.json(r)));
 app.get('/api/produits/recherche', (req, res) => {
   const q = req.query.q || '';
@@ -161,7 +153,7 @@ app.use('/api/checkout', checkoutRouter);
 
 // ─── 16) CRUD Produits protégées ──────────────────────────────────────────
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
-  const images = req.files.map(f => `/uploads/${f.filename}`);
+  const images = (req.files || []).map(f => `/uploads/${f.filename}`);
   const p = new Produit({ ...req.body, prix: parseFloat(req.body.prix), images });
   await p.save();
   res.status(201).json(p);
@@ -169,7 +161,7 @@ app.post('/api/produits', authMiddleware, upload.array('images'), async (req, re
 app.put('/api/produits/:id', authMiddleware, upload.array('images'), async (req, res) => {
   const prod = await Produit.findById(req.params.id);
   if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
-  if (req.files.length) {
+  if (req.files && req.files.length) {
     for (const img of prod.images) await supprimerFichier(path.join(__dirname, img));
     prod.images = req.files.map(f => `/uploads/${f.filename}`);
   }
