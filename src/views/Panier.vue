@@ -269,9 +269,13 @@ export default {
   .panier-page {
     padding: 1rem;
     max-width: 100%;
-    min-height: 100vh;         /* prend toute la hauteur de l'écran */
+    min-height: 100vh; /* Prend toute la hauteur de l’écran */
     display: flex;
-    flex-direction: column;    /* permet au footer d’aller en bas */
+    flex-direction: column;
+  }
+
+  .panier-liste {
+    flex: 1; /* pousse le footer vers le bas */
   }
 
   .logo-panier {
@@ -330,15 +334,14 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: max-content;
-    margin: auto auto 0;    /* pousse le footer en bas */
+    width: 100%;
+    margin-top: auto; /* colle le footer en bas */
     gap: 1rem;
   }
 
   .panier-footer h2 {
     font-size: 1rem;
     margin: 0;
-    width: 100%;
     text-align: center;
   }
 
