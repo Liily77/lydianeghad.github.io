@@ -274,14 +274,11 @@ export default {
   }
 
   .panier-liste {
-    flex: 1; /* pousse le footer vers le bas si la liste est longue */
-    padding-bottom: 90px; /* espace de sécurité pour le footer fixe */
+    flex: 1;
+    padding-bottom: 90px; /* pour ne pas que le footer fixe recouvre les items */
   }
 
-  .logo-panier {
-    max-width: 180px;
-    transform: translateX(0);
-  }
+  .logo-panier { max-width: 180px; transform: translateX(0); }
 
   .panier-item {
     flex-direction: row;
@@ -294,41 +291,17 @@ export default {
   }
 
   .image-container img {
-    width: 70px;
-    height: 70px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    object-fit: cover;
+    width: 70px; height: 70px; border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); object-fit: cover;
   }
 
-  .infos {
-    flex: 1;
-    width: auto;
-  }
+  .infos { flex: 1; width: auto; }
+  .infos h3 { font-size: 0.9rem; }
+  .infos p  { font-size: 0.75rem; }
 
-  .infos h3 {
-    font-size: 0.9rem;
-  }
-
-  .infos p {
-    font-size: 0.75rem;
-  }
-
-  .quantity-controls {
-    flex-wrap: nowrap;
-    gap: 0.4rem;
-  }
-
-  .quantity-controls button {
-    padding: 0.2rem 0.5rem;
-    font-size: 0.7rem;
-  }
-
-  .retirer-btn {
-    margin-left: auto;
-    font-size: 0.7rem;
-    padding: 0.2rem 0.5rem;
-  }
+  .quantity-controls { flex-wrap: nowrap; gap: 0.4rem; }
+  .quantity-controls button { padding: 0.2rem 0.5rem; font-size: 0.7rem; }
+  .retirer-btn { margin-left: auto; font-size: 0.7rem; padding: 0.2rem 0.5rem; }
 
   /* Footer paiement fixe en bas */
   .panier-footer {
@@ -338,13 +311,13 @@ export default {
     bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
     width: min(92%, 480px);
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse; /* <<< inverse l’ordre : bouton au-dessus du total */
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     background: rgba(249, 244, 240, 0.95);
     backdrop-filter: blur(2px);
     padding: 0.75rem 1rem;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
     border-radius: 12px;
     z-index: 100;
   }
