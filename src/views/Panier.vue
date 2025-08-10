@@ -269,6 +269,9 @@ export default {
   .panier-page {
     padding: 1rem;
     max-width: 100%;
+    min-height: 100vh;         /* prend toute la hauteur de l'écran */
+    display: flex;
+    flex-direction: column;    /* permet au footer d’aller en bas */
   }
 
   .logo-panier {
@@ -299,12 +302,10 @@ export default {
     width: auto;
   }
 
-  /* Titre des catégories, produits */
   .infos h3 {
     font-size: 0.9rem;
   }
 
-  /* Texte descriptif et prix */
   .infos p {
     font-size: 0.75rem;
   }
@@ -314,13 +315,11 @@ export default {
     gap: 0.4rem;
   }
 
-  /* Boutons + / - */
   .quantity-controls button {
     padding: 0.2rem 0.5rem;
     font-size: 0.7rem;
   }
 
-  /* Bouton Retirer */
   .retirer-btn {
     margin-left: auto;
     font-size: 0.7rem;
@@ -330,22 +329,22 @@ export default {
   .panier-footer {
     display: flex;
     flex-direction: column;
-    align-items: center;   /* centre horizontalement */
-    width: max-content;    /* largeur au contenu */
-    margin: 1rem auto 0;
+    align-items: center;
+    width: max-content;
+    margin: auto auto 0;    /* pousse le footer en bas */
     gap: 1rem;
   }
 
   .panier-footer h2 {
     font-size: 1rem;
     margin: 0;
-    width: 100%;          /* prend la largeur du parent */
+    width: 100%;
     text-align: center;
   }
 
   .payer-btn {
-    width: 100%;           /* occupe toute la largeur du parent */
-    max-width: 300px;      /* max-width comme tu souhaites */
+    width: 100%;
+    max-width: 300px;
     font-size: 0.8rem;
     padding: 0.5rem 1rem;
     border-radius: 10px;
