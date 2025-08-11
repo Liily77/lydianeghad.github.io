@@ -266,6 +266,11 @@ export default {
 }
 
 @media (max-width: 768px) {
+  /* on définit la hauteur approximative du footer du site */
+  .panier-page { 
+    --site-footer-h: 72px; /* ajuste à 64–80px selon ton footer */
+  }
+
   .panier-page {
     padding: 1rem;
     max-width: 100%;
@@ -273,9 +278,11 @@ export default {
     flex-direction: column;
   }
 
+  /* on réserve assez d'espace en bas pour :
+     footer site + bloc paiement */
   .panier-liste {
     flex: 1;
-    padding-bottom: 90px; /* pour ne pas que le footer fixe recouvre les items */
+    padding-bottom: calc(var(--site-footer-h) + 140px);
   }
 
   .logo-panier { max-width: 180px; transform: translateX(0); }
@@ -303,15 +310,16 @@ export default {
   .quantity-controls button { padding: 0.2rem 0.5rem; font-size: 0.7rem; }
   .retirer-btn { margin-left: auto; font-size: 0.7rem; padding: 0.2rem 0.5rem; }
 
-  /* Footer paiement fixe en bas */
+  /* === BLOC PAIEMENT FIXE AU-DESSUS DU FOOTER DU SITE === */
   .panier-footer {
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+    /* on place le bloc AU-DESSUS du footer site */
+    bottom: calc(var(--site-footer-h) + env(safe-area-inset-bottom, 0px) + 8px);
     width: min(92%, 480px);
     display: flex;
-    flex-direction: column-reverse; /* <<< inverse l’ordre : bouton au-dessus du total */
+    flex-direction: column-reverse; /* bouton au-dessus du total */
     align-items: center;
     gap: 0.5rem;
     background: rgba(249, 244, 240, 0.95);
@@ -337,5 +345,6 @@ export default {
     border-radius: 10px;
   }
 }
+
 
 </style>
