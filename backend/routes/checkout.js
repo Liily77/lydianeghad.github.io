@@ -5,9 +5,10 @@ const router  = express.Router();
 
 // ─── Sandbox vs Production pour SumUp ──────────────────────────────────
 const isSandbox    = process.env.USE_SUMUP_SANDBOX === 'true';
-const CHECKOUT_URL = isSandbox
-  ? 'https://sandbox.sumup.com/v0.1/checkouts'
-  : 'https://api.sumup.com/v0.1/checkouts';
+
+
+const CHECKOUT_URL = 'https://api.sumup.com/v0.1/checkouts';
+
 
 // ─── Création d’un checkout SumUp ─────────────────────────────────────
 router.post('/', async (req, res) => {
