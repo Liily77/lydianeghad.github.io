@@ -5,7 +5,8 @@ const store   = require('../sumupTokenStore'); // ← on lit le token ici
 const router  = express.Router();
 
 // ─── URL SumUp (identique sandbox & production) ──────────────────────────
-const CHECKOUT_URL = 'https://api.sumup.com/v0.1/checkouts';
+const CHECKOUT_URL  = 'https://api.sumup.com/v0.1/checkouts';
+const MERCHANT_CODE = process.env.SUMUP_MERCHANT_CODE; // ex: M99GF6UV
 
 // ─── Création d’un checkout SumUp ────────────────────────────────────────
 router.post('/', async (req, res) => {
@@ -33,16 +34,21 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Montant invalide' });
     }
 
-    // 2) Appel API SumUp avec hosted checkout activé
+    // 2) Construire le payload pour SumUp
     const payload = {
       checkout_reference: orderId || `order_${Date.now()}`,
       amount:             Number(total.toFixed(2)),
       currency:           currency || 'EUR',
       description:        title || 'Commande Arc En Ciel',
-      hosted_checkout:    { enabled: true }, // ✅ indispensable pour URL de paiement
-      return_url: process.env.CHECKOUT_RETURN_URL || 'https://arcenciel-backend.onrender.com/panier'
+      hosted_checkout:    { enabled: true },
+      return_url: process.env.CHECKOUT_RETURN_URL || 'https://arcenciel-backend.onrender.com/panier',
+      ...(MERCHANT_CODE ? { merchant_code: MERCHANT_CODE } : {})
     };
 
+    // Debug log
+    console.log('SumUp payload →', payload);
+
+    // 3) Appel API SumUp
     const response = await axios.post(CHECKOUT_URL, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -51,7 +57,7 @@ router.post('/', async (req, res) => {
       timeout: 15000
     });
 
-    // 3) Réponse au front
+    // 4) Réponse au front
     res.json({ checkoutUrl: response.data.checkout_url });
   } catch (err) {
     console.error('Erreur création checkout SumUp:', err.response?.data || err.message);
