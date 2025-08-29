@@ -1,17 +1,16 @@
 // backend/routes/checkout.js
 const express = require('express');
 const axios   = require('axios');
-const store   = require('../sumupTokenStore'); // ← on lit le token ici
+const store   = require('../sumupTokenStore');
 const router  = express.Router();
 
-// ─── URL SumUp (identique sandbox & production) ──────────────────────────
+// SumUp
 const CHECKOUT_URL  = 'https://api.sumup.com/v0.1/checkouts';
 const MERCHANT_CODE = process.env.SUMUP_MERCHANT_CODE; // ex: M99GF6UV
 
-// ─── Création d’un checkout SumUp ────────────────────────────────────────
 router.post('/', async (req, res) => {
   try {
-    // 0) Vérifier le token côté serveur
+    // 0) Token OAuth côté serveur
     const token = store.get();
     if (!token) {
       return res.status(400).json({ error: 'Token SumUp manquant côté serveur' });
@@ -19,7 +18,7 @@ router.post('/', async (req, res) => {
 
     const { items, amount, currency, title, orderId } = req.body;
 
-    // 1) Calcule le montant total
+    // 1) Montant total
     let total;
     if (Array.isArray(items) && items.length) {
       total = items.reduce(
@@ -29,12 +28,11 @@ router.post('/', async (req, res) => {
     } else {
       total = Number(amount);
     }
-
     if (!total || total <= 0) {
       return res.status(400).json({ error: 'Montant invalide' });
     }
 
-    // 2) Construire le payload pour SumUp
+    // 2) Payload SumUp
     const payload = {
       checkout_reference: orderId || `order_${Date.now()}`,
       amount:             Number(total.toFixed(2)),
@@ -45,10 +43,9 @@ router.post('/', async (req, res) => {
       ...(MERCHANT_CODE ? { merchant_code: MERCHANT_CODE } : {})
     };
 
-    // 🔎 Debug log côté serveur
     console.log('SumUp payload →', payload);
 
-    // 3) Appel API SumUp
+    // 3) Appel API
     const response = await axios.post(CHECKOUT_URL, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -57,29 +54,26 @@ router.post('/', async (req, res) => {
       timeout: 15000
     });
 
-    // 🔎 Logs détaillés de la réponse SumUp
     console.log('SumUp response status:', response.status);
     console.log('SumUp response data:', response.data);
 
-    // Si pas d'URL de paiement, renvoyer tout le JSON pour debug côté front
-    const checkoutUrl = response?.data?.checkout_url;
+    // ⚠️ SumUp renvoie "hosted_checkout_url" (et pas "checkout_url")
+    const checkoutUrl =
+      response?.data?.checkout_url || response?.data?.hosted_checkout_url;
+
     if (!checkoutUrl) {
       return res.status(502).json({
-        error: 'Réponse SumUp sans checkout_url',
+        error: 'Réponse SumUp sans URL de paiement',
         sumup: response.data
       });
     }
 
-    // 4) Réponse au front
+    // 4) OK
     res.json({ checkoutUrl });
   } catch (err) {
     const status  = err.response?.status || 500;
     const details = err.response?.data || { message: err.message };
-
-    // 🔎 Log serveur
     console.error('Erreur création checkout SumUp:', details);
-
-    // 🔁 Renvoi au front avec le JSON SumUp pour inspection dans Network
     res.status(status).json({
       error: details?.message || details?.error_message || 'Impossible de créer le checkout',
       sumup: details
