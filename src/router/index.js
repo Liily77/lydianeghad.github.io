@@ -19,7 +19,8 @@ import Produit from '../views/Produit.vue'
 import Admin from '../views/Admin.vue'
 import Nouveautes from '../views/Nouveautes.vue'
 import Rechercher from '../components/Rechercher.vue'
-import Contact from '../views/Contact.vue' // 
+import Contact from '../views/Contact.vue'
+import Merci from '../views/Merci.vue' // ✅ nouvelle vue Merci
 
 // Routes
 const routes = [
@@ -40,7 +41,8 @@ const routes = [
   { path: '/panier', name: 'Panier', component: () => import('../views/Panier.vue') },
   { path: '/nouveautes', name: 'Nouveautes', component: Nouveautes },
   { path: '/recherche', name: 'Rechercher', component: Rechercher },
-  { path: '/contact', name: 'Contact', component: Contact } // ✅ Ajout de la route Contact
+  { path: '/contact', name: 'Contact', component: Contact },
+  { path: '/merci', name: 'Merci', component: Merci } // ✅ route ajoutée
 ]
 
 // Router

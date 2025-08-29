@@ -32,20 +32,25 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Montant invalide' });
     }
 
-    // 2) Payload SumUp
+    // 2) Référence + return_url avec ref
+    const orderRef = orderId || `order_${Date.now()}`;
+    const BASE_URL = process.env.BASE_URL || 'https://arcenciel-backend.onrender.com';
+    const returnUrl = `${BASE_URL}/merci?ref=${encodeURIComponent(orderRef)}`;
+
+    // 3) Payload SumUp (Hosted Checkout)
     const payload = {
-      checkout_reference: orderId || `order_${Date.now()}`,
+      checkout_reference: orderRef,
       amount:             Number(total.toFixed(2)),
       currency:           currency || 'EUR',
       description:        title || 'Commande Arc En Ciel',
       hosted_checkout:    { enabled: true },
-      return_url: process.env.CHECKOUT_RETURN_URL || 'https://arcenciel-backend.onrender.com/panier',
+      return_url:         returnUrl,
       ...(MERCHANT_CODE ? { merchant_code: MERCHANT_CODE } : {})
     };
 
     console.log('SumUp payload →', payload);
 
-    // 3) Appel API
+    // 4) Appel API
     const response = await axios.post(CHECKOUT_URL, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -57,7 +62,7 @@ router.post('/', async (req, res) => {
     console.log('SumUp response status:', response.status);
     console.log('SumUp response data:', response.data);
 
-    // ⚠️ SumUp renvoie "hosted_checkout_url" (et pas "checkout_url")
+    // 5) URL de paiement (hosted_checkout_url)
     const checkoutUrl =
       response?.data?.checkout_url || response?.data?.hosted_checkout_url;
 
@@ -68,7 +73,7 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // 4) OK
+    // 6) OK
     res.json({ checkoutUrl });
   } catch (err) {
     const status  = err.response?.status || 500;
