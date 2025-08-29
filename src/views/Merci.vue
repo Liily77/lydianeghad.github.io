@@ -22,6 +22,7 @@ const ref = route.query.ref || 'inconnue'
 <style scoped>
 .merci-page {
   display: flex;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   justify-content: center;
   align-items: center;
   padding: 2rem;

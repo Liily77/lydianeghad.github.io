@@ -151,6 +151,13 @@ app.get('/api/produits/:id', (req, res) => {
 // ─── 15) Route de création de checkout via SumUp ─────────────────────────
 app.use('/api/checkout', checkoutRouter);
 
+// ─── 15.1) Ping return_url SumUp (évite 404 sur POST /merci) ─────────────
+app.post('/merci', (req, res) => {
+  console.log('SumUp return_url POST ping →', req.body);
+  // Rien à renvoyer, on confirme juste réception
+  res.status(204).end();
+});
+
 // ─── 16) CRUD Produits protégées ──────────────────────────────────────────
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
   const images = (req.files || []).map(f => `/uploads/${f.filename}`);
