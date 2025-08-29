@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
       ...(MERCHANT_CODE ? { merchant_code: MERCHANT_CODE } : {})
     };
 
-    // Debug log
+    // 🔎 Debug log côté serveur
     console.log('SumUp payload →', payload);
 
     // 3) Appel API SumUp
@@ -57,12 +57,33 @@ router.post('/', async (req, res) => {
       timeout: 15000
     });
 
+    // 🔎 Logs détaillés de la réponse SumUp
+    console.log('SumUp response status:', response.status);
+    console.log('SumUp response data:', response.data);
+
+    // Si pas d'URL de paiement, renvoyer tout le JSON pour debug côté front
+    const checkoutUrl = response?.data?.checkout_url;
+    if (!checkoutUrl) {
+      return res.status(502).json({
+        error: 'Réponse SumUp sans checkout_url',
+        sumup: response.data
+      });
+    }
+
     // 4) Réponse au front
-    res.json({ checkoutUrl: response.data.checkout_url });
+    res.json({ checkoutUrl });
   } catch (err) {
-    console.error('Erreur création checkout SumUp:', err.response?.data || err.message);
-    const status = err.response?.status || 500;
-    res.status(status).json({ error: 'Impossible de créer le checkout' });
+    const status  = err.response?.status || 500;
+    const details = err.response?.data || { message: err.message };
+
+    // 🔎 Log serveur
+    console.error('Erreur création checkout SumUp:', details);
+
+    // 🔁 Renvoi au front avec le JSON SumUp pour inspection dans Network
+    res.status(status).json({
+      error: details?.message || details?.error_message || 'Impossible de créer le checkout',
+      sumup: details
+    });
   }
 });
 
