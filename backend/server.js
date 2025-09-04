@@ -72,6 +72,18 @@ const produitSchema = new mongoose.Schema({
 }, { timestamps: true });
 const Produit = mongoose.model('Produit', produitSchema);
 
+// --- Modèle Order (statut de paiement) ---
+const orderSchema = new mongoose.Schema({
+  ref:        { type: String, required: true, unique: true }, // checkout_reference
+  checkoutId: { type: String },                                // id du checkout SumUp
+  amount:     { type: Number, required: true },
+  currency:   { type: String, default: 'EUR' },
+  status:     { type: String, default: 'PENDING' },            // PENDING | PAID | FAILED | CANCELED
+  raw:        { type: Object }                                 // payload SumUp (utile en test)
+}, { timestamps: true });
+const Order = mongoose.model('Order', orderSchema);
+
+
 // ─── 11) Multer & nettoyage ───────────────────────────────────────────────
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
@@ -152,10 +164,53 @@ app.get('/api/produits/:id', (req, res) => {
 app.use('/api/checkout', checkoutRouter);
 
 // ─── 15.1) Ping return_url SumUp (évite 404 sur POST /merci) ─────────────
-app.post('/merci', (req, res) => {
+app.post('/merci', express.urlencoded({ extended: true }), async (req, res) => {
   console.log('SumUp return_url POST ping →', req.body);
-  // Rien à renvoyer, on confirme juste réception
+  const { id, status } = req.body || {};
+
+  if (id) {
+    try {
+      await Order.findOneAndUpdate(
+        { checkoutId: id },
+        { status: status || 'PENDING' },
+        { new: true }
+      );
+    } catch (e) {
+      console.error('Erreur maj Order sur /merci:', e.message);
+    }
+  }
+
   res.status(204).end();
+});
+
+// ─── 15.2) Page Merci (GET) — affiche la référence ───────────────────────
+app.get('/merci', (req, res) => {
+  const ref = req.query.ref || 'inconnue';
+  res.send(`
+    <!doctype html>
+    <html lang="fr">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Merci pour votre commande</title>
+        <style>
+          body { font-family: system-ui, Arial, sans-serif; padding: 40px; text-align: center; }
+          h1 { font-size: 24px; margin-bottom: 12px; }
+          .box { display: inline-block; padding: 16px 20px; border: 1px solid #eee; border-radius: 10px; }
+          .ref { font-weight: 700; }
+          a { display:inline-block; margin-top:18px; text-decoration:none; }
+        </style>
+      </head>
+      <body>
+        <h1>✅ Paiement reçu</h1>
+        <div class="box">
+          Référence de votre commande : <span class="ref">${ref}</span>
+        </div>
+        <br/>
+        <a href="/">← Retour à la boutique</a>
+      </body>
+    </html>
+  `);
 });
 
 // ─── 16) CRUD Produits protégées ──────────────────────────────────────────
