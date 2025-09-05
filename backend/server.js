@@ -243,6 +243,18 @@ app.delete('/api/produits/:id', authMiddleware, async (req, res) => {
   res.json({ message: 'Produit supprimé' });
 });
 
+// ─── 16 bis) API statut commande ──────────────────────────────────────────
+app.get('/api/orders/:ref/status', async (req, res) => {
+  try {
+    const order = await Order.findOne({ ref: req.params.ref }).lean();
+    if (!order) return res.status(404).json({ error: 'Order not found' });
+    res.json({ status: order.status });
+  } catch (e) {
+    console.error('Erreur statut commande:', e.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // ─── 17) Fallback SPA ─────────────────────────────────────────────────────
 app.get('*', (_req, res) => {
   res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));

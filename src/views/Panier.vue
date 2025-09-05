@@ -37,7 +37,7 @@
 
 <script>
 import { getPanier, retirerProduit, modifierQuantite } from '../utils/panier';
-import { api } from '@/utils/api'; // Assure-toi que api.js est bien configuré
+import { api } from '@/utils/api'; // doit renvoyer le JSON (fetch wrapper)
 
 export default {
   name: 'Panier',
@@ -81,27 +81,33 @@ export default {
           return;
         }
 
-        // On prépare les articles au format attendu par le backend
+        // Articles au format attendu par le backend
         const items = this.panier.map(p => ({
           name: p.nom,
           quantity: p.quantite,
           unit_price: p.prix
         }));
 
-        // Envoi vers ton backend
+        // Création du checkout côté backend
         const data = await api('/api/checkout', {
           method: 'POST',
           body: JSON.stringify({ items })
         });
 
-        if (!data.checkoutUrl) {
+        if (!data || !data.checkoutUrl || !data.ref) {
           console.error('Réponse checkout invalide:', data);
           alert('Impossible de créer le paiement.');
           return;
         }
 
-        // Redirection vers SumUp
-        window.location.href = data.checkoutUrl;
+        // ➜ On bascule vers la page d'attente avec ref + checkoutUrl
+        this.$router.push({
+          path: '/attente',
+          query: {
+            ref: data.ref,
+            checkoutUrl: data.checkoutUrl
+          }
+        });
 
       } catch (e) {
         console.error(e);
@@ -114,6 +120,7 @@ export default {
   }
 };
 </script>
+
 
 
 
