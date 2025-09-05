@@ -43,7 +43,8 @@ export default {
   name: 'Panier',
   data() {
     return {
-      panier: []
+      panier: [],
+      loading: false
     };
   },
   computed: {
@@ -76,8 +77,12 @@ export default {
     },
     async payer() {
       try {
+        if (this.loading) return;
+        this.loading = true;
+
         if (!this.panier.length) {
           alert('Votre panier est vide.');
+          this.loading = false;
           return;
         }
 
@@ -97,21 +102,17 @@ export default {
         if (!data || !data.checkoutUrl || !data.ref) {
           console.error('Réponse checkout invalide:', data);
           alert('Impossible de créer le paiement.');
+          this.loading = false;
           return;
         }
 
-        // ➜ On bascule vers la page d'attente avec ref + checkoutUrl
-        this.$router.push({
-          path: '/attente',
-          query: {
-            ref: data.ref,
-            checkoutUrl: data.checkoutUrl
-          }
-        });
+      
+        window.location.href = data.checkoutUrl;
 
       } catch (e) {
         console.error(e);
         alert('Erreur lors de la création du paiement.');
+        this.loading = false;
       }
     }
   },
@@ -120,6 +121,7 @@ export default {
   }
 };
 </script>
+
 
 
 
