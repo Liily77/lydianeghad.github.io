@@ -20,15 +20,14 @@ const jwt        = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
 // ─── Import des routeurs ──────────────────────────────────────────────────
-const authRouter     = require('./routes/authentification');
-const checkoutRouter = require('./routes/checkout');
+const authRouter = require('./routes/authentification');
 
 // ─── Store en mémoire pour le token SumUp ─────────────────────────────────
 const sumupTokenStore = require('./sumupTokenStore');
 
 // ─── 2) Endpoints SumUp (prod vs sandbox) ─────────────────────────────────
 // (Références uniquement, la logique d’OAuth est dans routes/authentification)
-const isSandbox    = process.env.USE_SUMUP_SANDBOX === 'true';
+const isSandbox = process.env.USE_SUMUP_SANDBOX === 'true';
 
 // ─── 4) Express setup ─────────────────────────────────────────────────────
 const app  = express();
@@ -83,6 +82,8 @@ const orderSchema = new mongoose.Schema({
 }, { timestamps: true });
 const Order = mongoose.model('Order', orderSchema);
 
+// ─── 10 bis) Route checkout chargée APRÈS les modèles ─────────────────────
+const checkoutRouter = require('./routes/checkout');
 
 // ─── 11) Multer & nettoyage ───────────────────────────────────────────────
 const uploadDir = path.join(__dirname, 'uploads');
