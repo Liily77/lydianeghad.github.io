@@ -239,10 +239,9 @@ app.get('/api/orders/:ref/status', async (req, res) => {
 });
 
 // ─── 17) Fallback SPA ─────────────────────────────────────────────────────
-app.get('*', (_req, res) => {
+app.get(/^(?!\/api|\/uploads|\/auth).*/, (_req, res) => {
   res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
 });
-
 // ─── 18) Démarrage serveur ────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`🚀 Serveur front+API sur port ${PORT} (Sandbox: ${isSandbox})`);
