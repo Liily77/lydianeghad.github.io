@@ -25,7 +25,7 @@ const authRouter = require('./routes/authentification');
 // ─── Store en mémoire pour le token SumUp ─────────────────────────────────
 const sumupTokenStore = require('./sumupTokenStore');
 
-// ─── 2) Endpoints SumUp (prod vs sandbox) ─────────────────────────────────
+// ─── 2) Sandbox flag ──────────────────────────────────────────────────────
 const isSandbox = process.env.USE_SUMUP_SANDBOX === 'true';
 
 // ─── 4) Express setup ─────────────────────────────────────────────────────
@@ -46,8 +46,6 @@ app.use(express.json());
 
 // ─── 7) Routes OAuth SumUp + statut connexion ─────────────────────────────
 app.use('/auth', authRouter);
-
-// Petit endpoint de diagnostic : indique si un token est présent côté serveur
 app.get('/auth/status', (_req, res) => {
   res.json({ connected: sumupTokenStore.isSet() });
 });
@@ -56,12 +54,12 @@ app.get('/auth/status', (_req, res) => {
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// ─── 9) MongoDB ─────────────────────────────────────────────────────────
+// ─── 9) MongoDB ───────────────────────────────────────────────────────────
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connectée !'))
   .catch(err => console.error('❌ Erreur MongoDB :', err));
 
-// ─── 10) Modèle Produit ─────────────────────────────────────────────────
+// ─── 10) Modèle Produit ───────────────────────────────────────────────────
 const produitSchema = new mongoose.Schema({
   nom:         { type: String, required: true },
   description: { type: String, required: true },
@@ -105,7 +103,7 @@ async function supprimerFichier(fp) {
   catch (err) { console.error('Erreur suppression', fp, err); }
 }
 
-// ─── 12) Auth middleware ─────────────────────────────────────────────────
+// ─── 12) Auth middleware ──────────────────────────────────────────────────
 function authMiddleware(req, res, next) {
   const h = req.headers.authorization;
   if (!h) return res.status(401).json({ message: 'Authentification requise' });
@@ -117,17 +115,14 @@ function authMiddleware(req, res, next) {
 // ─── 13) Login Admin ──────────────────────────────────────────────────────
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-  if (
-    username === process.env.ADMIN_USER &&
-    password === process.env.ADMIN_PASS
-  ) {
+  if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS) {
     const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: '2h' });
     return res.json({ token });
   }
   res.status(401).json({ message: 'Identifiants invalides' });
 });
 
-// ─── 14) API Produits & Email ────────────────────────────────────────────
+// ─── 14) API Produits & Email ─────────────────────────────────────────────
 app.post('/api/send-email', async (req, res) => {
   const { name, email, message } = req.body;
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
@@ -161,10 +156,10 @@ app.get('/api/produits/:id', (req, res) => {
     .then(p => p ? res.json(p) : res.status(404).json({ message: 'Produit introuvable' }));
 });
 
-// ─── 15) Route de création de checkout via SumUp ─────────────────────────
+// ─── 15) Route de création de checkout via SumUp ──────────────────────────
 app.use('/api/checkout', checkoutRouter);
 
-// ─── 15.1) Ping return_url SumUp (évite 404 sur POST /merci) ─────────────
+// ─── 15.1) Ping return_url SumUp (POST) ───────────────────────────────────
 app.post('/merci', express.urlencoded({ extended: true }), async (req, res) => {
   console.log('SumUp return_url POST ping →', req.body);
   const { id, status } = req.body || {};
@@ -184,13 +179,7 @@ app.post('/merci', express.urlencoded({ extended: true }), async (req, res) => {
   res.status(204).end();
 });
 
-// ─── 15.2) Rediriger GET /merci vers la page Vue (frontend) ──────────────
-// FRONT_URL = URL publique de ton frontend (ex: https://arcenciel-frontend.onrender.com)
-app.get('/merci', (req, res) => {
-  const ref = req.query.ref || '';
-  const FRONT_URL = process.env.FRONT_URL || 'https://arcenciel-frontend.onrender.com';
-  res.redirect(302, `${FRONT_URL}/merci?ref=${encodeURIComponent(ref)}`);
-});
+// ⚠️ PAS DE REDIRECTION 302 SUR GET /merci ! Laisse la SPA gérer.
 
 // ─── 16) CRUD Produits protégées ──────────────────────────────────────────
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
@@ -242,6 +231,7 @@ app.get('/api/orders/:ref/status', async (req, res) => {
 app.get(/^(?!\/api|\/uploads|\/auth).*/, (_req, res) => {
   res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
 });
+
 // ─── 18) Démarrage serveur ────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`🚀 Serveur front+API sur port ${PORT} (Sandbox: ${isSandbox})`);

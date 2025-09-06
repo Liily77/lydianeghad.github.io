@@ -19,7 +19,7 @@ import Admin from '../views/Admin.vue'
 import Nouveautes from '../views/Nouveautes.vue'
 import Rechercher from '../components/Rechercher.vue'
 import Contact from '../views/Contact.vue'
-import Merci from '../views/Merci.vue' 
+import Merci from '../views/Merci.vue'
 
 // Routes
 const routes = [
@@ -52,10 +52,7 @@ const router = createRouter({
     if (to.hash) {
       return new Promise((resolve) => {
         setTimeout(() => {
-          resolve({
-            el: to.hash,
-            behavior: 'smooth'
-          })
+          resolve({ el: to.hash, behavior: 'smooth' })
         }, 300)
       })
     }

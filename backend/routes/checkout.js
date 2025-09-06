@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
 
     // 3) Payload SumUp (Hosted Checkout)
     // - return_url   : SumUp fait un POST (ping) ici → backend (statut)
-    // - redirect_url : bouton "Retour au site marchand" → même domaine, Vue affiche Merci.vue
+    // - redirect_url : bouton "Retour au site marchand" → même URL (la SPA rend Merci.vue)
     const payload = {
       checkout_reference: orderRef,
       amount:             total,
