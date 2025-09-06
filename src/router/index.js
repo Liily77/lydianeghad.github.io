@@ -22,7 +22,6 @@ import Contact from '../views/Contact.vue'
 import Merci from '../views/Merci.vue'
 import Checkout from '../views/Checkout.vue'
 
-// Définition des routes
 const routes = [
   { path: '/', name: 'Home', component: Home },
   { path: '/bagues', name: 'Bagues', component: Bagues },
@@ -37,43 +36,28 @@ const routes = [
   { path: '/cartesdiv', name: 'Cartesdiv', component: Cartesdiv },
   { path: '/pendules', name: 'Pendules', component: Pendules },
   { path: '/produit/:id', name: 'Produit', component: Produit },
-
-  // Page Admin protégée
-  {
-    path: '/admin',
-    name: 'Admin',
-    component: Admin,
-    beforeEnter: (_to, _from, next) => {
-      const token = sessionStorage.getItem('admin_token')
-      if (!token) {
-        // si pas connecté, retour page d'accueil
-        return next('/')
-      }
-      next()
-    }
-  },
-
+  // ✅ plus de beforeEnter : on laisse Admin.vue afficher le login si pas connecté
+  { path: '/admin', name: 'Admin', component: Admin },
   { path: '/panier', name: 'Panier', component: () => import('../views/Panier.vue') },
   { path: '/nouveautes', name: 'Nouveautes', component: Nouveautes },
   { path: '/recherche', name: 'Rechercher', component: Rechercher },
   { path: '/contact', name: 'Contact', component: Contact },
   { path: '/checkout', name: 'Checkout', component: Checkout },
-  { path: '/merci', name: 'Merci', component: Merci }
+  { path: '/merci', name: 'Merci', component: Merci },
+  // (optionnel) catch-all -> home
+  { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 
-// Création du router
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(to) {
     if (to.hash) {
       return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({ el: to.hash, behavior: 'smooth' })
-        }, 300)
+        setTimeout(() => resolve({ el: to.hash, behavior: 'smooth' }), 300)
       })
     }
-    return savedPosition || { top: 0 }
+    return { top: 0 }
   }
 })
 

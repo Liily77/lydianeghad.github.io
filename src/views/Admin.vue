@@ -189,6 +189,8 @@
 <script>
 import { api } from '@/utils/api'
 
+const INACTIVITY_MIN = 30 // ↙ change si tu veux (minutes)
+
 export default {
   name: 'Admin',
   data() {
@@ -219,7 +221,10 @@ export default {
         'boucles doreilles','bijoux de cheville',
         'malas','parures','portecles',
         'cartesdiv','pendule'
-      ]
+      ],
+
+      // timer d'inactivité
+      _idleTimer: null,
     }
   },
   computed: {
@@ -236,11 +241,25 @@ export default {
     }
   },
   async mounted() {
+    // Si un token existe encore pour cet onglet, on affiche l’admin
     const token = sessionStorage.getItem('admin_token')
     if (token) {
       this.isLoggedIn = true
       await this.chargerProduits()
+      this._startIdleWatch()
     }
+    // reset timer sur activité utilisateur
+    window.addEventListener('mousemove', this._resetIdleWatch)
+    window.addEventListener('keydown', this._resetIdleWatch)
+    window.addEventListener('click', this._resetIdleWatch)
+    window.addEventListener('scroll', this._resetIdleWatch)
+  },
+  beforeUnmount() {
+    this._clearIdleWatch()
+    window.removeEventListener('mousemove', this._resetIdleWatch)
+    window.removeEventListener('keydown', this._resetIdleWatch)
+    window.removeEventListener('click', this._resetIdleWatch)
+    window.removeEventListener('scroll', this._resetIdleWatch)
   },
   methods: {
     // ========== Authentification admin ==========
@@ -255,9 +274,10 @@ export default {
             password: this.loginPass
           })
         })
-        sessionStorage.setItem('admin_token', token) // ✅ sessionStorage
+        sessionStorage.setItem('admin_token', token) // ✅ sessionStorage = auto logout à la fermeture
         this.isLoggedIn = true
         await this.chargerProduits()
+        this._startIdleWatch()
       } catch (err) {
         this.loginError = err.message || 'Erreur serveur, réessayez plus tard'
       } finally {
@@ -270,11 +290,13 @@ export default {
       this.loginUser = ''
       this.loginPass = ''
       this.produits = []
+      this._clearIdleWatch()
     },
 
     // ========== OAuth SumUp ==========
     connectSumUp() {
-      window.location.href = import.meta.env.VITE_BACKEND_URL + '/auth/connect'
+      const base = import.meta.env.VITE_BACKEND_URL || ''
+      window.location.href = base + '/auth/connect'
     },
 
     // ========== Gestion des fichiers images ==========
@@ -289,7 +311,13 @@ export default {
           headers: { Authorization: 'Bearer ' + sessionStorage.getItem('admin_token') }
         })
       } catch (err) {
-        if (err.message.includes('401')) this.seDeconnecter()
+        // si 401/403 → on force la déconnexion
+        if ((err.message || '').includes('401') || (err.message || '').includes('403')) {
+          this.seDeconnecter()
+        } else {
+          this.formMessage = '❌ Erreur de chargement produits'
+          this.formError = true
+        }
       }
     },
 
@@ -325,10 +353,11 @@ export default {
         formData.append('prix', this.nouveauProduit.prix)
         formData.append('categorie', catFinale)
         this.fichiersImages.forEach(f => f && formData.append('images', f))
+
         const data = await api('/api/produits', {
           method: 'POST',
           headers: { Authorization: 'Bearer ' + sessionStorage.getItem('admin_token') },
-          body: formData
+          body: formData // <-- api.js s’occupe de ne PAS mettre Content-Type quand c’est du FormData
         })
         this.produits.push(data)
         this.formMessage = '✅ Produit ajouté !'
@@ -391,10 +420,31 @@ export default {
       } catch {
         alert('❌ Erreur suppression')
       }
+    },
+
+    // ========== Gestion inactivité ==========
+    _startIdleWatch() {
+      this._clearIdleWatch()
+      this._idleTimer = setTimeout(() => {
+        // auto-logout après INACTIVITY_MIN min
+        this.seDeconnecter()
+        alert('Session expirée pour inactivité.')
+      }, INACTIVITY_MIN * 60 * 1000)
+    },
+    _resetIdleWatch() {
+      if (!this.isLoggedIn) return
+      this._startIdleWatch()
+    },
+    _clearIdleWatch() {
+      if (this._idleTimer) {
+        clearTimeout(this._idleTimer)
+        this._idleTimer = null
+      }
     }
   }
 }
 </script>
+
 
 
 
