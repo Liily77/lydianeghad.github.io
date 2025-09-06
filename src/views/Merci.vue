@@ -2,15 +2,17 @@
   <section class="merci">
     <div class="card">
       <div class="icon-wrap">
-        <span v-if="isPaid" class="icon">✅</span>
-        <span v-else-if="isPending" class="icon">⏳</span>
-        <span v-else class="icon">ℹ️</span>
+        <!-- Plus de check vert. On garde juste l'icône attente/info si besoin -->
+        <span v-if="isPending" class="icon">⏳</span>
+        <span v-else-if="!isPaid" class="icon">ℹ️</span>
       </div>
 
-      <h1 v-if="isPaid">Paiement reçu, merci !</h1>
+      <!-- Titre -->
+      <h1 v-if="isPaid">Paiement reçu, merci ❤️</h1>
       <h1 v-else-if="isPending">Paiement en cours de confirmation…</h1>
       <h1 v-else>Nous avons bien reçu votre retour</h1>
 
+      <!-- Référence -->
       <p class="ref" v-if="ref">
         Référence de votre commande :
         <strong>{{ ref }}</strong>
@@ -22,27 +24,26 @@
         (Référence manquante dans l’URL)
       </p>
 
+      <!-- Statut -->
       <p class="status" v-if="loading">Vérification du statut…</p>
       <p class="status" v-else>
         Statut :
         <span :class="['badge', badgeClass]">{{ statusLabel }}</span>
       </p>
 
+      <!-- Astuce si en attente -->
       <p class="tip" v-if="isPending">
         Vous venez de revenir depuis SumUp. Si l’écran reste en “en cours”, patientez quelques secondes puis
         <button class="linklike" @click="checkStatus">rafraîchissez le statut</button>.
       </p>
 
+      <!-- Actions -->
       <div class="actions">
         <button class="primary" @click="goHome">← Revenir à la boutique</button>
-        <a
-          class="secondary"
-          :href="`mailto:contact@exemple.com?subject=Commande%20Arc%20En%20Ciel%20${encodeURIComponent(ref)}`"
-        >
-          Besoin d’aide ?
-        </a>
+        <button class="secondary" @click="goContact">Besoin d’aide ?</button>
       </div>
 
+      <!-- FAQ courte -->
       <details class="details">
         <summary>Que se passe-t-il ensuite ?</summary>
         <ul>
@@ -68,6 +69,7 @@ export default {
   },
   computed: {
     isPaid() {
+      // On accepte PAID/SUCCESSFUL/SUCCESS par prudence
       return this.status === 'PAID' || this.status === 'SUCCESSFUL' || this.status === 'SUCCESS';
     },
     isPending() {
@@ -103,12 +105,15 @@ export default {
       } finally {
         this.loading = false;
         document.title = this.isPaid
-          ? '✅ Paiement validé – Arc En Ciel'
+          ? 'Paiement validé – Arc En Ciel'
           : 'Merci – Arc En Ciel';
       }
     },
     goHome() {
       this.$router.push('/');
+    },
+    goContact() {
+      this.$router.push('/contact');
     },
     async copyRef() {
       try {
@@ -194,9 +199,10 @@ h1 { margin: 12px 0 12px; font-size: 34px; font-weight: 700; }
 .primary:hover { transform: translateY(-1px); }
 
 .secondary {
-  text-decoration: none; border: 2px solid #ddd; border-radius: 14px;
-  padding: 12px 20px; color: #333; font-weight: 700; font-size: 18px;
   background: #fff;
+  border: 2px solid #ddd; border-radius: 14px;
+  padding: 12px 20px; color: #333; font-weight: 700; font-size: 18px;
+  cursor: pointer;
 }
 
 /* ——— Liens style bouton ——— */
