@@ -36,25 +36,22 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Montant invalide' });
     }
 
-    // 2) Référence + URLs de retour
-    const orderRef     = orderId || `order_${Date.now()}`;
-    const BACKEND_URL  = process.env.BASE_URL || 'https://arcenciel-backend.onrender.com';
-    const FRONTEND_URL = process.env.FRONTEND_URL || 'https://arcenciel-frontend.onrender.com';
-
-    // - return_url   : SumUp fait un POST (ping) ici → backend (statut)
-    const returnUrl   = `${BACKEND_URL}/merci?ref=${encodeURIComponent(orderRef)}`;
-    // - redirect_url : bouton "Retour au site marchand" → frontend (page Merci.vue)
-    const redirectUrl = `${FRONTEND_URL}/merci?ref=${encodeURIComponent(orderRef)}`;
+    // 2) Référence + URL de retour (même domaine front+back)
+    const orderRef    = orderId || `order_${Date.now()}`;
+    const BACKEND_URL = process.env.BASE_URL || 'https://arcenciel-backend.onrender.com';
+    const thankyou    = `${BACKEND_URL}/merci?ref=${encodeURIComponent(orderRef)}`;
 
     // 3) Payload SumUp (Hosted Checkout)
+    // - return_url   : SumUp fait un POST (ping) ici → backend (statut)
+    // - redirect_url : bouton "Retour au site marchand" → même domaine, Vue affiche Merci.vue
     const payload = {
       checkout_reference: orderRef,
       amount:             total,
       currency:           (currency || 'EUR').toUpperCase(),
       description:        title || 'Commande Arc En Ciel',
       hosted_checkout:    { enabled: true },
-      return_url:         returnUrl,    // ← ping serveur (POST)
-      redirect_url:       redirectUrl,  // ← bouton retour → frontend
+      return_url:         thankyou, // POST ping SumUp
+      redirect_url:       thankyou, // bouton “Retour au site marchand”
       ...(MERCHANT_CODE ? { merchant_code: MERCHANT_CODE } : {})
     };
 
@@ -91,7 +88,7 @@ router.post('/', async (req, res) => {
       { upsert: true, new: true }
     );
 
-    // 7) Retour front (Mode B → redirection directe dans le même onglet)
+    // 7) Retour front (redirection directe même onglet)
     res.json({ checkoutUrl, ref: orderRef });
   } catch (err) {
     const status  = err.response?.status || 500;
