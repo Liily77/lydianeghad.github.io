@@ -61,7 +61,7 @@ const produitSchema = new mongoose.Schema({
 const Produit = mongoose.model('Produit', produitSchema);
 
 //   - Order (depuis models/Order.js aligné avec checkout)
-require('./models/order'); // enregistre le modèle
+require('./models/Order'); // avec O majuscule// enregistre le modèle
 const Order = mongoose.models.Order || mongoose.model('Order');
 
 // 9) Routes importées
