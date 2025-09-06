@@ -20,6 +20,7 @@ import Nouveautes from '../views/Nouveautes.vue'
 import Rechercher from '../components/Rechercher.vue'
 import Contact from '../views/Contact.vue'
 import Merci from '../views/Merci.vue'
+import Checkout from '../views/Checkout.vue' // 👈 ajouté
 
 // Routes
 const routes = [
@@ -36,11 +37,17 @@ const routes = [
   { path: '/cartesdiv', name: 'Cartesdiv', component: Cartesdiv },
   { path: '/pendules', name: 'Pendules', component: Pendules },
   { path: '/produit/:id', name: 'Produit', component: Produit },
-  { path: '/admin', name: 'Admin', component: Admin },
+  { path: '/admin', name: 'Admin', component: Admin, beforeEnter: 
+    (_to, _from, next) => {
+    const t = sessionStorage.getItem('admin_token');
+    if (!t) return next('/'); // ou vers /login si tu fais une page dédiée
+    next();
+  }},
   { path: '/panier', name: 'Panier', component: () => import('../views/Panier.vue') },
   { path: '/nouveautes', name: 'Nouveautes', component: Nouveautes },
   { path: '/recherche', name: 'Rechercher', component: Rechercher },
   { path: '/contact', name: 'Contact', component: Contact },
+  { path: '/checkout', name: 'Checkout', component: Checkout }, 
   { path: '/merci', name: 'Merci', component: Merci }
 ]
 

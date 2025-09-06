@@ -25,7 +25,7 @@
 
       <div class="panier-footer">
         <h2>Total : {{ totalPanier }} €</h2>
-        <button class="payer-btn" @click="payer">Payer</button>
+        <button class="payer-btn" @click="payer">Commander</button>
       </div>
     </div>
 
@@ -37,22 +37,20 @@
 
 <script>
 import { getPanier, retirerProduit, modifierQuantite } from '../utils/panier';
-import { api } from '@/utils/api'; // doit renvoyer le JSON (fetch wrapper)
 
 export default {
   name: 'Panier',
   data() {
     return {
       panier: [],
-      loading: false
     };
   },
   computed: {
     totalPanier() {
       return this.panier
-        .reduce((total, item) => total + item.prix * item.quantite, 0)
+        .reduce((total, item) => total + Number(item.prix) * Number(item.quantite), 0)
         .toFixed(2);
-    }
+    },
   },
   methods: {
     getImageUrl(img) {
@@ -75,52 +73,24 @@ export default {
       modifierQuantite(id, -1);
       this.chargerPanier();
     },
-    async payer() {
-      try {
-        if (this.loading) return;
-        this.loading = true;
-
-        if (!this.panier.length) {
-          alert('Votre panier est vide.');
-          this.loading = false;
-          return;
-        }
-
-        // Articles au format attendu par le backend
-        const items = this.panier.map(p => ({
-          name: p.nom,
-          quantity: p.quantite,
-          unit_price: p.prix
-        }));
-
-        // Création du checkout côté backend
-        const data = await api('/api/checkout', {
-          method: 'POST',
-          body: JSON.stringify({ items })
-        });
-
-        if (!data || !data.checkoutUrl || !data.ref) {
-          console.error('Réponse checkout invalide:', data);
-          alert('Impossible de créer le paiement.');
-          this.loading = false;
-          return;
-        }
-
-      
-        window.location.href = data.checkoutUrl;
-
-      } catch (e) {
-        console.error(e);
-        alert('Erreur lors de la création du paiement.');
-        this.loading = false;
-      }
-    }
+    payer() {
+      // 👉 redirige vers la page Checkout
+      this.$router.push('/checkout');
+    },
   },
   mounted() {
     this.chargerPanier();
-  }
+    // 👉 écouter les MAJ du panier faites ailleurs dans l'app
+    window.addEventListener('maj-panier', this.chargerPanier);
+  },
+  beforeUnmount() {
+    // 👉 nettoyage de l'écouteur
+    window.removeEventListener('maj-panier', this.chargerPanier);
+  },
 };
 </script>
+
+
 
 
 

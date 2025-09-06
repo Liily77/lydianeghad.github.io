@@ -185,7 +185,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { api } from '@/utils/api'
 
@@ -236,7 +235,7 @@ export default {
     }
   },
   async mounted() {
-    const token = localStorage.getItem('admin_token')
+    const token = sessionStorage.getItem('admin_token')
     if (token) {
       this.isLoggedIn = true
       await this.chargerProduits()
@@ -255,7 +254,7 @@ export default {
             password: this.loginPass
           })
         })
-        localStorage.setItem('admin_token', token)
+        sessionStorage.setItem('admin_token', token) // ✅ sessionStorage
         this.isLoggedIn = true
         await this.chargerProduits()
       } catch (err) {
@@ -265,7 +264,7 @@ export default {
       }
     },
     seDeconnecter() {
-      localStorage.removeItem('admin_token')
+      sessionStorage.removeItem('admin_token')
       this.isLoggedIn = false
       this.loginUser = ''
       this.loginPass = ''
@@ -274,7 +273,6 @@ export default {
 
     // ========== OAuth SumUp ==========
     connectSumUp() {
-      // On appelle directement la route /auth/connect de notre backend
       window.location.href = import.meta.env.VITE_BACKEND_URL + '/auth/connect'
     },
 
@@ -287,7 +285,7 @@ export default {
     async chargerProduits() {
       try {
         this.produits = await api('/api/produits', {
-          headers: { Authorization: 'Bearer ' + localStorage.getItem('admin_token') }
+          headers: { Authorization: 'Bearer ' + sessionStorage.getItem('admin_token') }
         })
       } catch (err) {
         if (err.message.includes('401')) this.seDeconnecter()
@@ -328,7 +326,7 @@ export default {
         this.fichiersImages.forEach(f => f && formData.append('images', f))
         const data = await api('/api/produits', {
           method: 'POST',
-          headers: { Authorization: 'Bearer ' + localStorage.getItem('admin_token') },
+          headers: { Authorization: 'Bearer ' + sessionStorage.getItem('admin_token') },
           body: formData
         })
         this.produits.push(data)
@@ -366,7 +364,7 @@ export default {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('admin_token')
+            Authorization: 'Bearer ' + sessionStorage.getItem('admin_token')
           },
           body: JSON.stringify(produit)
         })
@@ -386,7 +384,7 @@ export default {
       try {
         await api(`/api/produits/${id}`, {
           method: 'DELETE',
-          headers: { Authorization: 'Bearer ' + localStorage.getItem('admin_token') }
+          headers: { Authorization: 'Bearer ' + sessionStorage.getItem('admin_token') }
         })
         this.produits = this.produits.filter(p => (p._id || p.id) !== id)
       } catch {
@@ -396,6 +394,7 @@ export default {
   }
 }
 </script>
+
 
 
 

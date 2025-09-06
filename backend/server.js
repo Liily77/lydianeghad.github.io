@@ -1,6 +1,6 @@
 // backend/server.js
 
-// ─── 1) Chargement des variables d'environnement en dev ───────────────────
+// 1) Variables d'env en dev
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
@@ -19,47 +19,38 @@ const hpp        = require('hpp');
 const jwt        = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
-// ─── Import des routeurs ──────────────────────────────────────────────────
-const authRouter = require('./routes/authentification');
-
-// ─── Store en mémoire pour le token SumUp ─────────────────────────────────
+// 2) Flags / stores
 const sumupTokenStore = require('./sumupTokenStore');
-
-// ─── 2) Sandbox flag ──────────────────────────────────────────────────────
 const isSandbox = process.env.USE_SUMUP_SANDBOX === 'true';
 
-// ─── 4) Express setup ─────────────────────────────────────────────────────
+// 3) Express
 const app  = express();
 const PORT = process.env.PORT || 3001;
-app.set('trust proxy', 1); // Render/Heroku derrière un proxy
+app.set('trust proxy', 1);
 
-// ─── 5) Sécurité & logs ──────────────────────────────────────────────────
+// 4) Sécurité & logs
 app.use(helmet());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(xssClean());
 app.use(hpp());
 app.use(morgan('combined'));
 
-// ─── 6) CORS + JSON ───────────────────────────────────────────────────────
+// 5) CORS + parsers
 app.use(cors({ origin: true, credentials: true }));
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));              // IMPORTANT: avant les routes
+app.use(express.urlencoded({ extended: true }));       // pour /merci (POST)
 
-// ─── 7) Routes OAuth SumUp + statut connexion ─────────────────────────────
-app.use('/auth', authRouter);
-app.get('/auth/status', (_req, res) => {
-  res.json({ connected: sumupTokenStore.isSet() });
-});
-
-// ─── 8) Static + uploads ─────────────────────────────────────────────────
+// 6) Static
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// ─── 9) MongoDB ───────────────────────────────────────────────────────────
+// 7) MongoDB
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connectée !'))
   .catch(err => console.error('❌ Erreur MongoDB :', err));
 
-// ─── 10) Modèle Produit ───────────────────────────────────────────────────
+// 8) Modèles Mongoose
+//   - Produit (inline, comme avant)
 const produitSchema = new mongoose.Schema({
   nom:         { type: String, required: true },
   description: { type: String, required: true },
@@ -69,21 +60,22 @@ const produitSchema = new mongoose.Schema({
 }, { timestamps: true });
 const Produit = mongoose.model('Produit', produitSchema);
 
-// --- Modèle Order (statut de paiement) ---
-const orderSchema = new mongoose.Schema({
-  ref:        { type: String, required: true, unique: true }, // checkout_reference
-  checkoutId: { type: String },                                // id du checkout SumUp
-  amount:     { type: Number, required: true },
-  currency:   { type: String, default: 'EUR' },
-  status:     { type: String, default: 'PENDING' },            // PENDING | PAID | FAILED | CANCELED
-  raw:        { type: Object }                                 // payload SumUp (utile en test)
-}, { timestamps: true });
-const Order = mongoose.model('Order', orderSchema);
+//   - Order (depuis models/Order.js aligné avec checkout)
+require('./models/order'); // enregistre le modèle
+const Order = mongoose.models.Order || mongoose.model('Order');
 
-// ─── 10 bis) Route checkout chargée APRÈS les modèles ─────────────────────
+// 9) Routes importées
+const authRouter     = require('./routes/authentification');
 const checkoutRouter = require('./routes/checkout');
+const webhookRouter  = require('./routes/webhooksumup');
 
-// ─── 11) Multer & nettoyage ───────────────────────────────────────────────
+// 10) Auth SumUp & statut
+app.use('/auth', authRouter);
+app.get('/auth/status', (_req, res) => {
+  res.json({ connected: sumupTokenStore.isSet() });
+});
+
+// 11) Uploads (Multer)
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 const storage = multer.diskStorage({
@@ -99,11 +91,10 @@ const upload = multer({
   }
 });
 async function supprimerFichier(fp) {
-  try { await fs.promises.unlink(fp); }
-  catch (err) { console.error('Erreur suppression', fp, err); }
+  try { await fs.promises.unlink(fp); } catch (err) { console.error('Erreur suppression', fp, err); }
 }
 
-// ─── 12) Auth middleware ──────────────────────────────────────────────────
+// 12) Middleware d’auth simple JWT (admin)
 function authMiddleware(req, res, next) {
   const h = req.headers.authorization;
   if (!h) return res.status(401).json({ message: 'Authentification requise' });
@@ -112,7 +103,7 @@ function authMiddleware(req, res, next) {
   catch { return res.status(401).json({ message: 'Token invalide' }); }
 }
 
-// ─── 13) Login Admin ──────────────────────────────────────────────────────
+// 13) Login Admin
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS) {
@@ -122,7 +113,7 @@ app.post('/api/login', (req, res) => {
   res.status(401).json({ message: 'Identifiants invalides' });
 });
 
-// ─── 14) API Produits & Email ─────────────────────────────────────────────
+// 14) Contact email
 app.post('/api/send-email', async (req, res) => {
   const { name, email, message } = req.body;
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
@@ -146,6 +137,7 @@ app.post('/api/send-email', async (req, res) => {
   }
 });
 
+// 15) Produits (public)
 app.get('/api/produits', (_req, res) => Produit.find().then(r => res.json(r)));
 app.get('/api/produits/recherche', (req, res) => {
   const q = req.query.q || '';
@@ -156,32 +148,7 @@ app.get('/api/produits/:id', (req, res) => {
     .then(p => p ? res.json(p) : res.status(404).json({ message: 'Produit introuvable' }));
 });
 
-// ─── 15) Route de création de checkout via SumUp ──────────────────────────
-app.use('/api/checkout', checkoutRouter);
-
-// ─── 15.1) Ping return_url SumUp (POST) ───────────────────────────────────
-app.post('/merci', express.urlencoded({ extended: true }), async (req, res) => {
-  console.log('SumUp return_url POST ping →', req.body);
-  const { id, status } = req.body || {};
-
-  if (id) {
-    try {
-      await Order.findOneAndUpdate(
-        { checkoutId: id },
-        { status: status || 'PENDING' },
-        { new: true }
-      );
-    } catch (e) {
-      console.error('Erreur maj Order sur /merci:', e.message);
-    }
-  }
-
-  res.status(204).end();
-});
-
-// ⚠️ PAS DE REDIRECTION 302 SUR GET /merci ! Laisse la SPA gérer.
-
-// ─── 16) CRUD Produits protégées ──────────────────────────────────────────
+// 16) Produits (admin)
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
   const images = (req.files || []).map(f => `/uploads/${f.filename}`);
   const p = new Produit({ ...req.body, prix: parseFloat(req.body.prix), images });
@@ -211,7 +178,11 @@ app.delete('/api/produits/:id', authMiddleware, async (req, res) => {
   res.json({ message: 'Produit supprimé' });
 });
 
-// ─── 16 bis) API statut commande ──────────────────────────────────────────
+// 17) API Checkout + Webhook SumUp
+app.use('/api/checkout', checkoutRouter);    // crée le checkout (PENDING)
+app.use('/webhooks', webhookRouter);     // marque PAID via webhook
+
+// 18) Endpoints de statut commande (utilisés par Merci.vue)
 app.get('/api/orders/:ref/status', async (req, res) => {
   try {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -220,19 +191,26 @@ app.get('/api/orders/:ref/status', async (req, res) => {
 
     const order = await Order.findOne({ ref: req.params.ref }).lean();
     if (!order) return res.status(404).json({ error: 'Order not found' });
-    res.json({ status: order.status });
+    res.json({ status: order.status, amounts: order.amounts || null });
   } catch (e) {
     console.error('Erreur statut commande:', e.message);
     res.status(500).json({ error: 'Server error' });
   }
 });
 
-// ─── 17) Fallback SPA ─────────────────────────────────────────────────────
-app.get(/^(?!\/api|\/uploads|\/auth).*/, (_req, res) => {
+// (Optionnel) Si SumUp POST sur /merci côté back, on loggue juste
+app.post('/merci', (req, res) => {
+  console.log('SumUp return_url POST ping →', req.body);
+  res.status(204).end();
+});
+// Ne PAS rediriger en GET ici : la SPA (Vue) gère /merci.
+
+// 19) Fallback SPA (toutes routes non-API → index.html)
+app.get(/^(?!\/api|\/uploads|\/auth|\/webhooks).*/, (_req, res) => {
   res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
 });
 
-// ─── 18) Démarrage serveur ────────────────────────────────────────────────
+// 20) Start
 app.listen(PORT, () => {
   console.log(`🚀 Serveur front+API sur port ${PORT} (Sandbox: ${isSandbox})`);
 });
