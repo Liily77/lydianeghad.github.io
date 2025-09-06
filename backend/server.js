@@ -184,6 +184,14 @@ app.post('/merci', express.urlencoded({ extended: true }), async (req, res) => {
   res.status(204).end();
 });
 
+// ─── 15.2) Rediriger GET /merci vers la page Vue (frontend) ──────────────
+// FRONT_URL = URL publique de ton frontend (ex: https://arcenciel-frontend.onrender.com)
+app.get('/merci', (req, res) => {
+  const ref = req.query.ref || '';
+  const FRONT_URL = process.env.FRONT_URL || 'https://arcenciel-frontend.onrender.com';
+  res.redirect(302, `${FRONT_URL}/merci?ref=${encodeURIComponent(ref)}`);
+});
+
 // ─── 16) CRUD Produits protégées ──────────────────────────────────────────
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
   const images = (req.files || []).map(f => `/uploads/${f.filename}`);
