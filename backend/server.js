@@ -26,12 +26,12 @@ const authRouter = require('./routes/authentification');
 const sumupTokenStore = require('./sumupTokenStore');
 
 // ─── 2) Endpoints SumUp (prod vs sandbox) ─────────────────────────────────
-// (Références uniquement, la logique d’OAuth est dans routes/authentification)
 const isSandbox = process.env.USE_SUMUP_SANDBOX === 'true';
 
 // ─── 4) Express setup ─────────────────────────────────────────────────────
 const app  = express();
 const PORT = process.env.PORT || 3001;
+app.set('trust proxy', 1); // Render/Heroku derrière un proxy
 
 // ─── 5) Sécurité & logs ──────────────────────────────────────────────────
 app.use(helmet());
@@ -184,36 +184,6 @@ app.post('/merci', express.urlencoded({ extended: true }), async (req, res) => {
   res.status(204).end();
 });
 
-// ─── 15.2) Page Merci (GET) — affiche la référence ───────────────────────
-app.get('/merci', (req, res) => {
-  const ref = req.query.ref || 'inconnue';
-  res.send(`
-    <!doctype html>
-    <html lang="fr">
-      <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>Merci pour votre commande</title>
-        <style>
-          body { font-family: system-ui, Arial, sans-serif; padding: 40px; text-align: center; }
-          h1 { font-size: 24px; margin-bottom: 12px; }
-          .box { display: inline-block; padding: 16px 20px; border: 1px solid #eee; border-radius: 10px; }
-          .ref { font-weight: 700; }
-          a { display:inline-block; margin-top:18px; text-decoration:none; }
-        </style>
-      </head>
-      <body>
-        <h1>✅ Paiement reçu</h1>
-        <div class="box">
-          Référence de votre commande : <span class="ref">${ref}</span>
-        </div>
-        <br/>
-        <a href="/">← Retour à la boutique</a>
-      </body>
-    </html>
-  `);
-});
-
 // ─── 16) CRUD Produits protégées ──────────────────────────────────────────
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
   const images = (req.files || []).map(f => `/uploads/${f.filename}`);
@@ -247,6 +217,10 @@ app.delete('/api/produits/:id', authMiddleware, async (req, res) => {
 // ─── 16 bis) API statut commande ──────────────────────────────────────────
 app.get('/api/orders/:ref/status', async (req, res) => {
   try {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+
     const order = await Order.findOne({ ref: req.params.ref }).lean();
     if (!order) return res.status(404).json({ error: 'Order not found' });
     res.json({ status: order.status });

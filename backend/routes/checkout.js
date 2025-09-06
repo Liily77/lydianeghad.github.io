@@ -5,7 +5,7 @@ const store     = require('../sumupTokenStore');
 const mongoose  = require('mongoose');
 const router    = express.Router();
 
-// ⚠️ Order est enregistré dans server.js, on le récupère ici :
+// Récupère le modèle Order défini dans server.js
 const Order = mongoose.model('Order');
 
 // SumUp
@@ -14,7 +14,7 @@ const MERCHANT_CODE = process.env.SUMUP_MERCHANT_CODE; // ex: M39S3HK3
 
 router.post('/', async (req, res) => {
   try {
-    // 0) Token OAuth côté serveur (obtenu via /auth/connect)
+    // 0) Token OAuth côté serveur
     const token = store.get();
     if (!token) {
       return res.status(400).json({ error: 'Token SumUp manquant côté serveur' });
@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
 
     const { items, amount, currency, title, orderId } = req.body || {};
 
-    // 1) Calcul du montant total côté serveur (NE JAMAIS faire confiance au front)
+    // 1) Calcul du montant total côté serveur
     let total = 0;
     if (Array.isArray(items) && items.length) {
       total = items.reduce((sum, i) =>
@@ -37,21 +37,24 @@ router.post('/', async (req, res) => {
     }
 
     // 2) Référence + URLs de retour
-    const orderRef  = orderId || `order_${Date.now()}`;
-    const BASE_URL  = process.env.BASE_URL || 'https://arcenciel-backend.onrender.com';
-    const thankyou  = `${BASE_URL}/merci?ref=${encodeURIComponent(orderRef)}`;
+    const orderRef     = orderId || `order_${Date.now()}`;
+    const BACKEND_URL  = process.env.BASE_URL || 'https://arcenciel-backend.onrender.com';
+    const FRONTEND_URL = process.env.FRONTEND_URL || 'https://arcenciel-frontend.onrender.com';
+
+    // - return_url   : SumUp fait un POST (ping) ici → backend (statut)
+    const returnUrl   = `${BACKEND_URL}/merci?ref=${encodeURIComponent(orderRef)}`;
+    // - redirect_url : bouton "Retour au site marchand" → frontend (page Merci.vue)
+    const redirectUrl = `${FRONTEND_URL}/merci?ref=${encodeURIComponent(orderRef)}`;
 
     // 3) Payload SumUp (Hosted Checkout)
-    // - return_url   : ping serveur (POST) après changement de statut
-    // - redirect_url : bouton "Retour au site marchand" sur l’écran vert ✅
     const payload = {
       checkout_reference: orderRef,
       amount:             total,
       currency:           (currency || 'EUR').toUpperCase(),
       description:        title || 'Commande Arc En Ciel',
       hosted_checkout:    { enabled: true },
-      return_url:         thankyou,
-      redirect_url:       thankyou,
+      return_url:         returnUrl,    // ← ping serveur (POST)
+      redirect_url:       redirectUrl,  // ← bouton retour → frontend
       ...(MERCHANT_CODE ? { merchant_code: MERCHANT_CODE } : {})
     };
 
@@ -74,12 +77,12 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // 6) Sauvegarde / Mise à jour de la commande (PENDING)
+    // 6) Enregistrer/Mettre à jour la commande (PENDING)
     await Order.findOneAndUpdate(
       { ref: orderRef },
       {
         ref:        orderRef,
-        checkoutId: data.id, // id de checkout SumUp
+        checkoutId: data.id,
         amount:     total,
         currency:   (currency || 'EUR').toUpperCase(),
         status:     'PENDING',
@@ -88,8 +91,7 @@ router.post('/', async (req, res) => {
       { upsert: true, new: true }
     );
 
-    // 7) Retour front
-    // Mode B : on va rediriger DIRECTEMENT vers checkoutUrl (même onglet)
+    // 7) Retour front (Mode B → redirection directe dans le même onglet)
     res.json({ checkoutUrl, ref: orderRef });
   } catch (err) {
     const status  = err.response?.status || 500;

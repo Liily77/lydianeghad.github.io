@@ -20,7 +20,6 @@ import Nouveautes from '../views/Nouveautes.vue'
 import Rechercher from '../components/Rechercher.vue'
 import Contact from '../views/Contact.vue'
 import Merci from '../views/Merci.vue' 
-import AttentePaiement from '../views/AttentePaiement.vue' // ✅ nouvelle vue Attente
 
 // Routes
 const routes = [
@@ -42,8 +41,7 @@ const routes = [
   { path: '/nouveautes', name: 'Nouveautes', component: Nouveautes },
   { path: '/recherche', name: 'Rechercher', component: Rechercher },
   { path: '/contact', name: 'Contact', component: Contact },
-  { path: '/merci', name: 'Merci', component: Merci },
-  { path: '/attente', name: 'AttentePaiement', component: AttentePaiement } // ✅ nouvelle route
+  { path: '/merci', name: 'Merci', component: Merci }
 ]
 
 // Router
