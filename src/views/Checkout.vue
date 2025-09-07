@@ -47,7 +47,6 @@
                 <span>{{ it.name }} × {{ it.qty }}</span>
                 <span>{{ (it.price * it.qty).toFixed(2) }} €</span>
               </div>
-              <small class="muted">Catégorie : {{ it.category }}</small>
             </li>
           </ul>
 
@@ -74,8 +73,6 @@
             <h3>Conditions de livraison</h3>
             <ul>
               <li><strong>Bijoux</strong> : 5,40 €</li>
-              <li><strong>Vêtements</strong> : 6,90 €</li>
-              <li><strong>Mix bijoux + vêtements</strong> : 6,90 €</li>
               <li><strong>Au-delà de 100 €</strong> : livraison <strong>offerte</strong></li>
             </ul>
             <small>Les frais exacts sont calculés automatiquement au paiement.</small>
@@ -111,17 +108,10 @@ export default {
     subTotal() {
       return this.cart.reduce((s, it) => s + Number(it.price) * Number(it.qty), 0)
     },
-    hasBijoux() {
-      return this.cart.some((it) => it.category === 'bijoux')
-    },
-    hasVetements() {
-      return this.cart.some((it) => it.category === 'vetements')
-    },
     shippingFee() {
+      // Bijoux uniquement
       if (this.subTotal > 100) return 0
-      if (this.hasVetements) return 6.90 // le plus élevé si mix
-      if (this.hasBijoux) return 5.40
-      return 0
+      return 5.40
     },
     total() {
       return +(this.subTotal + this.shippingFee).toFixed(2)
@@ -133,7 +123,7 @@ export default {
       this.cart = raw.map(p => ({
         id: p._id || p.id,
         name: p.nom,
-        category: p.categorie,
+        category: 'bijoux', // ⬅️ tout est bijoux
         price: Number(p.prix),
         qty: Number(p.quantite),
       }))
@@ -142,13 +132,6 @@ export default {
       try {
         if (this.loading) return
         this.loading = true
-
-        // ⚠️ pour l’instant : uniquement bijoux
-        if (this.cart.some(it => it.category !== 'bijoux')) {
-          alert("Pour l’instant, le paiement n'est disponible que pour les bijoux. Les vêtements arrivent bientôt 🙂")
-          this.loading = false
-          return
-        }
 
         if (!this.form.email || !this.cart.length) {
           alert('Email et panier sont requis.')
@@ -165,10 +148,10 @@ export default {
             city: this.form.city,
             country: this.form.country,
           },
-          items: this.cart.map(({ id, name, category, price, qty }) => ({
+          items: this.cart.map(({ id, name, price, qty }) => ({
             id,
             name,
-            category,
+            category: 'bijoux',
             unit_price: Number(price),
             quantity: Number(qty),
           })),
@@ -204,45 +187,148 @@ export default {
 </script>
 
 <style scoped>
-.checkout { display: flex; justify-content: center; padding: 2rem; font-family: "Lucida Sans", "Lucida Grande", sans-serif; }
-.card { width: 100%; max-width: 980px; background: #fff; border-radius: 18px; padding: 1.5rem; box-shadow: 0 8px 28px rgba(0,0,0,.08); }
-.title { font-size: 1.6rem; margin-bottom: 1rem; }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-.form label { font-weight: 600; margin-top: .75rem; display: block; }
-.form input { width: 100%; padding: .75rem; border: 1px solid #ddd; border-radius: 12px; outline: none; }
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
-.pay { margin-top: 1rem; width: 100%; padding: .9rem 1rem; border: 0; border-radius: 14px; background: #222; color: #fff; font-weight: 700; cursor: pointer; }
-.summary { background: #fafafa; border: 1px solid #eee; border-radius: 14px; padding: 1rem; }
-.subtitle { font-size: 1.1rem; margin-bottom: .5rem; }
-.items { list-style: none; padding: 0; margin: 0 .25rem .5rem; display: grid; gap: .35rem; }
-.row-between { display: flex; justify-content: space-between; }
-.muted { color: #777; }
-.line, .total { display: flex; justify-content: space-between; padding: .4rem 0; border-top: 1px dashed #e5e5e5; }
-.total { font-weight: 800; font-size: 1.1rem; border-top: 2px solid #ddd; margin-top: .25rem; }
+.checkout {
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem;
+  font-family: "Lucida Sans", "Lucida Grande", sans-serif;
+}
 
-/* encadré frais livraison */
+.card {
+  width: 100%;
+  max-width: 980px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 2rem;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem; /* ✅ plus d’espace entre form et récap */
+}
+
+.form label {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  display: block;
+  font-size: 1rem;
+}
+
+.form input {
+  width: 100%;
+  padding: 0.9rem;
+  font-size: 1rem;
+  margin-bottom: 1rem; /* ✅ plus d’espace entre les champs */
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  outline: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.pay {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 1rem 1.2rem;
+  border: 0;
+  border-radius: 14px;
+  background: #222;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.pay:hover {
+  background: #444;
+}
+
+.summary {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 1.5rem;
+  font-size: 1rem;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.items {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.row-between {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+}
+
+.line,
+.total {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-top: 1px dashed #e5e5e5;
+}
+
+.total {
+  font-weight: 800;
+  font-size: 1.2rem;
+  border-top: 2px solid #ddd;
+  margin-top: 0.5rem;
+}
+
+/* Encadré frais livraison */
 .shipping-info {
-  margin-top: 12px;
+  margin-top: 1.5rem;
   background: #fff;
   border: 1px solid #eee;
   border-radius: 14px;
-  padding: 12px 14px;
-  box-shadow: 0 6px 16px rgba(0,0,0,.04);
+  padding: 1rem 1.2rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+  font-size: 0.95rem;
 }
 .shipping-info h3 {
-  margin: 0 0 6px;
-  font-size: 1rem;
+  margin: 0 0 0.6rem;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 .shipping-info ul {
-  margin: 0 0 6px;
+  margin: 0 0 0.6rem;
   padding-left: 18px;
 }
 .shipping-info li {
-  line-height: 1.4;
+  line-height: 1.5;
 }
 .shipping-info small {
   color: #666;
 }
 
-@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
 </style>
