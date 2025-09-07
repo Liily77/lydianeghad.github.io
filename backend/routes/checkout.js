@@ -52,8 +52,8 @@ router.post('/', async (req, res) => {
   try {
     console.log('📥 Requête checkout reçue:', JSON.stringify(req.body, null, 2));
 
-    // 0) Vérifier token OAuth SumUp
-    const token = store.get();
+    // 0) Vérifier token OAuth SumUp (asynchrone pour compat persistance/refresh)
+    const token = await store.get();
     if (!token) {
       return res.status(400).json({ error: 'Token SumUp manquant côté serveur' });
     }
@@ -99,7 +99,7 @@ router.post('/', async (req, res) => {
         shippingAddress: shippingAddress || null,
         items,
         amounts:    { subTotal, shippingFee, total },
-        currency:   currency.toUpperCase(),
+        currency:   (currency || 'EUR').toUpperCase(),
         status:     'PENDING',
         channel:    'sumup',
         updatedAt:  new Date(),
@@ -112,7 +112,7 @@ router.post('/', async (req, res) => {
     const payload = {
       checkout_reference: orderRef,
       amount:             total,
-      currency:           currency.toUpperCase(),
+      currency:           (currency || 'EUR').toUpperCase(),
       description:        title,
       hosted_checkout:    { enabled: true },
       return_url:         thankyou,
