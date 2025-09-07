@@ -37,8 +37,8 @@ app.use(morgan('combined'));
 
 // 5) CORS + parsers
 app.use(cors({ origin: true, credentials: true }));
-app.use(express.json({ limit: '1mb' }));              // IMPORTANT: avant les routes
-app.use(express.urlencoded({ extended: true }));       // pour /merci (POST)
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true }));
 
 // 6) Static
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -50,7 +50,6 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error('❌ Erreur MongoDB :', err));
 
 // 8) Modèles Mongoose
-//   - Produit (inline, comme avant)
 const produitSchema = new mongoose.Schema({
   nom:         { type: String, required: true },
   description: { type: String, required: true },
@@ -60,8 +59,8 @@ const produitSchema = new mongoose.Schema({
 }, { timestamps: true });
 const Produit = mongoose.model('Produit', produitSchema);
 
-//   - Order (depuis models/Order.js aligné avec checkout)
-require('./models/Order'); // avec O majuscule// enregistre le modèle
+// Order (si présent dans ./models/Order.js)
+require('./models/Order'); // enregistre le modèle
 const Order = mongoose.models.Order || mongoose.model('Order');
 
 // 9) Routes importées
@@ -119,12 +118,11 @@ app.post('/api/send-email', async (req, res) => {
     const { nom, name, email, message } = req.body || {};
     const senderName = nom || name || 'Client';
 
-    // On récupère et nettoie les variables d'environnement
+    // Nettoyage des variables d'env
     const EMAIL_USER = (process.env.EMAIL_USER || '').trim();
     const EMAIL_PASS = (process.env.EMAIL_PASS || '').trim();
     const EMAIL_TO   = (process.env.EMAIL_TO   || '').trim();
 
-    // Vérification configuration
     if (!EMAIL_USER || !EMAIL_PASS || !EMAIL_TO) {
       return res.status(500).json({ success: false, message: 'Configuration email manquante' });
     }
@@ -132,7 +130,7 @@ app.post('/api/send-email', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email et message sont requis' });
     }
 
-    // Création du transporteur SMTP Gmail (mot de passe d’application)
+    // SMTP Gmail via mot de passe d'application
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
@@ -140,10 +138,9 @@ app.post('/api/send-email', async (req, res) => {
       auth: { user: EMAIL_USER, pass: EMAIL_PASS },
     });
 
-    // Envoi de l'email
     await transporter.sendMail({
-      from: `"Arc En Ciel" <${EMAIL_USER}>`,   
-      replyTo: `"${senderName}" <${email}>`,  
+      from: `"Arc En Ciel" <${EMAIL_USER}>`,   // respecte SPF/DMARC
+      replyTo: `"${senderName}" <${email}>`,   // "Répondre" → client
       to: EMAIL_TO,
       subject: `📩 Nouveau message – ${senderName}`,
       html: `
@@ -159,7 +156,6 @@ app.post('/api/send-email', async (req, res) => {
     return res.status(500).json({ success: false, message: 'Envoi impossible' });
   }
 });
-
 
 // 15) Produits (public)
 app.get('/api/produits', (_req, res) => Produit.find().then(r => res.json(r)));
@@ -203,8 +199,8 @@ app.delete('/api/produits/:id', authMiddleware, async (req, res) => {
 });
 
 // 17) API Checkout + Webhook SumUp
-app.use('/api/checkout', checkoutRouter);    // crée le checkout (PENDING)
-app.use('/webhooks', webhookRouter);     // marque PAID via webhook
+app.use('/api/checkout', checkoutRouter); // crée le checkout (PENDING)
+app.use('/webhooks', webhookRouter);      // webhook (si utilisé)
 
 // 18) Endpoints de statut commande (utilisés par Merci.vue)
 app.get('/api/orders/:ref/status', async (req, res) => {
@@ -222,12 +218,11 @@ app.get('/api/orders/:ref/status', async (req, res) => {
   }
 });
 
-// (Optionnel) Si SumUp POST sur /merci côté back, on loggue juste
+// (Optionnel) si SumUp POST sur /merci côté back
 app.post('/merci', (req, res) => {
   console.log('SumUp return_url POST ping →', req.body);
   res.status(204).end();
 });
-// Ne PAS rediriger en GET ici : la SPA (Vue) gère /merci.
 
 // 19) Fallback SPA (toutes routes non-API → index.html)
 app.get(/^(?!\/api|\/uploads|\/auth|\/webhooks).*/, (_req, res) => {
