@@ -5,19 +5,21 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-const express    = require('express');
-const cors       = require('cors');
-const multer     = require('multer');
-const path       = require('path');
-const fs         = require('fs');
-const mongoose   = require('mongoose');
-const morgan     = require('morgan');
-const helmet     = require('helmet');
-const rateLimit  = require('express-rate-limit');
-const xssClean   = require('xss-clean');
-const hpp        = require('hpp');
-const jwt        = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
+const express   = require('express');
+const cors      = require('cors');
+const multer    = require('multer');
+const path      = require('path');
+const fs        = require('fs');
+const mongoose  = require('mongoose');
+const morgan    = require('morgan');
+const helmet    = require('helmet');
+const rateLimit = require('express-rate-limit');
+const xssClean  = require('xss-clean');
+const hpp       = require('hpp');
+const jwt       = require('jsonwebtoken');
+
+// Mailer (Brevo)
+const { buildTransport, sendMail } = require('./mailer');
 
 // 2) Flags / stores
 const sumupTokenStore = require('./sumupTokenStore');
@@ -112,52 +114,45 @@ app.post('/api/login', (req, res) => {
   res.status(401).json({ message: 'Identifiants invalides' });
 });
 
-// 14) Contact email
+// 14) Contact email (via Brevo)
 app.post('/api/send-email', async (req, res) => {
   try {
     const { nom, name, email, message } = req.body || {};
-    const senderName = nom || name || 'Client';
+    const senderName = (nom || name || 'Client').toString().trim();
+    const replyEmail = (email || '').toString().trim();
+    const body       = (message || '').toString();
 
-    // Nettoyage des variables d'env
-    const EMAIL_USER = (process.env.EMAIL_USER || '').trim();
-    const EMAIL_PASS = (process.env.EMAIL_PASS || '').trim();
-    const EMAIL_TO   = (process.env.EMAIL_TO   || '').trim();
+    const MAIL_FROM = (process.env.MAIL_FROM || '').trim();
+    const EMAIL_TO  = (process.env.EMAIL_TO  || '').trim();
 
-    if (!EMAIL_USER || !EMAIL_PASS || !EMAIL_TO) {
-      return res.status(500).json({ success: false, message: 'Configuration email manquante' });
+    if (!MAIL_FROM || !EMAIL_TO) {
+      return res.status(500).json({ success: false, message: 'Config email manquante (MAIL_FROM / EMAIL_TO)' });
     }
-    if (!email || !message) {
+    if (!replyEmail || !body) {
       return res.status(400).json({ success: false, message: 'Email et message sont requis' });
     }
 
-    // SMTP Gmail via mot de passe d'application
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: { user: EMAIL_USER, pass: EMAIL_PASS },
-    });
+    const html = `
+      <p><b>Nom :</b> ${senderName}</p>
+      <p><b>Email :</b> ${replyEmail}</p>
+      <p><b>Message :</b><br/>${body.replace(/\n/g, '<br/>')}</p>
+    `;
 
-    await transporter.sendMail({
-      from: `"Arc En Ciel" <${EMAIL_USER}>`,   // respecte SPF/DMARC
-      replyTo: `"${senderName}" <${email}>`,   // "Répondre" → client
+    const info = await sendMail({
+      from: MAIL_FROM,
       to: EMAIL_TO,
+      replyTo: `"${senderName}" <${replyEmail}>`,
       subject: `📩 Nouveau message – ${senderName}`,
-      html: `
-        <p><b>Nom :</b> ${senderName}</p>
-        <p><b>Email :</b> ${email}</p>
-        <p><b>Message :</b><br/>${String(message).replace(/\n/g,'<br/>')}</p>
-      `,
+      html,
     });
 
-    return res.json({ success: true, message: 'Message envoyé' });
+    console.log('EMAIL SENT:', info && (info.messageId || info.response));
+    res.json({ success: true, message: 'Message envoyé' });
   } catch (err) {
     console.error('EMAIL ERROR:', err);
-    return res.status(500).json({ success: false, message: 'Envoi impossible' });
+    res.status(500).json({ success: false, message: 'Envoi impossible' });
   }
 });
-
-
 
 // 15) Produits (public)
 app.get('/api/produits', (_req, res) => Produit.find().then(r => res.json(r)));
@@ -232,25 +227,21 @@ app.get(/^(?!\/api|\/uploads|\/auth|\/webhooks).*/, (_req, res) => {
 });
 
 // --- DIAGNOSTIC SMTP (temporaire) ---
-app.get('/api/_mail-diagnose', async (req, res) => {
+app.get('/api/_mail-diagnose', async (_req, res) => {
   try {
-    const EMAIL_USER = (process.env.EMAIL_USER || '').trim();
-    const EMAIL_PASS = (process.env.EMAIL_PASS || '').trim();
-    const EMAIL_TO   = (process.env.EMAIL_TO   || '').trim();
+    const MAIL_FROM = (process.env.MAIL_FROM || '').trim();
+    const EMAIL_TO  = (process.env.EMAIL_TO  || '').trim();
+    const transport = buildTransport();
 
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: { user: EMAIL_USER, pass: EMAIL_PASS },
-    });
-
-    await transporter.verify(); // teste connexion + auth
+    await transport.verify(); // teste connexion + auth
     res.json({
       ok: true,
-      user: EMAIL_USER,
+      provider: (process.env.MAIL_PROVIDER || 'brevo'),
+      host: process.env.BREVO_SMTP_HOST || 'smtp-relay.brevo.com',
+      port: Number(process.env.BREVO_SMTP_PORT || 587),
+      user: process.env.BREVO_SMTP_USER || '',
       to: EMAIL_TO,
-      passLen: EMAIL_PASS.length, // doit être 16
+      from: MAIL_FROM,
       note: 'Connexion/auth SMTP OK',
     });
   } catch (e) {
@@ -259,12 +250,10 @@ app.get('/api/_mail-diagnose', async (req, res) => {
       code: e.code,
       responseCode: e.responseCode,
       msg: e.message,
-      passLen: (process.env.EMAIL_PASS || '').trim().length,
-      hint: 'Si passLen != 16 ou mauvais compte, corriger les variables Render.',
+      hint: 'Vérifie BREVO_SMTP_USER / BREVO_SMTP_KEY / host / port et supprime les anciennes variables Gmail.',
     });
   }
 });
-
 
 // 20) Start
 app.listen(PORT, () => {

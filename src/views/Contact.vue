@@ -78,43 +78,52 @@ export default {
     validateForm() {
       this.errors = {}
 
-      if (!this.form.nom) {
+      const nom = (this.form.nom || '').trim()
+      const email = (this.form.email || '').trim()
+      const message = (this.form.message || '').trim()
+
+      if (!nom) {
         this.errors.nom = 'Le nom est obligatoire.'
       }
-      if (!this.form.email) {
+      if (!email) {
         this.errors.email = 'L’email est obligatoire.'
-      } else if (!this.isValidEmail(this.form.email)) {
+      } else if (!this.isValidEmail(email)) {
         this.errors.email = 'Format d’email invalide.'
       }
-      if (!this.form.message) {
+      if (!message) {
         this.errors.message = 'Le message est obligatoire.'
-      } else if (this.form.message.length < 10) {
+      } else if (message.length < 10) {
         this.errors.message = 'Le message doit contenir au moins 10 caractères.'
       }
 
       return Object.keys(this.errors).length === 0
     },
     isValidEmail(email) {
-      // Simple regex email validation
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       return re.test(email)
     },
     async envoyerMessage() {
-      if (!this.validateForm()) {
-        return
-      }
+      if (this.sending) return
+      if (!this.validateForm()) return
 
       this.sending = true
       this.toastMessage = ''
 
       try {
+        const payload = {
+          nom: this.form.nom.trim(),
+          email: this.form.email.trim(),
+          message: this.form.message.trim(),
+        }
+
         const { success, message } = await api('/api/send-email', {
           method: 'POST',
-          body: JSON.stringify(this.form)
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
         })
 
         if (success) {
-          this.toastMessage = '✅ Message envoyé avec succès !'
+          this.toastMessage = '✅ Message envoyé avec succès !'
           this.toastSuccess = true
           this.form.nom = ''
           this.form.email = ''
@@ -129,14 +138,13 @@ export default {
         this.toastSuccess = false
       } finally {
         this.sending = false
-        setTimeout(() => {
-          this.toastMessage = ''
-        }, 4000)
+        setTimeout(() => { this.toastMessage = '' }, 4000)
       }
     }
   }
 }
 </script>
+
 
 <style scoped>
 .contact-page {
