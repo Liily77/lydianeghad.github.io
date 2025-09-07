@@ -230,6 +230,7 @@ app.post('/merci', (req, res) => {
 app.get(/^(?!\/api|\/uploads|\/auth|\/webhooks).*/, (_req, res) => {
   res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
 });
+
 // --- DIAGNOSTIC SMTP (temporaire) ---
 app.get('/api/_mail-diagnose', async (req, res) => {
   try {
