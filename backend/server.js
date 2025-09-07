@@ -157,6 +157,8 @@ app.post('/api/send-email', async (req, res) => {
   }
 });
 
+
+
 // 15) Produits (public)
 app.get('/api/produits', (_req, res) => Produit.find().then(r => res.json(r)));
 app.get('/api/produits/recherche', (req, res) => {
@@ -228,6 +230,40 @@ app.post('/merci', (req, res) => {
 app.get(/^(?!\/api|\/uploads|\/auth|\/webhooks).*/, (_req, res) => {
   res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
 });
+// --- DIAGNOSTIC SMTP (temporaire) ---
+app.get('/api/_mail-diagnose', async (req, res) => {
+  try {
+    const EMAIL_USER = (process.env.EMAIL_USER || '').trim();
+    const EMAIL_PASS = (process.env.EMAIL_PASS || '').trim();
+    const EMAIL_TO   = (process.env.EMAIL_TO   || '').trim();
+
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: { user: EMAIL_USER, pass: EMAIL_PASS },
+    });
+
+    await transporter.verify(); // teste connexion + auth
+    res.json({
+      ok: true,
+      user: EMAIL_USER,
+      to: EMAIL_TO,
+      passLen: EMAIL_PASS.length, // doit être 16
+      note: 'Connexion/auth SMTP OK',
+    });
+  } catch (e) {
+    res.status(500).json({
+      ok: false,
+      code: e.code,
+      responseCode: e.responseCode,
+      msg: e.message,
+      passLen: (process.env.EMAIL_PASS || '').trim().length,
+      hint: 'Si passLen != 16 ou mauvais compte, corriger les variables Render.',
+    });
+  }
+});
+
 
 // 20) Start
 app.listen(PORT, () => {
