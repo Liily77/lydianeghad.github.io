@@ -115,27 +115,41 @@ app.post('/api/login', (req, res) => {
 
 // 14) Contact email
 app.post('/api/send-email', async (req, res) => {
-  const { name, email, message } = req.body;
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
-    return res.status(500).json({ message: 'Configuration email manquante' });
-  }
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth:    { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
-  });
   try {
-    await transporter.sendMail({
-      from:    `"${name}" <${email}>`,
-      to:      process.env.EMAIL_TO,
-      subject: '📩 Nouveau message',
-      html:    `<p>${message}</p>`
+    const { nom, name, email, message } = req.body || {};
+    const senderName = nom || name || 'Client';
+
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
+      return res.status(500).json({ success: false, message: 'Configuration email manquante' });
+    }
+    if (!email || !message) {
+      return res.status(400).json({ success: false, message: 'Email et message sont requis' });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
     });
-    res.json({ success: true });
+
+    await transporter.sendMail({
+      from: `"Arc En Ciel" <${process.env.EMAIL_USER}>`,   // important pour SPF/DMARC
+      replyTo: `"${senderName}" <${email}>`,               // le bouton "Répondre" pointera vers le client
+      to: process.env.EMAIL_TO,
+      subject: `📩 Nouveau message – ${senderName}`,
+      html: `
+        <p><b>Nom :</b> ${senderName}</p>
+        <p><b>Email :</b> ${email}</p>
+        <p><b>Message :</b><br/>${String(message).replace(/\n/g,'<br/>')}</p>
+      `
+    });
+
+    return res.json({ success: true, message: 'Message envoyé' });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false });
+    console.error('EMAIL ERROR:', err);
+    return res.status(500).json({ success: false, message: 'Envoi impossible' });
   }
 });
+
 
 // 15) Produits (public)
 app.get('/api/produits', (_req, res) => Produit.find().then(r => res.json(r)));
