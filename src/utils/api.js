@@ -1,52 +1,65 @@
 // src/utils/api.js
 
-/**
- * BASE = URL du backend en prod (via VITE_BACKEND_URL),
- *        chaîne vide en dev (on fait tourner le back en localhost).
- */
-export const BASE = import.meta.env.PROD
-  ? import.meta.env.VITE_BACKEND_URL
-  : 'http://localhost:3001'
+// Base URL du backend
+export const BASE = import.meta.env.VITE_BACKEND_URL || '';
 
 /**
- * Wrapper fetch pour appeler l’API.
- * - Ajoute automatiquement Content-Type si JSON
- * - En cas de 401 → supprime le token admin et redirige vers /admin
- * @param {string} url     Chemin relatif (ex: '/api/produits')
- * @param {object} options fetch options
- * @returns {Promise<any>} JSON parsé ou texte brut
+ * Petit wrapper fetch :
+ *  - n’ajoute pas Content-Type lorsqu’on envoie du FormData
+ *  - remonte le vrai message d’erreur JSON retourné par l’API
+ *  - en 401: on nettoie le token admin et on renvoie vers /admin
  */
-export async function api(url, options = {}) {
-  const fullUrl = `${BASE}${url}`
+export async function api(path, options = {}) {
+  const url = BASE + path;
+  const isForm = options.body instanceof FormData;
 
-  const res = await fetch(fullUrl, {
+  const res = await fetch(url, {
+    method: options.method || 'GET',
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {})
+      ...(isForm ? {} : { 'Content-Type': 'application/json' }),
+      ...(options.headers || {}),
     },
-    ...options
-  })
+    body: options.body,
+  });
 
-  // Gestion auto des erreurs
-  if (res.status === 401) {
-    // 🔒 Token expiré ou invalide → logout
-    sessionStorage.removeItem('admin_token')
-    if (window.location.pathname !== '/admin') {
-      window.location.href = '/admin'
+  // Essaye de parser la réponse
+  let data = null;
+  const ct = res.headers.get('content-type') || '';
+  if (ct.includes('application/json')) {
+    try {
+      data = await res.json();
+    } catch (_) {
+      // pas de JSON lisible
     }
-    throw new Error('401 Unauthorized')
+  } else {
+    try {
+      data = await res.text();
+    } catch (_) {}
+  }
+
+  if (res.status === 401) {
+    sessionStorage.removeItem('admin_token');
+    if (window.location.pathname !== '/admin') {
+      window.location.href = '/admin';
+    }
+    const msg = (data && (data.error || data.message)) || '401 Unauthorized';
+    const err = new Error(msg);
+    err.status = 401;
+    err.data = data;
+    throw err;
   }
 
   if (!res.ok) {
-    throw new Error(`API ${res.status}: ${res.statusText}`)
+    const msg =
+      (data && (data.error || data.message || data.error_description)) ||
+      res.statusText ||
+      'Erreur inconnue';
+    const err = new Error(`API ${res.status}: ${msg}`);
+    err.status = res.status;
+    err.data = data;
+    throw err;
   }
 
-  // Retourne JSON si dispo, sinon texte
-  const ct = res.headers.get('content-type') || ''
-  if (ct.includes('application/json')) {
-    return res.json()
-  } else {
-    return res.text()
-  }
+  return data;
 }
