@@ -119,28 +119,38 @@ app.post('/api/send-email', async (req, res) => {
     const { nom, name, email, message } = req.body || {};
     const senderName = nom || name || 'Client';
 
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
+    // On récupère et nettoie les variables d'environnement
+    const EMAIL_USER = (process.env.EMAIL_USER || '').trim();
+    const EMAIL_PASS = (process.env.EMAIL_PASS || '').trim();
+    const EMAIL_TO   = (process.env.EMAIL_TO   || '').trim();
+
+    // Vérification configuration
+    if (!EMAIL_USER || !EMAIL_PASS || !EMAIL_TO) {
       return res.status(500).json({ success: false, message: 'Configuration email manquante' });
     }
     if (!email || !message) {
       return res.status(400).json({ success: false, message: 'Email et message sont requis' });
     }
 
+    // Création du transporteur SMTP Gmail (mot de passe d’application)
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: { user: EMAIL_USER, pass: EMAIL_PASS },
     });
 
+    // Envoi de l'email
     await transporter.sendMail({
-      from: `"Arc En Ciel" <${process.env.EMAIL_USER}>`,   // important pour SPF/DMARC
-      replyTo: `"${senderName}" <${email}>`,               // le bouton "Répondre" pointera vers le client
-      to: process.env.EMAIL_TO,
+      from: `"Arc En Ciel" <${EMAIL_USER}>`,   
+      replyTo: `"${senderName}" <${email}>`,  
+      to: EMAIL_TO,
       subject: `📩 Nouveau message – ${senderName}`,
       html: `
         <p><b>Nom :</b> ${senderName}</p>
         <p><b>Email :</b> ${email}</p>
         <p><b>Message :</b><br/>${String(message).replace(/\n/g,'<br/>')}</p>
-      `
+      `,
     });
 
     return res.json({ success: true, message: 'Message envoyé' });
