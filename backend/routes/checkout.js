@@ -19,14 +19,15 @@ function safeNum(v) {
 }
 
 function computeSubTotal(items = []) {
-  return items.reduce((sum, i) =>
-    sum + safeNum(i.quantity) * safeNum(i.unit_price), 0
+  return items.reduce(
+    (sum, i) => sum + safeNum(i.quantity) * safeNum(i.unit_price),
+    0
   );
 }
 
 function computeShippingFee_bijouxOnly(items = [], subTotal) {
   if (subTotal > 100) return 0;
-  const hasBijoux = items.some(i => i.category === 'bijoux');
+  const hasBijoux = items.some((i) => i.category === 'bijoux');
   return hasBijoux ? 5.40 : 0;
 }
 
@@ -52,11 +53,8 @@ router.post('/', async (req, res) => {
   try {
     console.log('📥 Requête checkout reçue:', JSON.stringify(req.body, null, 2));
 
-    // 0) Vérifier token OAuth SumUp (asynchrone pour compat persistance/refresh)
-    const token = await store.get();
-    if (!token) {
-      return res.status(400).json({ error: 'Token SumUp manquant côté serveur' });
-    }
+    // 0) Récupérer un token OAuth valide (auto-fetch + auto-refresh)
+    const token = await store.getValidToken();
 
     const {
       items = [],
@@ -99,11 +97,11 @@ router.post('/', async (req, res) => {
         shippingAddress: shippingAddress || null,
         items,
         amounts:    { subTotal, shippingFee, total },
-        currency:   (currency || 'EUR').toUpperCase(),
+        currency:   currency.toUpperCase(),
         status:     'PENDING',
         channel:    'sumup',
         updatedAt:  new Date(),
-        createdAt:  new Date()
+        createdAt:  new Date(),
       },
       { upsert: true, new: true }
     );
@@ -112,12 +110,12 @@ router.post('/', async (req, res) => {
     const payload = {
       checkout_reference: orderRef,
       amount:             total,
-      currency:           (currency || 'EUR').toUpperCase(),
+      currency:           currency.toUpperCase(),
       description:        title,
       hosted_checkout:    { enabled: true },
       return_url:         thankyou,
       redirect_url:       thankyou,
-      ...(MERCHANT_CODE ? { merchant_code: MERCHANT_CODE } : {})
+      ...(MERCHANT_CODE ? { merchant_code: MERCHANT_CODE } : {}),
     };
 
     console.log('📤 Payload envoyé à SumUp:', JSON.stringify(payload, null, 2));
@@ -126,9 +124,9 @@ router.post('/', async (req, res) => {
     const response = await axios.post(CHECKOUT_URL, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      timeout: 15000
+      timeout: 15000,
     });
 
     const data = response?.data || {};
@@ -138,7 +136,7 @@ router.post('/', async (req, res) => {
     if (!checkoutUrl) {
       return res.status(502).json({
         error: 'Réponse SumUp sans URL de paiement',
-        sumup: data
+        sumup: data,
       });
     }
 
@@ -151,7 +149,6 @@ router.post('/', async (req, res) => {
 
     // 8) Réponse front
     res.json({ checkoutUrl, ref: orderRef });
-
   } catch (err) {
     const status  = err.response?.status || 500;
     const details = err.response?.data || { message: err.message };
@@ -159,8 +156,12 @@ router.post('/', async (req, res) => {
     console.error('❌ Erreur création checkout SumUp:', JSON.stringify(details, null, 2));
 
     res.status(status).json({
-      error: details?.message || details?.error_message || details?.error_description || 'Impossible de créer le checkout',
-      sumup: details
+      error:
+        details?.message ||
+        details?.error_message ||
+        details?.error_description ||
+        'Impossible de créer le checkout',
+      sumup: details,
     });
   }
 });
