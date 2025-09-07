@@ -5,14 +5,14 @@ const store     = require('../sumupTokenStore');
 const mongoose  = require('mongoose');
 const router    = express.Router();
 
-// Récupère le modèle Order défini dans server.js / models/Order.js
+// Modèle Order
 const Order = mongoose.model('Order');
 
-// SumUp
+// Constantes SumUp
 const CHECKOUT_URL  = 'https://api.sumup.com/v0.1/checkouts';
-const MERCHANT_CODE = process.env.SUMUP_MERCHANT_CODE; // ex: M39S3HK3
+const MERCHANT_CODE = process.env.SUMUP_MERCHANT_CODE;
 
-// ---------- Helpers de calcul & validation ----------
+// ---------- Helpers ----------
 function safeNum(v) {
   const n = Number(v);
   return Number.isFinite(n) && n >= 0 ? n : 0;
@@ -24,40 +24,34 @@ function computeSubTotal(items = []) {
   );
 }
 
-// ⚠️ VERSION ACTUELLE (bijoux uniquement)
-// - Bijoux: 5.40 €
-// - > 100 € (strictement) : gratuit
-// TODO: Quand les vêtements seront ajoutés, réintroduire:
-//       vetements: 6.90, mix: 6.90
 function computeShippingFee_bijouxOnly(items = [], subTotal) {
   if (subTotal > 100) return 0;
   const hasBijoux = items.some(i => i.category === 'bijoux');
-  if (hasBijoux) return 5.40;
-  return 0; // panier vide → 0
+  return hasBijoux ? 5.40 : 0;
 }
 
 function validateItems_bijouxOnly(items = []) {
-  // ⚠️ pour l’instant on n’accepte que la catégorie 'bijoux'
   const allowed = new Set(['bijoux']);
-  if (!Array.isArray(items) || !items.length) return 'Items requis';
+  if (!Array.isArray(items) || !items.length) return '❌ Items requis';
   for (const it of items) {
-    if (!allowed.has(it.category)) return 'Catégorie invalide (bijoux uniquement pour le moment)';
-    if (safeNum(it.unit_price) === 0) return 'Prix invalide';
-    if (safeNum(it.quantity) === 0) return 'Quantité invalide';
+    if (!allowed.has(it.category)) return `❌ Catégorie invalide (${it.category}) — uniquement 'bijoux' pour le moment`;
+    if (safeNum(it.unit_price) === 0) return `❌ Prix invalide pour ${it.name || 'un produit'}`;
+    if (safeNum(it.quantity) === 0) return `❌ Quantité invalide pour ${it.name || 'un produit'}`;
   }
   return null;
 }
 
+// ---------- Route principale ----------
 router.post('/', async (req, res) => {
   try {
-    // 0) Token OAuth côté serveur
+    console.log('📥 Requête checkout reçue:', req.body);
+
+    // 0) Vérifier token
     const token = store.get();
     if (!token) {
       return res.status(400).json({ error: 'Token SumUp manquant côté serveur' });
     }
 
-    // Payload attendu :
-    // { email, shippingAddress, items[], currency='EUR', title='Commande Arc En Ciel', orderId? }
     const {
       items = [],
       currency = 'EUR',
@@ -67,30 +61,30 @@ router.post('/', async (req, res) => {
       shippingAddress
     } = req.body || {};
 
-    // 1) Validations d’entrée (bijoux uniquement pour le moment)
+    // 1) Validation
     if (!email) {
-      return res.status(400).json({ error: 'Email requis' });
+      return res.status(400).json({ error: '❌ Email requis' });
     }
     const itemsError = validateItems_bijouxOnly(items);
     if (itemsError) {
       return res.status(400).json({ error: itemsError });
     }
 
-    // 2) Recalcul du montant total côté serveur
+    // 2) Calcul
     let subTotal    = Number(computeSubTotal(items).toFixed(2));
     let shippingFee = Number(computeShippingFee_bijouxOnly(items, subTotal).toFixed(2));
     let total       = Number((subTotal + shippingFee).toFixed(2));
 
     if (!total || total <= 0) {
-      return res.status(400).json({ error: 'Montant invalide' });
+      return res.status(400).json({ error: '❌ Montant total invalide' });
     }
 
-    // 3) Référence + URL de retour (même domaine front+back)
+    // 3) Référence commande
     const orderRef    = orderId || `order_${Date.now()}`;
     const BACKEND_URL = process.env.BASE_URL || 'https://arcenciel-backend.onrender.com';
     const thankyou    = `${BACKEND_URL}/merci?ref=${encodeURIComponent(orderRef)}`;
 
-    // 4) Enregistrer/Mettre à jour la commande (PENDING) avec détails
+    // 4) Enregistrer en base
     await Order.findOneAndUpdate(
       { ref: orderRef },
       {
@@ -99,7 +93,7 @@ router.post('/', async (req, res) => {
         shippingAddress: shippingAddress || null,
         items,
         amounts:    { subTotal, shippingFee, total },
-        currency:   (currency || 'EUR').toUpperCase(),
+        currency:   currency.toUpperCase(),
         status:     'PENDING',
         channel:    'sumup',
         updatedAt:  new Date(),
@@ -108,17 +102,19 @@ router.post('/', async (req, res) => {
       { upsert: true, new: true }
     );
 
-    // 5) Payload SumUp (Hosted Checkout) — montant = TOTAL (produits + port)
+    // 5) Payload SumUp
     const payload = {
       checkout_reference: orderRef,
       amount:             total,
-      currency:           (currency || 'EUR').toUpperCase(),
+      currency:           currency.toUpperCase(),
       description:        title,
       hosted_checkout:    { enabled: true },
-      return_url:         thankyou, // ping/POST SumUp + redirection SPA (Merci.vue)
-      redirect_url:       thankyou, // bouton “Retour au site marchand”
+      return_url:         thankyou,
+      redirect_url:       thankyou,
       ...(MERCHANT_CODE ? { merchant_code: MERCHANT_CODE } : {})
     };
+
+    console.log('📤 Payload envoyé à SumUp:', payload);
 
     // 6) Appel API SumUp
     const response = await axios.post(CHECKOUT_URL, payload, {
@@ -129,8 +125,9 @@ router.post('/', async (req, res) => {
       timeout: 15000
     });
 
-    // 7) URL de paiement
     const data = response?.data || {};
+    console.log('✅ Réponse SumUp:', data);
+
     const checkoutUrl = data.checkout_url || data.hosted_checkout_url;
     if (!checkoutUrl) {
       return res.status(502).json({
@@ -139,20 +136,22 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // 8) Sauvegarder l'id checkout SumUp + raw
+    // 7) Sauvegarde checkoutId
     await Order.findOneAndUpdate(
       { ref: orderRef },
       { checkoutId: data.id, raw: data },
       { new: true }
     );
 
-    // 9) Retour front (redirection directe même onglet)
+    // 8) Réponse front
     res.json({ checkoutUrl, ref: orderRef });
 
   } catch (err) {
     const status  = err.response?.status || 500;
     const details = err.response?.data || { message: err.message };
-    console.error('Erreur création checkout SumUp:', details);
+
+    console.error('❌ Erreur création checkout SumUp:', details);
+
     res.status(status).json({
       error: details?.message || details?.error_message || 'Impossible de créer le checkout',
       sumup: details
