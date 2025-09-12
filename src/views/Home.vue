@@ -152,41 +152,72 @@ export default {
   transform: scale(1.3);
 }
 
-
 /* ================= */
 /* Styles MOBILE ONLY */
 /* ================= */
-
 @media (max-width: 768px) {
-
   .banner {
-    height: clamp(25vh, 30vh, 35vh); /* hauteur fluide */
+    height: clamp(25vh, 30vh, 35vh);
     border-bottom-left-radius: clamp(10px, 2vw, 20px);
     border-bottom-right-radius: clamp(10px, 2vw, 20px);
   }
 
+  /* centre et limite la largeur du cartouche sur mobile */
+  .banner-text {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 92%;
+    max-width: 340px;
+    text-align: center;
+  }
+
   .banner-text-box {
-    padding: clamp(0.5rem, 2vw, 0.8rem) clamp(0.8rem, 3vw, 1rem); 
-    font-size: clamp(0.85rem, 2.5vw, 1rem); 
+    padding: clamp(0.5rem, 2vw, 0.8rem) clamp(0.8rem, 3vw, 1rem);
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
     border-radius: clamp(5px, 1vw, 10px);
   }
+
+  .banner-text-box p { white-space: normal; }
 
   .categories-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: clamp(0.8rem, 3vw, 1.3rem);   
+    gap: clamp(0.8rem, 3vw, 1.3rem);
     margin: clamp(0.5rem, 2vw, 1rem) clamp(0.5rem, 2vw, 1rem);
   }
-
-  .category-item {
-    width: 100%;
-  }
-
+  .category-item { width: 100%; }
   .category-image {
-    width: clamp(100px, 35vw, 130px);  
+    width: clamp(100px, 35vw, 130px);
     height: clamp(100px, 35vw, 130px);
     border-radius: 50%;
   }
+}
+
+/* ======================== */
+/* Laptops (769–1366 px)    */
+/* ======================== */
+@media (min-width: 769px) and (max-width: 1366px) {
+  /* garde le bloc bien au centre et dans la photo */
+  .banner-text { top: 46%; }
+  .banner-text-box {
+    max-width: 56vw;      /* évite de dépasser l'image */
+    font-size: 1rem;
+    padding: .7rem 1.2rem;
+  }
+  .banner-text-box p { white-space: normal; } /* autorise les retours si besoin */
+}
+
+/* ======================== */
+/* Grands écrans (≥1600 px) */
+/* ======================== */
+@media (min-width: 1600px) {
+  .banner-text { top: 42%; }
+  .banner-text-box {
+    max-width: 62vw;
+  }
+  .banner-text-box p { white-space: nowrap; } /* 1 ligne par phrase si la place le permet */
 }
 
 
