@@ -10,12 +10,10 @@
       <div class="banner-text">
         <div class="banner-text-box">
           <p>
-            Découvrez des bijoux spirituels façonnés à la main, où chaque pierre
-            naturelle porte en elle une énergie unique.
+            cDes essentiels faciles à vivre, sélectionnés pour durer et vous accompagner tous les jours.
           </p>
           <p>
-            Créations artisanales et uniques, elles sont conçues pour harmoniser
-            corps et esprit.
+            Des vêtements que l’on aime porter — et quelques bijoux pour compléter l’ensemble.
           </p>
         </div>
       </div>
@@ -80,7 +78,7 @@ export default {
   width: 100%;
   height: 56vh;               /* ta hauteur habituelle */
   overflow: hidden;
-  background-color: #f4d6dc;  /* ⬅︎ rose du bandeau (adapte si besoin) */
+  background-color: #f1dad7;  /* ⬅︎ rose du bandeau (adapte si besoin) */
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }
@@ -100,7 +98,7 @@ export default {
   position: absolute;
   left: 50%;
   bottom: 8%;
-  transform: translateX(-50%);
+  transform: translateX(-20%);
   width: 90%;
   max-width: 800px;
   text-align: center;
