@@ -142,7 +142,7 @@ app.post('/api/send-email', async (req, res) => {
       from: MAIL_FROM,
       to: EMAIL_TO,
       replyTo: `"${senderName}" <${replyEmail}>`,
-      subject: `📩 Nouveau message – ${senderName}`,
+      subject: `📩 Nouveau message du site Arc En Ciel– ${senderName}`,
       html,
     });
 
