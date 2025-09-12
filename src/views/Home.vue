@@ -9,12 +9,8 @@
       />
       <div class="banner-text">
         <div class="banner-text-box">
-          <p>
-            cDes essentiels faciles à vivre, sélectionnés pour durer et vous accompagner tous les jours.
-          </p>
-          <p>
-            Des vêtements que l’on aime porter — et quelques bijoux pour compléter l’ensemble.
-          </p>
+          <p>Des essentiels faciles à vivre, sélectionnés pour durer et vous accompagner tous les jours.</p>
+          <p>Des vêtements que l’on aime porter et quelques bijoux pour compléter l’ensemble.</p>
         </div>
       </div>
     </div>
@@ -93,33 +89,45 @@ export default {
   border-bottom-right-radius: 20px;
 }
 
-/* Texte inchangé, tu peux le garder au centre ou en bas */
+/* Bloc texte centré + remonté */
 .banner-text {
   position: absolute;
+  top: 40%;                 /* ↑ remonte (ajuste 38–44% si besoin) */
   left: 50%;
-  bottom: 8%;
-  transform: translateX(-20%);
-  width: 90%;
-  max-width: 800px;
+  transform: translate(-50%, -50%); /* centre vraiment (plus de décalage) */
+  width: 100%;
   text-align: center;
 }
 
+/* Cartouche + lignes sur une seule ligne */
 .banner-text-box {
+  display: inline-block;    /* s’adapte au contenu */
   background-color: rgba(245, 237, 224, 0.9);
   font-family: 'Raleway', sans-serif;
   padding: 1rem 2rem;
   border-radius: 10px;
   color: #333;
   font-size: 1.2rem;
-  line-height: 1.6;
+  line-height: 1.4;
+  max-width: 90vw;          /* évite de dépasser l’écran */
 }
+
+/* Chaque phrase sur une seule ligne (desktop) */
+.banner-text-box p {
+  margin: 0.25rem 0;
+  white-space: nowrap;      /* pas de retour à la ligne */
+}
+
+
+
 
 /* Mobile */
 @media (max-width: 768px) {
   .banner { height: 62vh; }        /* un peu plus haut sur mobile */
   .banner-text { bottom: 6%; }      /* remonte légèrement si besoin */
 }
-
+  .banner-text { top: 46%; }          /* recale un peu plus bas si besoin */
+  .banner-text-box p { white-space: normal; }
 /* CATÉGORIES */
 .categories-container {
   display: flex;
