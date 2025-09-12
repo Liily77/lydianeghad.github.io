@@ -132,6 +132,7 @@ app.post('/api/send-email', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email et message sont requis' });
     }
 
+    // 1) Mail vers la boutique (avec Reply-To = client)
     const html = `
       <p><b>Nom :</b> ${senderName}</p>
       <p><b>Email :</b> ${replyEmail}</p>
@@ -145,14 +146,27 @@ app.post('/api/send-email', async (req, res) => {
       subject: `📩 Nouveau message Arc En Ciel – ${senderName}`,
       html,
     });
+    console.log('EMAIL SENT (boutique):', info && (info.messageId || info.response));
 
-    console.log('EMAIL SENT:', info && (info.messageId || info.response));
-    res.json({ success: true, message: 'Message envoyé' });
+    // 2) Accusé de réception automatique au client
+    try {
+      await sendContactAutoReply({
+        to: replyEmail,
+        firstName: senderName.split(' ')[0] || senderName
+      });
+      console.log('AUTO-REPLY SENT (client):', replyEmail);
+    } catch (e) {
+      console.error('AUTO-REPLY ERROR:', e.message);
+      // On ne bloque pas la réponse côté front si l’auto-reply échoue.
+    }
+
+    return res.json({ success: true, message: 'Message envoyé' });
   } catch (err) {
     console.error('EMAIL ERROR:', err);
-    res.status(500).json({ success: false, message: 'Envoi impossible' });
+    return res.status(500).json({ success: false, message: 'Envoi impossible' });
   }
 });
+
 
 // 15) Produits (public)
 app.get('/api/produits', (_req, res) => Produit.find().then(r => res.json(r)));
