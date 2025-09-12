@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 // Vues statiques
 import Home from '../views/Home.vue'
 import Bagues from '../views/Bagues.vue'
+import Hauts from '../views/Hauts.vue'
 import Colliers from '../views/Colliers.vue'
 import Bracelets from '../views/Bracelets.vue'
 import Boucles from '../views/Boucles.vue'
@@ -25,6 +26,7 @@ import Checkout from '../views/Checkout.vue'
 const routes = [
   { path: '/', name: 'Home', component: Home },
   { path: '/bagues', name: 'Bagues', component: Bagues },
+  { path: '/hauts', name: 'Hauts', component: Hauts },
   { path: '/colliers', name: 'Colliers', component: Colliers },
   { path: '/bracelets', name: 'Bracelets', component: Bracelets },
   { path: '/boucles', name: 'Boucles', component: Boucles },
@@ -36,7 +38,6 @@ const routes = [
   { path: '/cartesdiv', name: 'Cartesdiv', component: Cartesdiv },
   { path: '/pendules', name: 'Pendules', component: Pendules },
   { path: '/produit/:id', name: 'Produit', component: Produit },
-  // ✅ plus de beforeEnter : on laisse Admin.vue afficher le login si pas connecté
   { path: '/admin', name: 'Admin', component: Admin },
   { path: '/panier', name: 'Panier', component: () => import('../views/Panier.vue') },
   { path: '/nouveautes', name: 'Nouveautes', component: Nouveautes },
@@ -44,7 +45,6 @@ const routes = [
   { path: '/contact', name: 'Contact', component: Contact },
   { path: '/checkout', name: 'Checkout', component: Checkout },
   { path: '/merci', name: 'Merci', component: Merci },
-  // (optionnel) catch-all -> home
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 

@@ -56,6 +56,9 @@
       <router-link to="/pendules#pendules-cards" class="category-item">
         <img src="/assets/images/PENDULES.png" alt="Pendules" class="category-image" />
       </router-link>
+      <router-link to="/hauts#hauts-cards" class="category-item">
+        <img src="/assets/images/HAUTS.png" alt="Hauts" class="category-image" />
+      </router-link>
     </div>
   </div>
 </template>
@@ -87,10 +90,12 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 25%; /* ↑ remonte l'image (0% = tout en haut, 100% = tout en bas) */
   display: block;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }
+
 .banner-text {
   position: absolute;
   top: 50%;
