@@ -19,7 +19,8 @@ const hpp       = require('hpp');
 const jwt       = require('jsonwebtoken');
 
 // Mailer (Brevo)
-const { buildTransport, sendMail } = require('./mailer');
+const { buildTransport, sendMail, sendContactAutoReply } = require('./mailer');
+
 
 // 2) Flags / stores
 const sumupTokenStore = require('./sumupTokenStore');
