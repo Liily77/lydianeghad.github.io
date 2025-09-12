@@ -74,12 +74,13 @@ export default {
 }
 
 /* BANNIÈRE — voir toute l’image */
+
 .banner {
   position: relative;
   width: 100%;
-  height: 56vh;               /* un peu plus haut pour caser image + texte */
-  background-color: #f9f4f0;  /* couleur des bandes si les ratios ne matchent pas */
+  height: 56vh;               /* ta hauteur habituelle */
   overflow: hidden;
+  background-color: #f4d6dc;  /* ⬅︎ rose du bandeau (adapte si besoin) */
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }
@@ -87,17 +88,18 @@ export default {
 .banner-img {
   width: 100%;
   height: 100%;
-  object-fit: contain;        /* <-- affiche TOUTE l’image */
+  object-fit: contain;        /* montre toute l’image */
   object-position: center;
   display: block;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }
 
+/* Texte inchangé, tu peux le garder au centre ou en bas */
 .banner-text {
   position: absolute;
   left: 50%;
-  bottom: 8%;                 /* texte en bas pour libérer l’image */
+  bottom: 8%;
   transform: translateX(-50%);
   width: 90%;
   max-width: 800px;
