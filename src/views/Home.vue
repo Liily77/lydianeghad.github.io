@@ -73,42 +73,51 @@ export default {
   padding: 0;
 }
 
-/* BANNIÈRE */
+/* BANNIÈRE — voir toute l’image */
 .banner {
   position: relative;
   width: 100%;
-  height: 50vh;
+  height: 56vh;               /* un peu plus haut pour caser image + texte */
+  background-color: #f9f4f0;  /* couleur des bandes si les ratios ne matchent pas */
   overflow: hidden;
-  /* coins inférieurs arrondis */
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }
- .banner-img {
+
+.banner-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center 85%; /* <- montre plus le bas de l'image */
+  object-fit: contain;        /* <-- affiche TOUTE l’image */
+  object-position: center;
   display: block;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }
+
 .banner-text {
   position: absolute;
-  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 8%;                 /* texte en bas pour libérer l’image */
+  transform: translateX(-50%);
   width: 90%;
   max-width: 800px;
   text-align: center;
 }
+
 .banner-text-box {
-  background-color: rgba(245, 237, 224, 0.858);
+  background-color: rgba(245, 237, 224, 0.9);
   font-family: 'Raleway', sans-serif;
   padding: 1rem 2rem;
   border-radius: 10px;
   color: #333;
   font-size: 1.2rem;
   line-height: 1.6;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .banner { height: 62vh; }        /* un peu plus haut sur mobile */
+  .banner-text { bottom: 6%; }      /* remonte légèrement si besoin */
 }
 
 /* CATÉGORIES */
