@@ -134,7 +134,7 @@ export default {
         }
       } catch (err) {
         console.error(err)
-        this.toastMessage = '❌ Impossible d’envoyer le message. Réessayez plus tard.'
+        this.toastMessage = 'Impossible d’envoyer le message. Réessayez plus tard.'
         this.toastSuccess = false
       } finally {
         this.sending = false
