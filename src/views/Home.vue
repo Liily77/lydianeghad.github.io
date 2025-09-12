@@ -56,9 +56,6 @@
       <router-link to="/pendules#pendules-cards" class="category-item">
         <img src="/assets/images/PENDULES.png" alt="Pendules" class="category-image" />
       </router-link>
-      <router-link to="/hauts#hauts-cards" class="category-item">
-        <img src="/assets/images/HAUTS.png" alt="Hauts" class="category-image" />
-      </router-link>
     </div>
   </div>
 </template>

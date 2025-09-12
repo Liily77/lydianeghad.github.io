@@ -25,7 +25,6 @@ import Checkout from '../views/Checkout.vue'
 const routes = [
   { path: '/', name: 'Home', component: Home },
   { path: '/bagues', name: 'Bagues', component: Bagues },
-  { path: '/hauts', name: 'Hauts', component: () => import('../views/Hauts.vue') },
   { path: '/colliers', name: 'Colliers', component: Colliers },
   { path: '/bracelets', name: 'Bracelets', component: Bracelets },
   { path: '/boucles', name: 'Boucles', component: Boucles },
