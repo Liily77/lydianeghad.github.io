@@ -83,16 +83,15 @@ export default {
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }
-.banner-img {
+ .banner-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 25%; 
+  object-position: center 85%; /* <- montre plus le bas de l'image */
   display: block;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }
-
 .banner-text {
   position: absolute;
   top: 50%;
