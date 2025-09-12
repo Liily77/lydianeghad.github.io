@@ -180,45 +180,57 @@ export default {
   }
 
   .banner-text-box p { white-space: normal; }
-
-  .categories-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: clamp(0.8rem, 3vw, 1.3rem);
-    margin: clamp(0.5rem, 2vw, 1rem) clamp(0.5rem, 2vw, 1rem);
-  }
-  .category-item { width: 100%; }
-  .category-image {
-    width: clamp(100px, 35vw, 130px);
-    height: clamp(100px, 35vw, 130px);
-    border-radius: 50%;
-  }
 }
 
 /* ======================== */
 /* Laptops (769–1366 px)    */
 /* ======================== */
 @media (min-width: 769px) and (max-width: 1366px) {
-  /* garde le bloc bien au centre et dans la photo */
-  .banner-text { top: 46%; }
-  .banner-text-box {
-    max-width: 56vw;      /* évite de dépasser l'image */
-    font-size: 1rem;
-    padding: .7rem 1.2rem;
+  .banner-text {
+    position: absolute;
+    top: 46%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
   }
-  .banner-text-box p { white-space: normal; } /* autorise les retours si besoin */
+
+  .banner-text-box {
+    max-width: min(48vw, 680px);  /* évite de dépasser l'image (contain) */
+    font-size: 1rem;
+    padding: .75rem 1.2rem;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Ajustement petits laptops (769–1024 px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .banner-text { top: 48%; }
+  .banner-text-box {
+    max-width: min(46vw, 600px);
+    font-size: .95rem;
+  }
 }
 
 /* ======================== */
 /* Grands écrans (≥1600 px) */
 /* ======================== */
 @media (min-width: 1600px) {
-  .banner-text { top: 42%; }
-  .banner-text-box {
-    max-width: 62vw;
+  .banner-text {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
-  .banner-text-box p { white-space: nowrap; } /* 1 ligne par phrase si la place le permet */
+
+  .banner-text-box {
+    max-width: min(62vw, 900px);
+  }
+
+  .banner-text-box p { white-space: nowrap; } /* 1 ligne par phrase si possible */
 }
+
 
 
 </style>
