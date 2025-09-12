@@ -90,7 +90,7 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 25%; /* ↑ remonte l'image (0% = tout en haut, 100% = tout en bas) */
+  object-position: center 25%; 
   display: block;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
