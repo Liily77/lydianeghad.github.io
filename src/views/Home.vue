@@ -126,8 +126,7 @@ export default {
   .banner { height: 62vh; }        /* un peu plus haut sur mobile */
   .banner-text { bottom: 6%; }      /* remonte légèrement si besoin */
 }
-  .banner-text { top: 46%; }          /* recale un peu plus bas si besoin */
-  .banner-text-box p { white-space: normal; }
+
 /* CATÉGORIES */
 .categories-container {
   display: flex;
