@@ -92,7 +92,7 @@ export default {
 /* Bloc texte centré + remonté */
 .banner-text {
   position: absolute;
-  top: 40%;                 /* ↑ remonte (ajuste 38–44% si besoin) */
+  top: 45%;                 /* ↑ remonte (ajuste 38–44% si besoin) */
   left: 50%;
   transform: translate(-50%, -50%); /* centre vraiment (plus de décalage) */
   width: 100%;
