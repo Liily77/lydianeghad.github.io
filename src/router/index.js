@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // Vues statiques
 import Home from '../views/Home.vue'
-import Bagues from '../views/Bagues.vue'
+import Hauts from '../views/Hauts.vue'            // ← remplace Bagues
 import Colliers from '../views/Colliers.vue'
 import Bracelets from '../views/Bracelets.vue'
 import Boucles from '../views/Boucles.vue'
@@ -24,7 +24,7 @@ import Checkout from '../views/Checkout.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
-  { path: '/bagues', name: 'Bagues', component: Bagues },
+  { path: '/hauts', name: 'Hauts', component: Hauts }, // ← remplace /bagues
   { path: '/colliers', name: 'Colliers', component: Colliers },
   { path: '/bracelets', name: 'Bracelets', component: Bracelets },
   { path: '/boucles', name: 'Boucles', component: Boucles },
@@ -44,8 +44,6 @@ const routes = [
   { path: '/checkout', name: 'Checkout', component: Checkout },
   { path: '/merci', name: 'Merci', component: Merci },
   { path: '/:pathMatch(.*)*', redirect: '/' }
-  
-
 ]
 
 const router = createRouter({

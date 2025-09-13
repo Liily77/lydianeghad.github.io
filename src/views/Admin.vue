@@ -217,7 +217,7 @@ export default {
       formError: false,
 
       categoriesFixes: [
-        'bague','collier','bracelet','chapelet',
+        'hauts','collier','bracelet','chapelet',
         'boucles doreilles','bijoux de cheville',
         'malas','parures','portecles',
         'cartesdiv','pendule'

@@ -25,7 +25,7 @@
         <router-link
           :to="{
             path: `/produit/${produit._id || produit.id}`,
-            query: { from: 'bagues' }
+            query: { from: 'hauts' }
           }"
           class="add-to-cart"
         >
@@ -38,16 +38,10 @@
 
 <script>
 export default {
-  name: 'BagueProduit',
+  name: 'HautProduit',
   props: {
-    produit: {
-      type: Object,
-      required: true
-    },
-    getImageUrl: {
-      type: Function,
-      required: true
-    }
+    produit: { type: Object, required: true },
+    getImageUrl: { type: Function, required: true }
   },
   data() {
     return {
@@ -58,10 +52,10 @@ export default {
   computed: {
     images() {
       if (!this.produit.images || this.produit.images.length === 0) {
-        // Retourne une image par défaut si aucune image dispo
+        // image fallback si aucune image dispo
         return [this.getImageUrl('/assets/images/image-placeholder.png')];
       }
-      // Applique la fonction getImageUrl à chaque image
+      // applique la fonction getImageUrl à chaque image
       return this.produit.images.map(img => this.getImageUrl(img));
     },
     transitionName() {

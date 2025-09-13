@@ -28,7 +28,7 @@ const isSandbox = process.env.USE_SUMUP_SANDBOX === 'true';
 
 // 3) Express
 const app  = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;f
 app.set('trust proxy', 1);
 
 // 4) Sécurité & logs

@@ -17,8 +17,9 @@
 
     <!-- CATÉGORIES -->
     <div id="categories" class="categories-container">
-      <router-link to="/bagues#bagues-cards" class="category-item">
-        <img src="/assets/images/BAGUES.png" alt="Bagues" class="category-image" />
+      
+      <router-link to="/hauts#hauts-cards" class="category-item">
+        <img src="/assets/images/HAUTS.png" alt="Hauts" class="category-image" />
       </router-link>
       <router-link to="/colliers#colliers-cards" class="category-item">
         <img src="/assets/images/COLLIERS.png" alt="Colliers" class="category-image" />

@@ -1,8 +1,9 @@
 <template>
-  <div class="bagues-page">
+  <div class="home">
     <!-- TITRE SECTION -->
     <div class="section-title">
-      <img src="/assets/images/titre-bagues.jpg" alt="Nos Bagues" />
+      <!-- 👇 image conservée (bagues) -->
+      <img src="/assets/images/titre-bagues.jpg" alt="Nos Hauts" />
     </div>
 
     <!-- RETOUR ACCUEIL -->
@@ -11,62 +12,60 @@
     </div>
 
     <!-- FICHES PRODUITS -->
-    <div id="bagues-cards" class="products-container">
+    <div id="hauts-cards" class="products-container">
       <BagueProduit
-        v-for="produit in produitsBagues"
+        v-for="produit in produitsHauts"
         :key="produit._id"
         :produit="produit"
-        :getImageUrl="getImageUrl"/>
+        :getImageUrl="getImageUrl"
+      />
     </div>
 
     <!-- BANNIÈRE -->
     <div class="banner">
-      <img src="/assets/images/banner-bagues.jpg" alt="Bannière Bagues" class="banner-img" />
+      <!-- 👇 image conservée (bagues) -->
+      <img src="/assets/images/banner-bagues.jpg" alt="Bannière Hauts" class="banner-img" />
       <div class="banner-text">
         <div class="banner-text-box">
-          <p>Découvrez notre collection de bagues artisanales et spirituelles.</p>
-          <p>Énergie, élégance et symbolique à votre doigt.</p>
+          <p>Chemises, blouses, tops, pulls : vos indispensables.</p>
+          <p>Une sélection pratique et stylée.</p>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-
 <script>
-import BagueProduit from '../components/BagueProduit.vue'
+import HautProduit from '../components/HautProduit.vue'
 import { api } from '@/utils/api'
 
 export default {
-  name: 'Bagues',
-  components: { BagueProduit },
+  name: 'Hauts',
+  components: { BagueProduit: HautProduit },
   data() {
-    return {
-      produitsBagues: []
-    }
+    return { produitsHauts: [] }
   },
   methods: {
     getImageUrl(img) {
-      if (!img) return ''
+      if (!img) return '/assets/images/image-placeholder.png'
       const backendUrl = import.meta.env.VITE_BACKEND_URL || ''
-      return img.startsWith('/uploads') ? backendUrl + img : img
+      return img.startsWith('/uploads') ? `${backendUrl}${img}` : img
     }
   },
   async mounted() {
     window.scrollTo(0, 0)
-    console.log('[Bagues.vue] mounted — fetch via api()')
     try {
-      // Utilisation du wrapper api() pour respecter BASE
       const all = await api('/api/produits', { credentials: 'include' })
-      this.produitsBagues = all.filter(
-        p => p.categorie && p.categorie.toLowerCase() === 'bagues'
+      this.produitsHauts = (all || []).filter(
+        p => (p.categorie || '').toLowerCase() === 'hauts'
       )
     } catch (err) {
-      console.error('Erreur chargement bagues :', err)
+      console.error('[Hauts.vue] Erreur chargement hauts :', err)
     }
   }
 }
 </script>
+
 
 
 
