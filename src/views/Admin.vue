@@ -1,6 +1,6 @@
 <template>
   <div class="admin-page">
-    <!-- Si pas connecté, afficher formulaire login -->
+    <!-- ===== Connexion ===== -->
     <div v-if="!isLoggedIn" class="login-form">
       <h1>Connexion Admin</h1>
       <form @submit.prevent="seConnecter">
@@ -18,18 +18,13 @@
       </form>
     </div>
 
-    <!-- Sinon, afficher interface admin -->
+    <!-- ===== Interface admin ===== -->
     <div v-else>
-      <!-- En-tête : titre + boutons -->
       <div class="admin-header">
         <h1 class="titre-centre">Gestion des produits 🛍️</h1>
         <div class="admin-header-buttons">
-          <button @click="connectSumUp" class="connect-btn">
-            Connecter SumUp
-          </button>
-          <button @click="seDeconnecter" class="logout-btn">
-            Déconnexion
-          </button>
+          <button @click="connectSumUp" class="connect-btn">Connecter SumUp</button>
+          <button @click="seDeconnecter" class="logout-btn">Déconnexion</button>
         </div>
       </div>
 
@@ -38,82 +33,46 @@
         <label>Filtrer par catégorie :
           <select v-model="filtreCategorie">
             <option value="">Toutes</option>
-            <option
-              v-for="cat in categoriesDisponibles"
-              :key="cat"
-              :value="cat"
-            >
+            <option v-for="cat in categoriesDisponibles" :key="cat" :value="cat">
               {{ cat }}
             </option>
           </select>
         </label>
 
         <label>Recherche :
-          <input
-            type="text"
-            v-model="rechercheTexte"
-            placeholder="Nom ou description"
-          />
+          <input type="text" v-model="rechercheTexte" placeholder="Nom ou description" />
         </label>
       </div>
 
       <div class="admin-layout">
-        <!-- FORMULAIRE AJOUT -->
+        <!-- ===== Formulaire ajout ===== -->
         <form @submit.prevent="ajouterProduit" class="formulaire-ajout" novalidate>
           <h2>Ajouter un produit 🛒</h2>
 
           <label>Nom :
-            <input
-              type="text"
-              v-model="nouveauProduit.nom"
-              :class="{ 'input-error': errors.nom }"
-              required
-            />
+            <input type="text" v-model="nouveauProduit.nom" :class="{ 'input-error': errors.nom }" required />
             <span v-if="errors.nom" class="error-msg">{{ errors.nom }}</span>
           </label>
 
           <label>Description :
-            <textarea
-              v-model="nouveauProduit.description"
-              :class="{ 'input-error': errors.description }"
-              required
-            ></textarea>
+            <textarea v-model="nouveauProduit.description" :class="{ 'input-error': errors.description }" required></textarea>
             <span v-if="errors.description" class="error-msg">{{ errors.description }}</span>
           </label>
 
           <label>Prix (€) :
-            <input
-              type="number"
-              v-model.number="nouveauProduit.prix"
-              :class="{ 'input-error': errors.prix }"
-              min="0.01"
-              step="0.01"
-              required
-            />
+            <input type="number" v-model.number="nouveauProduit.prix" :class="{ 'input-error': errors.prix }" min="0.01" step="0.01" required />
             <span v-if="errors.prix" class="error-msg">{{ errors.prix }}</span>
           </label>
 
-          <!-- 👇 NOUVEAU : couleurs (CSV) -->
+          <!-- Couleurs (CSV) -->
           <label>Couleurs (séparées par des virgules) :
-            <input
-              type="text"
-              v-model="nouveauProduit.couleurs"
-              placeholder="ex: beige, bleu, noir"
-            />
+            <input type="text" v-model="nouveauProduit.couleurs" placeholder="ex: beige, bleu, noir" />
           </label>
 
           <label>Catégorie :
-            <select
-              v-model="categorieChoisie"
-              :class="{ 'input-error': errors.categorie }"
-              required
-            >
+            <select v-model="categorieChoisie" :class="{ 'input-error': errors.categorie }" required>
               <option disabled value="">-- Choisir une catégorie --</option>
-              <option
-                v-for="cat in categoriesDisponibles"
-                :key="cat"
-                :value="cat"
-              >
+              <option v-for="cat in categoriesDisponibles" :key="cat" :value="cat">
                 {{ cat }}
               </option>
               <option value="autre">Autre (à préciser)</option>
@@ -122,34 +81,16 @@
           </label>
 
           <label v-if="categorieChoisie === 'autre'">Nouvelle catégorie :
-            <input
-              type="text"
-              v-model="nouvelleCategorie"
-              :class="{ 'input-error': errors.nouvelleCategorie }"
-              placeholder="ex: pendules"
-              required
-            />
+            <input type="text" v-model="nouvelleCategorie" :class="{ 'input-error': errors.nouvelleCategorie }" placeholder="ex: pendules" required />
             <span v-if="errors.nouvelleCategorie" class="error-msg">{{ errors.nouvelleCategorie }}</span>
           </label>
 
-          <label
-            v-for="(file, index) in fichiersImages"
-            :key="index"
-          >
+          <label v-for="(file, index) in fichiersImages" :key="index">
             Image {{ index + 1 }} :
-            <input
-              type="file"
-              :ref="'fichierImage' + index"
-              @change="onFileChange($event, index)"
-              accept="image/*"
-            />
+            <input type="file" :ref="'fichierImage' + index" @change="onFileChange($event, index)" accept="image/*" />
           </label>
 
-          <button
-            type="submit"
-            class="ajouter-btn"
-            :disabled="isLoading"
-          >
+          <button type="submit" class="ajouter-btn" :disabled="isLoading">
             <span v-if="isLoading">⏳ Ajout en cours...</span>
             <span v-else>Ajouter le produit</span>
           </button>
@@ -159,28 +100,23 @@
           </p>
         </form>
 
-        <!-- TABLEAU PRODUITS -->
+        <!-- ===== Tableau produits ===== -->
         <div class="tableau-produits" v-if="produitsFiltres.length">
           <h2>📦 Produits filtrés ({{ produitsFiltres.length }})</h2>
 
-          <div
-            v-for="produit in produitsFiltres"
-            :key="produit._id || produit.id"
-            class="produit-item"
-          >
+          <div v-for="produit in produitsFiltres" :key="produit._id || produit.id" class="produit-item">
             <input v-model="produit.nom" />
             <input v-model="produit.description" />
             <input type="number" v-model.number="produit.prix" />
             <input v-model="produit.categorie" />
 
-            <!-- 👇 NOUVEAU : champ édition couleurs -->
+            <!-- Édition couleurs -->
             <input
               :value="toCSV(produit.couleurs)"
               @input="onCouleursInput(produit, $event.target.value)"
               placeholder="couleurs: beige, bleu"
             />
 
-            <!-- (optionnel) petits badges d’aperçu -->
             <div class="color-badges" v-if="toCSV(produit.couleurs)">
               <span
                 v-for="(c,i) in toCSV(produit.couleurs).split(',')"
@@ -191,24 +127,17 @@
             </div>
 
             <div class="img-preview" v-if="produit.images?.length">
-              <img
-                v-for="(img, i) in produit.images"
-                :key="i"
-                :src="img"
-                alt="Image produit"
-              />
+              <img v-for="(img, i) in produit.images" :key="i" :src="img" alt="Image produit" />
             </div>
 
             <div class="btn-droite">
               <button @click="modifierProduit(produit)">💾 Modifier</button>
-              <button @click="supprimerProduit(produit._id || produit.id)">
-                🗑 Supprimer
-              </button>
+              <button @click="supprimerProduit(produit._id || produit.id)">🗑 Supprimer</button>
             </div>
           </div>
         </div>
-      </div> <!-- .admin-layout -->
-    </div> <!-- v-else -->
+      </div> <!-- /admin-layout -->
+    </div> <!-- /v-else -->
   </div>
 </template>
 
@@ -234,7 +163,7 @@ export default {
       rechercheTexte: '',
 
       // Ajout produit
-      nouveauProduit: { nom: '', description: '', prix: null, couleurs: '' }, // 👈 couleurs CSV ici
+      nouveauProduit: { nom: '', description: '', prix: null, couleurs: '' },
       categorieChoisie: '',
       nouvelleCategorie: '',
       fichiersImages: [null, null, null, null, null],
@@ -245,11 +174,10 @@ export default {
       categoriesFixes: [
         'hauts','collier','bracelet','chapelet',
         'boucles doreilles','bijoux de cheville',
-        'malas','parures','portecles',
-        'cartesdiv','pendule'
+        'malas','parures','portecles','cartesdiv','pendule'
       ],
 
-      // timer d'inactivité
+      // Inactivité
       _idleTimer: null,
     }
   },
@@ -286,7 +214,7 @@ export default {
     window.removeEventListener('scroll', this._resetIdleWatch)
   },
   methods: {
-    // Helpers couleurs
+    /* ===== Helpers couleurs ===== */
     toCSV(val) {
       if (!val) return ''
       if (Array.isArray(val)) return val.join(', ')
@@ -294,27 +222,20 @@ export default {
     },
     csvToArray(csv) {
       if (!csv) return []
-      return csv
-        .split(',')
-        .map(s => s.trim())
-        .filter(Boolean)
+      return csv.split(',').map(s => s.trim()).filter(Boolean)
     },
     onCouleursInput(produit, csv) {
-      // stocke côté objet un tableau propre
       produit.couleurs = this.csvToArray(csv)
     },
 
-    // Auth admin
+    /* ===== Auth ===== */
     async seConnecter() {
       this.loginError = ''
       this.isLoading = true
       try {
         const { token } = await api('/api/login', {
           method: 'POST',
-          body: JSON.stringify({
-            username: this.loginUser,
-            password: this.loginPass
-          })
+          body: JSON.stringify({ username: this.loginUser, password: this.loginPass })
         })
         sessionStorage.setItem('admin_token', token)
         this.isLoggedIn = true
@@ -335,18 +256,18 @@ export default {
       this._clearIdleWatch()
     },
 
-    // OAuth SumUp
+    /* ===== SumUp ===== */
     connectSumUp() {
       const base = import.meta.env.VITE_BACKEND_URL || ''
       window.location.href = base + '/auth/connect'
     },
 
-    // Fichiers images
+    /* ===== Fichiers ===== */
     onFileChange(event, index) {
       this.fichiersImages[index] = event.target.files[0]
     },
 
-    // Chargement produits
+    /* ===== Produits CRUD ===== */
     async chargerProduits() {
       try {
         this.produits = await api('/api/produits', {
@@ -362,20 +283,16 @@ export default {
       }
     },
 
-    // Validation
     validateForm() {
       this.errors = {}
       if (!this.nouveauProduit.nom) this.errors.nom = 'Le nom est requis'
       if (!this.nouveauProduit.description) this.errors.description = 'La description est requise'
-      if (!this.nouveauProduit.prix || this.nouveauProduit.prix <= 0)
-        this.errors.prix = 'Le prix doit être > 0'
+      if (!this.nouveauProduit.prix || this.nouveauProduit.prix <= 0) this.errors.prix = 'Le prix doit être > 0'
       if (!this.categorieChoisie) this.errors.categorie = 'La catégorie est requise'
-      if (this.categorieChoisie === 'autre' && !this.nouvelleCategorie)
-        this.errors.nouvelleCategorie = 'Veuillez préciser la catégorie'
+      if (this.categorieChoisie === 'autre' && !this.nouvelleCategorie) this.errors.nouvelleCategorie = 'Veuillez préciser la catégorie'
       return Object.keys(this.errors).length === 0
     },
 
-    // Ajout produit
     async ajouterProduit() {
       if (!this.validateForm()) {
         this.formMessage = 'Veuillez corriger les erreurs avant de soumettre.'
@@ -387,13 +304,13 @@ export default {
       try {
         const formData = new FormData()
         const catFinale = this.categorieChoisie === 'autre'
-          ? this.nouvelleCategorie.toLowerCase()
-          : this.categorieChoisie.toLowerCase()
+          ? (this.nouvelleCategorie || '').toLowerCase()
+          : (this.categorieChoisie || '').toLowerCase()
+
         formData.append('nom', this.nouveauProduit.nom)
         formData.append('description', this.nouveauProduit.description)
         formData.append('prix', this.nouveauProduit.prix)
         formData.append('categorie', catFinale)
-        // 👇 en CSV ; le backend peut convertir en tableau
         formData.append('couleurs', (this.nouveauProduit.couleurs || '').trim())
         this.fichiersImages.forEach(f => f && formData.append('images', f))
 
@@ -414,7 +331,6 @@ export default {
       }
     },
 
-    // Reset formulaire
     resetFormulaire() {
       this.nouveauProduit = { nom: '', description: '', prix: null, couleurs: '' }
       this.categorieChoisie = ''
@@ -429,15 +345,11 @@ export default {
       }
     },
 
-    // Modification
     async modifierProduit(produit) {
       const id = produit._id || produit.id
-      // s’assure qu’on envoie un tableau (si l’utilisateur a tapé du CSV)
       const payload = {
         ...produit,
-        couleurs: Array.isArray(produit.couleurs)
-          ? produit.couleurs
-          : this.csvToArray(produit.couleurs)
+        couleurs: Array.isArray(produit.couleurs) ? produit.couleurs : this.csvToArray(produit.couleurs)
       }
       try {
         const updated = await api(`/api/produits/${id}`, {
@@ -458,7 +370,6 @@ export default {
       }
     },
 
-    // Suppression
     async supprimerProduit(id) {
       if (!confirm('❓ Supprimer ce produit ?')) return
       try {
@@ -472,7 +383,7 @@ export default {
       }
     },
 
-    // Gestion inactivité
+    /* ===== Inactivité ===== */
     _startIdleWatch() {
       this._clearIdleWatch()
       this._idleTimer = setTimeout(() => {
@@ -503,160 +414,91 @@ export default {
   box-sizing: border-box;
 }
 
-/* ===== Header titre + boutons ===== */
-.titre-centre {
-  font-size: 1.8rem;
-  margin: 1.5rem 0 !important;
-}
+/* Header */
+.titre-centre { font-size: 1.8rem; margin: 1.5rem 0 !important; }
 .admin-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; margin-bottom: 1rem;
 }
-.admin-header-buttons {
-  display: flex;
-  gap: 0.6rem;
-}
-.connect-btn,
-.logout-btn {
-  padding: 0.5rem 0.8rem;
-  font-size: 0.9rem;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
+.admin-header-buttons { display: flex; gap: 0.6rem; }
+.connect-btn, .logout-btn {
+  padding: 0.5rem 0.8rem; font-size: 0.9rem; border: none; border-radius: 6px;
+  font-weight: 600; cursor: pointer;
 }
 .connect-btn { background: #007bff; color: #fff; }
 .connect-btn:hover { background: #0056b3; }
 .logout-btn { background: #e20e0e; color: #fff; }
 .logout-btn:hover { background: #9b0404; }
 
-/* ===== Login ===== */
+/* Login */
 .login-form {
-  max-width: 320px;
-  margin: 2rem auto;
-  padding: 1rem;
-  background: #fafafae0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
+  max-width: 320px; margin: 2rem auto; padding: 1rem; background: #fafafae0;
+  border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;
 }
-.login-form h1 {
-  text-align: center;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-}
+.login-form h1 { text-align: center; margin-bottom: 1rem; font-size: 1.5rem; }
 .login-form label { display: block; margin-bottom: 0.8rem; font-weight: 600; }
 .login-form input {
-  width: 100%;
-  padding: 0.3rem 0.5rem;
-  margin-top: 0.2rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
+  width: 100%; padding: 0.3rem 0.5rem; margin-top: 0.2rem;
+  border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
 }
 .login-form button {
-  width: 100%;
-  padding: 0.5rem;
-  margin-top: 1rem;
-  background: #98babb;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
+  width: 100%; padding: 0.5rem; margin-top: 1rem; background: #98babb;
+  border-radius: 6px; font-weight: bold; cursor: pointer; border: none;
 }
 .login-form button:hover:not(:disabled) { background: #8c6da2; color: #fff; }
 .error-msg { color: #d9534f; margin-top: 0.5rem; font-size: 0.85rem; }
+.success-msg { color: #0a7a46; margin-top: 0.5rem; font-weight: 600; }
 
-/* ===== Filters ===== */
-.filters {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
+/* Filtres */
+.filters { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
 .filters label { flex: 1; min-width: 140px; font-weight: bold; }
-.filters select,
-.filters input {
-  width: 100%;
-  padding: 0.3rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
+.filters select, .filters input {
+  width: 100%; padding: 0.3rem; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;
 }
 
-/* ===== Admin layout ===== */
+/* Layout */
 .admin-layout { display: flex; gap: 1rem; flex-wrap: wrap; }
 .formulaire-ajout, .tableau-produits { flex: 1 1 320px; box-sizing: border-box; }
 
-/* ==== Formulaire Ajout ==== */
+/* Formulaire ajout */
 .formulaire-ajout {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  background: #fff; border: 1px solid #ddd; border-radius: 8px;
+  padding: 1rem; margin-bottom: 1rem;
 }
 .formulaire-ajout h2 { font-size: 1.2rem; margin-bottom: 1rem; }
 .formulaire-ajout label { display: block; margin-bottom: 0.8rem; font-weight: 600; }
-.formulaire-ajout input,
-.formulaire-ajout textarea,
-.formulaire-ajout select {
-  width: 100%;
-  padding: 0.4rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+.formulaire-ajout input, .formulaire-ajout textarea, .formulaire-ajout select {
+  width: 100%; padding: 0.4rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
 }
+.input-error { border-color: #d9534f; }
 .ajouter-btn {
-  width: 100%;
-  padding: 0.5rem;
-  background: #98babb;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 1rem;
+  width: 100%; padding: 0.5rem; background: #98babb; border: none;
+  border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 1rem;
 }
 .ajouter-btn:hover:not(:disabled) { background: #8c6da2; color: #fff; }
 
-/* ==== Tableau Produits ==== */
+/* Tableau produits */
 .tableau-produits h2 { font-size: 1.1rem; margin-bottom: 0.8rem; }
 .produit-item {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
-  box-sizing: border-box;
+  background: #fff; border: 1px solid #ddd; border-radius: 8px;
+  padding: 0.8rem; margin-bottom: 1rem; box-sizing: border-box;
 }
 .produit-item input {
-  width: 100%;
-  padding: 0.3rem;
-  margin-bottom: 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+  width: 100%; padding: 0.3rem; margin-bottom: 0.6rem;
+  border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
 }
 
-/* petits badges couleur (optionnel) */
+/* Badges couleurs */
 .color-badges { display: flex; flex-wrap: wrap; gap: .3rem; margin: .2rem 0 .6rem; }
-.color-chip {
-  background: #f1dad7;
-  border-radius: 999px;
-  padding: .15rem .5rem;
-  font-size: .8rem;
-}
+.color-chip { background: #f1dad7; border-radius: 999px; padding: .15rem .5rem; font-size: .8rem; }
 
-/* images */
+/* Images */
 .img-preview { display: flex; gap: 0.4rem; margin: 0.5rem 0; flex-wrap: wrap; }
 .img-preview img {
-  width: 60px; height: 60px; object-fit: cover;
-  border-radius: 4px; border: 1px solid #ccc;
+  width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc;
 }
 
+/* Boutons ligne */
 .btn-droite { display: flex; gap: 0.5rem; justify-content: flex-end; }
 .btn-droite button {
   flex: 1 1 auto; padding: 0.4rem; border-radius: 4px; border: none;
@@ -664,7 +506,7 @@ export default {
 }
 .btn-droite button:hover { background: #8c6da2; color: #fff; }
 
-/* ===== Responsive Mobile ===== */
+/* Responsive */
 @media (max-width: 768px) {
   .filters { flex-direction: column; }
   .admin-layout { flex-direction: column; }

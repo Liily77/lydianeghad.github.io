@@ -1,5 +1,6 @@
 <template>
   <div class="produit-page" v-if="produit">
+    <!-- Retour -->
     <div class="back-home">
       <router-link
         :to="{ path: `/${categorieURL}`, hash: `#${categorieURL}-cards` }"
@@ -9,7 +10,9 @@
       </router-link>
     </div>
 
+    <!-- Fiche -->
     <div class="fiche-produit" id="fiche">
+      <!-- Visuel -->
       <div class="fiche-image">
         <div class="carousel">
           <button class="arrow left" @click="prevImage" v-if="currentIndex > 0">❮</button>
@@ -25,19 +28,21 @@
         </div>
       </div>
 
+      <!-- Détails -->
       <div class="fiche-details">
         <h2>{{ produit.nom }}</h2>
         <p>{{ produit.description }}</p>
         <p>{{ prixAffiche }} €</p>
 
-        <!-- Sélecteur de couleur (uniquement si des couleurs existent) -->
-        <div v-if="hasCouleurs" class="color-row">
-          <label for="colorSelect" class="color-label">Couleur :</label>
-          <select id="colorSelect" v-model="selectedColor" class="color-select">
-            <option v-for="(c,i) in produit.couleurs" :key="i" :value="c">{{ c }}</option>
+        <!-- Couleurs -->
+        <div v-if="hasCouleurs" class="color-row" style="margin:.6rem 0 1rem; display:flex; align-items:center; gap:.6rem;">
+          <label for="colorSelect" class="color-label" style="font-weight:600;">Couleur :</label>
+          <select id="colorSelect" v-model="selectedColor" class="color-select" style="padding:.25rem .5rem; border-radius:8px; border:1px solid #ddd;">
+            <option v-for="(c,i) in couleursDisponibles" :key="i" :value="c">{{ c }}</option>
           </select>
         </div>
 
+        <!-- Actions -->
         <div class="actions-row">
           <div class="quantity-selector">
             <button @click="decreaseQuantity">−</button>
@@ -56,9 +61,9 @@
       </div>
     </div>
 
-    <!-- Toast notification -->
+    <!-- Toast -->
     <div v-if="showToast" class="toast-message">
-      ✅ Produit ajouté au panier !
+      ✨ Merci ! Produit ajouté au panier.
     </div>
   </div>
 
@@ -81,11 +86,11 @@ export default {
       currentIndex: 0,
       transitionName: 'slide-right',
       showToast: false,
-      selectedColor: '' // ← couleur choisie
+      selectedColor: '' // couleur choisie
     };
   },
   computed: {
-    // Préfixe backend + fallback image
+    // Images avec préfixe backend + fallback
     prefixedImages() {
       const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
       const imgs = (this.produit?.images || [])
@@ -93,18 +98,37 @@ export default {
         .filter(Boolean);
       return imgs.length ? imgs : ['/assets/images/image-placeholder.png'];
     },
-    // Prix formaté sans crash
+    // Prix affiché
     prixAffiche() {
       const n = Number(this.produit?.prix);
       return Number.isFinite(n) ? n.toFixed(2) : '—';
     },
+    // Retour vers la bonne catégorie
     categorieURL() {
       const from = this.$route.query.from;
       if (from) return from;
       return this.cleanCategorie(this.produit?.categorie || '');
     },
+    // Liste propre des couleurs
+    couleursDisponibles() {
+      const arr = Array.isArray(this.produit?.couleurs) ? this.produit.couleurs : [];
+      return arr.map(c => String(c).trim()).filter(Boolean);
+    },
     hasCouleurs() {
-      return Array.isArray(this.produit?.couleurs) && this.produit.couleurs.length > 0;
+      return this.couleursDisponibles.length > 0;
+    }
+  },
+  watch: {
+    // Dès qu’on charge un produit, on pré-sélectionne la 1re couleur si dispo
+    produit: {
+      immediate: true,
+      handler(val) {
+        if (val && this.couleursDisponibles.length) {
+          this.selectedColor = this.couleursDisponibles[0];
+        } else {
+          this.selectedColor = '';
+        }
+      }
     }
   },
   methods: {
@@ -119,35 +143,27 @@ export default {
     },
     nextImage() {
       this.transitionName = 'slide-right';
-      if (this.currentIndex < this.prefixedImages.length - 1) {
-        this.currentIndex++;
-      }
+      if (this.currentIndex < this.prefixedImages.length - 1) this.currentIndex++;
     },
     prevImage() {
       this.transitionName = 'slide-left';
-      if (this.currentIndex > 0) {
-        this.currentIndex--;
-      }
+      if (this.currentIndex > 0) this.currentIndex--;
     },
     increaseQuantity() {
       this.quantity++;
     },
     decreaseQuantity() {
-      if (this.quantity > 1) {
-        this.quantity--;
-      }
+      if (this.quantity > 1) this.quantity--;
     },
     ajouterProduitAuPanier() {
-      // on passe la couleur choisie si présente
-      const produitAvecCouleur = this.selectedColor
+      // On embarque la couleur choisie pour l’afficher dans le panier
+      const produitAvecCouleur = this.hasCouleurs && this.selectedColor
         ? { ...this.produit, couleurChoisie: this.selectedColor }
         : this.produit;
 
       ajouterAuPanier(produitAvecCouleur, this.quantity);
       this.showToast = true;
-      setTimeout(() => {
-        this.showToast = false;
-      }, 2500);
+      setTimeout(() => { this.showToast = false; }, 2200);
     }
   },
   async mounted() {
@@ -158,7 +174,7 @@ export default {
       const data = await res.json();
       if (data && data.nom) {
         this.produit = data;
-        // couleur par défaut = 1ère
+        // Couleur par défaut
         if (Array.isArray(this.produit.couleurs) && this.produit.couleurs.length) {
           this.selectedColor = this.produit.couleurs[0];
         }
