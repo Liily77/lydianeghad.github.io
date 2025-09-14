@@ -28,7 +28,16 @@
       <div class="fiche-details">
         <h2>{{ produit.nom }}</h2>
         <p>{{ produit.description }}</p>
-        <p>{{ produit.prix.toFixed(2) }} €</p>
+        <p>{{ prixAffiche }} €</p>
+
+        <!-- Sélecteur de couleur (uniquement si des couleurs existent) -->
+        <div v-if="hasCouleurs" class="color-row">
+          <label for="colorSelect" class="color-label">Couleur :</label>
+          <select id="colorSelect" v-model="selectedColor" class="color-select">
+            <option v-for="(c,i) in produit.couleurs" :key="i" :value="c">{{ c }}</option>
+          </select>
+        </div>
+
         <div class="actions-row">
           <div class="quantity-selector">
             <button @click="decreaseQuantity">−</button>
@@ -72,20 +81,30 @@ export default {
       currentIndex: 0,
       transitionName: 'slide-right',
       showToast: false,
+      selectedColor: '' // ← couleur choisie
     };
   },
   computed: {
-    // Préfixe backend sur chaque image si besoin
+    // Préfixe backend + fallback image
     prefixedImages() {
       const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
-      return (this.produit?.images || []).map(img =>
-        img.startsWith('/uploads') ? backendUrl + img : img
-      );
+      const imgs = (this.produit?.images || [])
+        .map(img => (img && img.startsWith('/uploads') ? backendUrl + img : img))
+        .filter(Boolean);
+      return imgs.length ? imgs : ['/assets/images/image-placeholder.png'];
+    },
+    // Prix formaté sans crash
+    prixAffiche() {
+      const n = Number(this.produit?.prix);
+      return Number.isFinite(n) ? n.toFixed(2) : '—';
     },
     categorieURL() {
       const from = this.$route.query.from;
       if (from) return from;
       return this.cleanCategorie(this.produit?.categorie || '');
+    },
+    hasCouleurs() {
+      return Array.isArray(this.produit?.couleurs) && this.produit.couleurs.length > 0;
     }
   },
   methods: {
@@ -119,7 +138,12 @@ export default {
       }
     },
     ajouterProduitAuPanier() {
-      ajouterAuPanier(this.produit, this.quantity);
+      // on passe la couleur choisie si présente
+      const produitAvecCouleur = this.selectedColor
+        ? { ...this.produit, couleurChoisie: this.selectedColor }
+        : this.produit;
+
+      ajouterAuPanier(produitAvecCouleur, this.quantity);
       this.showToast = true;
       setTimeout(() => {
         this.showToast = false;
@@ -134,6 +158,10 @@ export default {
       const data = await res.json();
       if (data && data.nom) {
         this.produit = data;
+        // couleur par défaut = 1ère
+        if (Array.isArray(this.produit.couleurs) && this.produit.couleurs.length) {
+          this.selectedColor = this.produit.couleurs[0];
+        }
         this.$nextTick(() => {
           const el = document.getElementById('fiche');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -145,8 +173,6 @@ export default {
   }
 };
 </script>
-
-
 
 <style scoped>
 .produit-page {
@@ -197,17 +223,8 @@ export default {
   position: relative;
   background: #f2f2f2;
 }
-.carousel {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.product-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+.carousel { position: relative; width: 100%; height: 100%; }
+.product-image { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* Détails produit */
 .fiche-details {
@@ -217,14 +234,18 @@ export default {
   flex-direction: column;
   justify-content: center;
 }
-.fiche-details h2 {
-  margin: 0 0 0.8rem;
-  font-size: 1.3rem;
-}
-.fiche-details p {
-  margin: 0.3rem 0;
-  font-size: 0.95rem;
-  line-height: 1.6;
+.fiche-details h2 { margin: 0 0 0.8rem; font-size: 1.3rem; }
+.fiche-details p { margin: 0.3rem 0; font-size: 0.95rem; line-height: 1.6; }
+
+/* Couleurs */
+.color-row { display: flex; align-items: center; gap: .6rem; margin-top: .6rem; }
+.color-label { font-weight: 600; }
+.color-select {
+  padding: .35rem .55rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  font-family: 'Raleway', sans-serif;
 }
 
 /* Actions */
@@ -236,11 +257,7 @@ export default {
 }
 
 /* Sélecteur de quantité */
-.quantity-selector {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
+.quantity-selector { display: flex; align-items: center; gap: 0.6rem; }
 .quantity-selector button {
   background: #f1dad7;
   border: none;
@@ -251,23 +268,14 @@ export default {
   cursor: pointer;
   font-family: 'Raleway', sans-serif;
 }
-.quantity-selector button:hover {
-  background: #e8c4bf;
-}
+.quantity-selector button:hover { background: #e8c4bf; }
 
-
-.buttons-group {
-  display: flex;
-  flex-direction: column;  
-  gap: 0.5rem;
-}
-
-.add-to-cart,
-.view-cart {
-  width: 10rem;             
-  padding: 0.6rem 0;        
+.buttons-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.add-to-cart, .view-cart {
+  width: 10rem;
+  padding: 0.6rem 0;
   font-family: 'Raleway', sans-serif;
-  font-size: 0.9rem;        
+  font-size: 0.9rem;
   font-weight: 600;
   text-align: center;
   border: none;
@@ -276,33 +284,12 @@ export default {
   transition: background 0.3s ease;
   text-decoration: none;
   display: block;
-  margin-left: auto;      
+  margin-left: auto;
 }
-
-
-.add-to-cart {
-  background-color: #f3e8f5;
-  color: #a074ae;
-
-}
-.add-to-cart:hover {
-
-  background-color:  #8c6da2;
-  color: white;
-
-}
-
-
-.view-cart {
-  background-color: #98babb;
-  color:whitesmoke;
-}
-  
-.view-cart:hover {
-  background-color: #719394;
-  color: white;
-}
-
+.add-to-cart { background-color: #f3e8f5; color: #a074ae; }
+.add-to-cart:hover { background-color: #8c6da2; color: #fff; }
+.view-cart { background-color: #98babb; color: whitesmoke; }
+.view-cart:hover { background-color: #719394; color: #fff; }
 
 .arrow {
   position: absolute;
@@ -315,15 +302,9 @@ export default {
   z-index: 2;
   transform: translateY(-50%);
 }
-.arrow:hover {
-  color: #a074ae;
-}
-.arrow.left {
-  left: 10px;
-}
-.arrow.right {
-  right: 10px;
-}
+.arrow:hover { color: #a074ae; }
+.arrow.left { left: 10px; }
+.arrow.right { right: 10px; }
 
 .toast-message {
   position: fixed;
@@ -340,18 +321,11 @@ export default {
   white-space: nowrap;
   animation: fadeinout 2.5s ease forwards;
 }
-
 @keyframes fadeinout {
-  0% {opacity: 0;}
-  10% {opacity: 1;}
-  90% {opacity: 1;}
-  100% {opacity: 0;}
+  0% {opacity: 0;} 10% {opacity: 1;} 90% {opacity: 1;} 100% {opacity: 0;}
 }
 
-
-
 @media (max-width: 768px) {
-  
   .fiche-produit {
     flex-direction: column;
     height: auto;
@@ -361,64 +335,27 @@ export default {
     transform-origin: top center;
     margin: 1rem auto 1.5rem;
   }
-
-  .fiche-image {
-    height: 240px;
-  }
-
-  .back-home {
-    margin-top: 0.8rem;
-    margin-bottom: 4rem;
-  }
-
-  .back-button {
-    padding: 0.25rem 0.6rem;
-    font-size: 0.75rem;
-    border-radius: 6px;
-  }
+  .fiche-image { height: 240px; }
+  .back-home { margin-top: 0.8rem; margin-bottom: 4rem; }
+  .back-button { padding: 0.25rem 0.6rem; font-size: 0.75rem; border-radius: 6px; }
 
   .actions-row {
-    display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
     margin-top: 1rem;
   }
-
-
-  .quantity-selector {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .buttons-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 140px;       
-    margin-left: auto;  
-  }
-
-  .add-to-cart,
-  .view-cart {
-    width: 100%;       
+  .buttons-group { width: 140px; margin-left: auto; }
+  .add-to-cart, .view-cart {
+    width: 100%;
     white-space: nowrap;
     padding: 0.4rem 1rem;
     font-size: 0.85rem;
     text-align: center;
-    box-sizing: border-box; 
+    box-sizing: border-box;
   }
-
-  .fiche-details p:last-of-type {
-    margin-bottom: 0.5rem;
-  }
-
-  .toast-message {
-    bottom: 80px; 
-  }
+  .fiche-details p:last-of-type { margin-bottom: 0.5rem; }
+  .toast-message { bottom: 80px; }
 }
-
-
 </style>

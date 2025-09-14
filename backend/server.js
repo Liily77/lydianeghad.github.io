@@ -21,7 +21,6 @@ const jwt       = require('jsonwebtoken');
 // Mailer (Brevo)
 const { buildTransport, sendMail, sendContactAutoReply } = require('./mailer');
 
-
 // 2) Flags / stores
 const sumupTokenStore = require('./sumupTokenStore');
 const isSandbox = process.env.USE_SUMUP_SANDBOX === 'true';
@@ -58,7 +57,8 @@ const produitSchema = new mongoose.Schema({
   description: { type: String, required: true },
   prix:        { type: Number, required: true },
   categorie:   { type: String, required: true },
-  images:      [String]
+  images:      [String],
+  couleurs:    [String]   // ✅ support multi-couleurs (toutes catégories)
 }, { timestamps: true });
 const Produit = mongoose.model('Produit', produitSchema);
 
@@ -94,6 +94,10 @@ const upload = multer({
 });
 async function supprimerFichier(fp) {
   try { await fs.promises.unlink(fp); } catch (err) { console.error('Erreur suppression', fp, err); }
+}
+// util: convertit '/uploads/xxx' -> '<dir>/uploads/xxx'
+function absUploadPath(rel) {
+  return path.join(__dirname, rel.replace(/^\//, '')); // évite le piège du leading slash
 }
 
 // 12) Middleware d’auth simple JWT (admin)
@@ -158,7 +162,6 @@ app.post('/api/send-email', async (req, res) => {
       console.log('AUTO-REPLY SENT (client):', replyEmail);
     } catch (e) {
       console.error('AUTO-REPLY ERROR:', e.message);
-      // On ne bloque pas la réponse côté front si l’auto-reply échoue.
     }
 
     return res.json({ success: true, message: 'Message envoyé' });
@@ -167,7 +170,6 @@ app.post('/api/send-email', async (req, res) => {
     return res.status(500).json({ success: false, message: 'Envoi impossible' });
   }
 });
-
 
 // 15) Produits (public)
 app.get('/api/produits', (_req, res) => Produit.find().then(r => res.json(r)));
@@ -180,33 +182,69 @@ app.get('/api/produits/:id', (req, res) => {
     .then(p => p ? res.json(p) : res.status(404).json({ message: 'Produit introuvable' }));
 });
 
+// helpers couleurs
+function parseCouleurs(input) {
+  if (Array.isArray(input)) {
+    return input.map(s => String(s).trim()).filter(Boolean);
+  }
+  if (typeof input === 'string') {
+    return input
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean);
+  }
+  return [];
+}
+
 // 16) Produits (admin)
 app.post('/api/produits', authMiddleware, upload.array('images'), async (req, res) => {
   const images = (req.files || []).map(f => `/uploads/${f.filename}`);
-  const p = new Produit({ ...req.body, prix: parseFloat(req.body.prix), images });
-  await p.save();
-  res.status(201).json(p);
-});
-app.put('/api/produits/:id', authMiddleware, upload.array('images'), async (req, res) => {
-  const prod = await Produit.findById(req.params.id);
-  if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
-  if (req.files && req.files.length) {
-    for (const img of prod.images) await supprimerFichier(path.join(__dirname, img));
-    prod.images = req.files.map(f => `/uploads/${f.filename}`);
-  }
-  Object.assign(prod, {
+  const couleurs = parseCouleurs(req.body.couleurs); // ✅ NEW
+
+  const p = new Produit({
     nom:         req.body.nom,
     description: req.body.description,
     prix:        parseFloat(req.body.prix),
-    categorie:   req.body.categorie
+    categorie:   req.body.categorie,
+    images,
+    ...(couleurs.length ? { couleurs } : {})
   });
+
+  await p.save();
+  res.status(201).json(p);
+});
+
+app.put('/api/produits/:id', authMiddleware, upload.array('images'), async (req, res) => {
+  const prod = await Produit.findById(req.params.id);
+  if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
+
+  // si nouvelles images → on remplace et on supprime les anciennes
+  if (req.files && req.files.length) {
+    for (const img of (prod.images || [])) {
+      try { await supprimerFichier(absUploadPath(img)); } catch {}
+    }
+    prod.images = req.files.map(f => `/uploads/${f.filename}`);
+  }
+
+  // champs texte
+  prod.nom         = req.body.nom ?? prod.nom;
+  prod.description = req.body.description ?? prod.description;
+  prod.prix        = req.body.prix ? parseFloat(req.body.prix) : prod.prix;
+  prod.categorie   = req.body.categorie ?? prod.categorie;
+
+  // ✅ couleurs (on met à jour seulement si fourni)
+  if (typeof req.body.couleurs !== 'undefined') {
+    prod.couleurs = parseCouleurs(req.body.couleurs);
+  }
+
   await prod.save();
   res.json(prod);
 });
+
 app.delete('/api/produits/:id', authMiddleware, async (req, res) => {
   const prod = await Produit.findByIdAndDelete(req.params.id);
   if (!prod) return res.status(404).json({ message: 'Produit introuvable' });
-  prod.images.forEach(img => supprimerFichier(path.join(__dirname, img)));
+  (prod.images || []).forEach(img => supprimerFichier(absUploadPath(img)));
   res.json({ message: 'Produit supprimé' });
 });
 

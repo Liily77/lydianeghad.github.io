@@ -27,7 +27,6 @@
           <button @click="connectSumUp" class="connect-btn">
             Connecter SumUp
           </button>
-          <!-- DEBUG : commit test pour vérifier le push -->
           <button @click="seDeconnecter" class="logout-btn">
             Déconnexion
           </button>
@@ -94,6 +93,15 @@
             <span v-if="errors.prix" class="error-msg">{{ errors.prix }}</span>
           </label>
 
+          <!-- 👇 NOUVEAU : couleurs (CSV) -->
+          <label>Couleurs (séparées par des virgules) :
+            <input
+              type="text"
+              v-model="nouveauProduit.couleurs"
+              placeholder="ex: beige, bleu, noir"
+            />
+          </label>
+
           <label>Catégorie :
             <select
               v-model="categorieChoisie"
@@ -154,6 +162,7 @@
         <!-- TABLEAU PRODUITS -->
         <div class="tableau-produits" v-if="produitsFiltres.length">
           <h2>📦 Produits filtrés ({{ produitsFiltres.length }})</h2>
+
           <div
             v-for="produit in produitsFiltres"
             :key="produit._id || produit.id"
@@ -163,6 +172,23 @@
             <input v-model="produit.description" />
             <input type="number" v-model.number="produit.prix" />
             <input v-model="produit.categorie" />
+
+            <!-- 👇 NOUVEAU : champ édition couleurs -->
+            <input
+              :value="toCSV(produit.couleurs)"
+              @input="onCouleursInput(produit, $event.target.value)"
+              placeholder="couleurs: beige, bleu"
+            />
+
+            <!-- (optionnel) petits badges d’aperçu -->
+            <div class="color-badges" v-if="toCSV(produit.couleurs)">
+              <span
+                v-for="(c,i) in toCSV(produit.couleurs).split(',')"
+                :key="i"
+                class="color-chip"
+                :title="c.trim()"
+              >{{ c.trim() }}</span>
+            </div>
 
             <div class="img-preview" v-if="produit.images?.length">
               <img
@@ -181,15 +207,15 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div> <!-- .admin-layout -->
+    </div> <!-- v-else -->
   </div>
 </template>
 
 <script>
 import { api } from '@/utils/api'
 
-const INACTIVITY_MIN = 30 // ↙ change si tu veux (minutes)
+const INACTIVITY_MIN = 30 // minutes
 
 export default {
   name: 'Admin',
@@ -208,7 +234,7 @@ export default {
       rechercheTexte: '',
 
       // Ajout produit
-      nouveauProduit: { nom: '', description: '', prix: null },
+      nouveauProduit: { nom: '', description: '', prix: null, couleurs: '' }, // 👈 couleurs CSV ici
       categorieChoisie: '',
       nouvelleCategorie: '',
       fichiersImages: [null, null, null, null, null],
@@ -241,14 +267,12 @@ export default {
     }
   },
   async mounted() {
-    // Si un token existe encore pour cet onglet, on affiche l’admin
     const token = sessionStorage.getItem('admin_token')
     if (token) {
       this.isLoggedIn = true
       await this.chargerProduits()
       this._startIdleWatch()
     }
-    // reset timer sur activité utilisateur
     window.addEventListener('mousemove', this._resetIdleWatch)
     window.addEventListener('keydown', this._resetIdleWatch)
     window.addEventListener('click', this._resetIdleWatch)
@@ -262,7 +286,25 @@ export default {
     window.removeEventListener('scroll', this._resetIdleWatch)
   },
   methods: {
-    // ========== Authentification admin ==========
+    // Helpers couleurs
+    toCSV(val) {
+      if (!val) return ''
+      if (Array.isArray(val)) return val.join(', ')
+      return String(val)
+    },
+    csvToArray(csv) {
+      if (!csv) return []
+      return csv
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean)
+    },
+    onCouleursInput(produit, csv) {
+      // stocke côté objet un tableau propre
+      produit.couleurs = this.csvToArray(csv)
+    },
+
+    // Auth admin
     async seConnecter() {
       this.loginError = ''
       this.isLoading = true
@@ -274,7 +316,7 @@ export default {
             password: this.loginPass
           })
         })
-        sessionStorage.setItem('admin_token', token) // ✅ sessionStorage = auto logout à la fermeture
+        sessionStorage.setItem('admin_token', token)
         this.isLoggedIn = true
         await this.chargerProduits()
         this._startIdleWatch()
@@ -293,25 +335,24 @@ export default {
       this._clearIdleWatch()
     },
 
-    // ========== OAuth SumUp ==========
+    // OAuth SumUp
     connectSumUp() {
       const base = import.meta.env.VITE_BACKEND_URL || ''
       window.location.href = base + '/auth/connect'
     },
 
-    // ========== Gestion des fichiers images ==========
+    // Fichiers images
     onFileChange(event, index) {
       this.fichiersImages[index] = event.target.files[0]
     },
 
-    // ========== Chargement des produits ==========
+    // Chargement produits
     async chargerProduits() {
       try {
         this.produits = await api('/api/produits', {
           headers: { Authorization: 'Bearer ' + sessionStorage.getItem('admin_token') }
         })
       } catch (err) {
-        // si 401/403 → on force la déconnexion
         if ((err.message || '').includes('401') || (err.message || '').includes('403')) {
           this.seDeconnecter()
         } else {
@@ -321,7 +362,7 @@ export default {
       }
     },
 
-    // ========== Validation formulaire ajout ==========
+    // Validation
     validateForm() {
       this.errors = {}
       if (!this.nouveauProduit.nom) this.errors.nom = 'Le nom est requis'
@@ -334,7 +375,7 @@ export default {
       return Object.keys(this.errors).length === 0
     },
 
-    // ========== Ajout d’un produit ==========
+    // Ajout produit
     async ajouterProduit() {
       if (!this.validateForm()) {
         this.formMessage = 'Veuillez corriger les erreurs avant de soumettre.'
@@ -352,12 +393,14 @@ export default {
         formData.append('description', this.nouveauProduit.description)
         formData.append('prix', this.nouveauProduit.prix)
         formData.append('categorie', catFinale)
+        // 👇 en CSV ; le backend peut convertir en tableau
+        formData.append('couleurs', (this.nouveauProduit.couleurs || '').trim())
         this.fichiersImages.forEach(f => f && formData.append('images', f))
 
         const data = await api('/api/produits', {
           method: 'POST',
           headers: { Authorization: 'Bearer ' + sessionStorage.getItem('admin_token') },
-          body: formData // <-- api.js s’occupe de ne PAS mettre Content-Type quand c’est du FormData
+          body: formData
         })
         this.produits.push(data)
         this.formMessage = '✅ Produit ajouté !'
@@ -371,9 +414,9 @@ export default {
       }
     },
 
-    // ========== Réinitialiser le formulaire ==========
+    // Reset formulaire
     resetFormulaire() {
-      this.nouveauProduit = { nom: '', description: '', prix: null }
+      this.nouveauProduit = { nom: '', description: '', prix: null, couleurs: '' }
       this.categorieChoisie = ''
       this.nouvelleCategorie = ''
       this.fichiersImages = [null, null, null, null, null]
@@ -386,9 +429,16 @@ export default {
       }
     },
 
-    // ========== Modification d’un produit ==========
+    // Modification
     async modifierProduit(produit) {
       const id = produit._id || produit.id
+      // s’assure qu’on envoie un tableau (si l’utilisateur a tapé du CSV)
+      const payload = {
+        ...produit,
+        couleurs: Array.isArray(produit.couleurs)
+          ? produit.couleurs
+          : this.csvToArray(produit.couleurs)
+      }
       try {
         const updated = await api(`/api/produits/${id}`, {
           method: 'PUT',
@@ -396,10 +446,10 @@ export default {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + sessionStorage.getItem('admin_token')
           },
-          body: JSON.stringify(produit)
+          body: JSON.stringify(payload)
         })
         const idx = this.produits.findIndex(p => (p._id || p.id) === id)
-        if (idx !== -1) this.$set(this.produits, idx, updated)
+        if (idx !== -1) this.$set ? this.$set(this.produits, idx, updated) : (this.produits[idx] = updated)
         this.formMessage = '✔ Produit modifié !'
         this.formError = false
       } catch {
@@ -408,7 +458,7 @@ export default {
       }
     },
 
-    // ========== Suppression d’un produit ==========
+    // Suppression
     async supprimerProduit(id) {
       if (!confirm('❓ Supprimer ce produit ?')) return
       try {
@@ -422,11 +472,10 @@ export default {
       }
     },
 
-    // ========== Gestion inactivité ==========
+    // Gestion inactivité
     _startIdleWatch() {
       this._clearIdleWatch()
       this._idleTimer = setTimeout(() => {
-        // auto-logout après INACTIVITY_MIN min
         this.seDeconnecter()
         alert('Session expirée pour inactivité.')
       }, INACTIVITY_MIN * 60 * 1000)
@@ -445,11 +494,6 @@ export default {
 }
 </script>
 
-
-
-
-
-
 <style scoped>
 .admin-page {
   padding: 1.5rem;
@@ -460,12 +504,10 @@ export default {
 }
 
 /* ===== Header titre + boutons ===== */
-
 .titre-centre {
   font-size: 1.8rem;
   margin: 1.5rem 0 !important;
-  }
-
+}
 .admin-header {
   display: flex;
   align-items: center;
@@ -473,12 +515,10 @@ export default {
   flex-wrap: wrap;
   margin-bottom: 1rem;
 }
-
 .admin-header-buttons {
   display: flex;
   gap: 0.6rem;
 }
-
 .connect-btn,
 .logout-btn {
   padding: 0.5rem 0.8rem;
@@ -488,20 +528,10 @@ export default {
   font-weight: 600;
   cursor: pointer;
 }
-.connect-btn {
-  background: #007bff;
-  color: #fff;
-}
-.connect-btn:hover {
-  background: #0056b3;
-}
-.logout-btn {
-  background: #e20e0e;
-  color: #fff;
-}
-.logout-btn:hover {
-  background: #9b0404;
-}
+.connect-btn { background: #007bff; color: #fff; }
+.connect-btn:hover { background: #0056b3; }
+.logout-btn { background: #e20e0e; color: #fff; }
+.logout-btn:hover { background: #9b0404; }
 
 /* ===== Login ===== */
 .login-form {
@@ -518,11 +548,7 @@ export default {
   margin-bottom: 1rem;
   font-size: 1.5rem;
 }
-.login-form label {
-  display: block;
-  margin-bottom: 0.8rem;
-  font-weight: 600;
-}
+.login-form label { display: block; margin-bottom: 0.8rem; font-weight: 600; }
 .login-form input {
   width: 100%;
   padding: 0.3rem 0.5rem;
@@ -541,15 +567,8 @@ export default {
   cursor: pointer;
   border: none;
 }
-.login-form button:hover:not(:disabled) {
-  background: #8c6da2;
-  color: #fff;
-}
-.error-msg {
-  color: #d9534f;
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-}
+.login-form button:hover:not(:disabled) { background: #8c6da2; color: #fff; }
+.error-msg { color: #d9534f; margin-top: 0.5rem; font-size: 0.85rem; }
 
 /* ===== Filters ===== */
 .filters {
@@ -558,11 +577,7 @@ export default {
   margin-bottom: 1rem;
   flex-wrap: wrap;
 }
-.filters label {
-  flex: 1;
-  min-width: 140px;
-  font-weight: bold;
-}
+.filters label { flex: 1; min-width: 140px; font-weight: bold; }
 .filters select,
 .filters input {
   width: 100%;
@@ -573,16 +588,8 @@ export default {
 }
 
 /* ===== Admin layout ===== */
-.admin-layout {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.formulaire-ajout,
-.tableau-produits {
-  flex: 1 1 320px;
-  box-sizing: border-box;
-}
+.admin-layout { display: flex; gap: 1rem; flex-wrap: wrap; }
+.formulaire-ajout, .tableau-produits { flex: 1 1 320px; box-sizing: border-box; }
 
 /* ==== Formulaire Ajout ==== */
 .formulaire-ajout {
@@ -592,15 +599,8 @@ export default {
   padding: 1rem;
   margin-bottom: 1rem;
 }
-.formulaire-ajout h2 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-}
-.formulaire-ajout label {
-  display: block;
-  margin-bottom: 0.8rem;
-  font-weight: 600;
-}
+.formulaire-ajout h2 { font-size: 1.2rem; margin-bottom: 1rem; }
+.formulaire-ajout label { display: block; margin-bottom: 0.8rem; font-weight: 600; }
 .formulaire-ajout input,
 .formulaire-ajout textarea,
 .formulaire-ajout select {
@@ -620,16 +620,10 @@ export default {
   cursor: pointer;
   margin-top: 1rem;
 }
-.ajouter-btn:hover:not(:disabled) {
-  background: #8c6da2;
-  color: #fff;
-}
+.ajouter-btn:hover:not(:disabled) { background: #8c6da2; color: #fff; }
 
 /* ==== Tableau Produits ==== */
-.tableau-produits h2 {
-  font-size: 1.1rem;
-  margin-bottom: 0.8rem;
-}
+.tableau-produits h2 { font-size: 1.1rem; margin-bottom: 0.8rem; }
 .produit-item {
   background: #fff;
   border: 1px solid #ddd;
@@ -646,51 +640,35 @@ export default {
   border-radius: 4px;
   box-sizing: border-box;
 }
-.img-preview {
-  display: flex;
-  gap: 0.4rem;
-  margin: 0.5rem 0;
-  flex-wrap: wrap;
+
+/* petits badges couleur (optionnel) */
+.color-badges { display: flex; flex-wrap: wrap; gap: .3rem; margin: .2rem 0 .6rem; }
+.color-chip {
+  background: #f1dad7;
+  border-radius: 999px;
+  padding: .15rem .5rem;
+  font-size: .8rem;
 }
+
+/* images */
+.img-preview { display: flex; gap: 0.4rem; margin: 0.5rem 0; flex-wrap: wrap; }
 .img-preview img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  width: 60px; height: 60px; object-fit: cover;
+  border-radius: 4px; border: 1px solid #ccc;
 }
-.btn-droite {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
-}
+
+.btn-droite { display: flex; gap: 0.5rem; justify-content: flex-end; }
 .btn-droite button {
-  flex: 1 1 auto;
-  padding: 0.4rem;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
+  flex: 1 1 auto; padding: 0.4rem; border-radius: 4px; border: none;
+  cursor: pointer; font-weight: bold;
 }
-.btn-droite button:hover {
-  background: #8c6da2;
-  color: #fff;
-}
+.btn-droite button:hover { background: #8c6da2; color: #fff; }
 
 /* ===== Responsive Mobile ===== */
 @media (max-width: 768px) {
-  .filters {
-    flex-direction: column;
-  }
-  .admin-layout {
-    flex-direction: column;
-  }
-  .formulaire-ajout,
-  .tableau-produits {
-    flex: 1 1 100%;
-  }
-   .titre-centre {
-    margin: 1.5rem 0 !important;
-  }
+  .filters { flex-direction: column; }
+  .admin-layout { flex-direction: column; }
+  .formulaire-ajout, .tableau-produits { flex: 1 1 100%; }
+  .titre-centre { margin: 1.5rem 0 !important; }
 }
 </style>
