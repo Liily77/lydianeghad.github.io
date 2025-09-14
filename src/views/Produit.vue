@@ -153,6 +153,8 @@ export default {
   background-color: #f9f4f0;
   padding: 2rem;
   font-family: 'Raleway', sans-serif;
+  max-width: 1100px;   /* ← largeur max de la page détail */
+  margin: 0 auto;      /* ← centre toute la zone contenu */
 }
 
 /* Bouton retour */
@@ -183,10 +185,10 @@ export default {
   border-radius: 20px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  margin-bottom: 2rem;
   max-width: 850px;
   width: 100%;
   height: 380px;
+  margin: 0 auto 2rem; /* ← centre le bloc fiche */
 }
 
 /* Image produit */
