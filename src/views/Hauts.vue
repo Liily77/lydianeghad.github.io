@@ -1,11 +1,7 @@
 <template>
   <div class="home">
-    <!-- TITRE SECTION -->
-    <div class="section-title">
-      <!-- 👇 image conservée (bagues) -->
-      <img src="/assets/images/titre-bagues.jpg" alt="Nos Hauts" />
-    </div>
 
+  
     <!-- RETOUR ACCUEIL -->
     <div class="back-home">
       <router-link to="/#categories" class="back-button">← Accueil</router-link>
@@ -139,16 +135,6 @@ export default {
   line-height: 1.6;
 }
 
-/* TITRE SECTION */
-.section-title {
-  text-align: center;
-  margin: 3rem 0 2rem;
-}
-
-.section-title img {
-  max-width: 800px;
-  width: 60%;
-}
 
 /* CONTENEUR DE PRODUITS */
 .products-container {
@@ -161,10 +147,6 @@ export default {
 
 
 @media (max-width: 768px) {
-    .section-title img {
-      width: clamp(80%, 95vw, 100%);
-      margin: 0 auto 1rem;
-    }
   
     .back-home {
       padding-left: clamp(0.1rem, 1vw, 0.5rem);
