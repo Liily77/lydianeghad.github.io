@@ -1,0 +1,29 @@
+# Manipulation de données
+pandas
+numpy
+
+# Machine Learning
+scikit-learn
+scipy
+
+# Analyse textuelle / NLP
+nltk
+langdetect
+spacy
+transformers
+torch
+sentencepiece
+safetensors
+
+# Visualisation
+matplotlib
+seaborn
+plotly
+
+
+# Formats Excel & Parquet
+openpyxl
+pyarrow
+
+# Scraping (Playwright)
+playwright

@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.env
+.venv/
+venv/
+
+# OS/IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Données volumineuses (ne pas versionner)
+data/raw/
+data/processed/
+data/curated/
+logs/
+outputs/
+visualisations/avis_with_influence_fr_pbix.csv
