@@ -1,0 +1,5 @@
+QA sur avis_with_influence_fr.csv
+- lignes initiales : 1941
+- doublons supprimés : 0
+- avis vides supprimés : 0
+- lignes finales : 1941

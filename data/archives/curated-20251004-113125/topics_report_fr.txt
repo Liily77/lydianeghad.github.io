@@ -1,0 +1,29 @@
+k=10
+Topic 0: situé, hôtel, hôtel situé, métro, proximité, quartier, restaurants, idéalement, pied, idéalement situé
+Topic 1: qualité, prix, rapport, rapport qualité, qualité prix, excellent rapport, prix emplacement, hôtel rapport, prix chambre, prix personnel
+Topic 2: petit, déjeuner, petit déjeuner, copieux, déjeuner copieux, propre petit, correct, excellent petit, déjeuner personnel, varié
+Topic 3: chambre, petite, chambre petite, lit, vue, paris, confortable, petite chambre, nuit, service
+Topic 4: chambres, petites, chambres petites, propres, chambres propres, confortables, bel, endroit, petites propres, chambres confortables
+Topic 5: personnel, sympathique, personnel sympathique, serviable, sympathique serviable, accueillant, personnel accueillant, confortable, emplacement personnel, personnel serviable
+Topic 6: emplacement, excellent, excellent emplacement, parfait, service, idéal, métro, emplacement idéal, emplacement parfait, excellent hôtel
+Topic 7: agréable, super, accueil, séjour, hôtel, personnel agréable, recommande, personnel, top, hôtel agréable
+Topic 8: salle, bain, salle bain, douche, étoiles, porte, lit, correct, chambre salle, eau
+Topic 9: propre, hôtel propre, chambre propre, confortable, vieux, propre confortable, propre petit, propre agréable, calme, propre personnel
+
+== Macro-thèmes (répartition) ==
+Accueil / Service: 470 (24.2%)
+Chambre / Confort: 436 (22.5%)
+Localisation / Transports: 427 (22.0%)
+Petit-déjeuner: 262 (13.5%)
+Salle de bain: 147 (7.6%)
+Propreté: 112 (5.8%)
+Rapport qualité-prix: 87 (4.5%)
+
+== Sentiment moyen par macro-thème (−1→+1) ==
+Chambre / Confort: 0.175
+Salle de bain: 0.224
+Petit-déjeuner: 0.431
+Rapport qualité-prix: 0.477
+Propreté: 0.634
+Localisation / Transports: 0.638
+Accueil / Service: 0.661

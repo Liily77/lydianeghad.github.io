@@ -27,3 +27,8 @@ pyarrow
 
 # Scraping (Playwright)
 playwright
+streamlit
+
+#streamlit
+altair
+

@@ -1,0 +1,14 @@
+timestamp,hotel_key,file,before,added,after,nb_avis_total_google,note_moyenne,mode
+2025-09-28T14:21:29,BW_Empire_Elysees,data\raw\avis_google_BW_Empire_Elysees.csv,463,33,496,457,4.0,topup
+2025-09-28T14:32:34,BW_Ronceray,data\raw\avis_google_BW_Ronceray_Opera.csv,1210,3,1213,1203,3.8,topup
+2025-09-28T14:52:57,BW_Litteraire_Marcel_Ayme,data\raw\avis_google_BW_Litteraire_Marcel_Ayme.csv,665,216,881,881,4.4,delta
+2025-09-28T17:39:28,BW_Bretagne_Montparnasse,data\raw\avis_google_BW_Bretagne_Montparnasse.csv,0,559,559,559,3.8,delta
+2025-09-28T18:19:35,BW_Bretagne_Montparnasse,data\raw\avis_google_BW_Bretagne_Montparnasse.csv,559,0,559,559,3.8,topup
+2025-10-04T11:41:11,BW_Ronceray,data\raw\avis_google_BW_Ronceray_Opera.csv,1213,7,1220,1204,3.8,topup
+2025-10-04T11:46:40,BW_Empire_Elysees,data\raw\avis_google_BW_Empire_Elysees.csv,496,33,529,457,4.0,topup
+2025-10-04T11:48:26,BW_Litteraire_Marcel_Ayme,data\raw\avis_google_BW_Litteraire_Marcel_Ayme.csv,881,1,882,882,4.4,delta
+2025-10-04T11:48:44,BW_Bretagne_Montparnasse,data\raw\avis_google_BW_Bretagne_Montparnasse.csv,559,1,560,560,3.8,delta
+2025-10-04T12:02:07,BW_Ronceray,data\raw\avis_google_BW_Ronceray_Opera.csv,1220,2,1222,1204,3.8,topup
+2025-10-04T12:07:34,BW_Empire_Elysees,data\raw\avis_google_BW_Empire_Elysees.csv,529,33,562,457,4.0,topup
+2025-10-04T12:13:36,BW_Litteraire_Marcel_Ayme,data\raw\avis_google_BW_Litteraire_Marcel_Ayme.csv,882,60,942,882,4.4,topup
+2025-10-04T12:15:50,BW_Bretagne_Montparnasse,data\raw\avis_google_BW_Bretagne_Montparnasse.csv,560,2,562,560,3.8,topup
